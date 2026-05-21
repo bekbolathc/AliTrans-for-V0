@@ -1,0 +1,242 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
+type Mode = "air" | "rail" | "road" | "advice";
+type Volume = "lt100" | "100-500" | "500-2000" | "2-10t" | "container";
+
+type Answers = {
+  from?: string;
+  to?: string;
+  vol?: Volume;
+  kind?: string;
+  mode?: Mode;
+  name?: string;
+  phone?: string;
+  wa?: string;
+  email?: string;
+};
+
+const captions: Record<number, string> = {
+  1: "Откуда везём",
+  2: "Куда везём",
+  3: "Объём",
+  4: "Тип груза",
+  5: "Скорость",
+  6: "Контакты",
+};
+
+export function Quiz() {
+  const [step, setStep] = useState<number | "block" | "done">(1);
+  const [answers, setAnswers] = useState<Answers>({});
+  const [price, setPrice] = useState("");
+  const [orderId, setOrderId] = useState("AXG-000000");
+
+  // Auto-advance on radio select (except step 6)
+  useEffect(() => {
+    if (typeof step !== "number") return;
+    // pass — handled by onChange below
+  }, [step]);
+
+  const set = (key: keyof Answers, value: string) => {
+    setAnswers((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const next = () => {
+    if (step === 3 && answers.vol === "lt100") {
+      setStep("block");
+      return;
+    }
+    if (step === 6) {
+      const base = { "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 }[answers.vol ?? "100-500"] ?? 800;
+      const mult = { air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 }[answers.mode ?? "rail"] ?? 1;
+      const low = Math.round(base * mult);
+      const high = Math.round(base * mult * 1.35);
+      setPrice(`$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`);
+      setOrderId("AXG-" + (100000 + Math.floor(Math.random() * 899999)));
+      setStep("done");
+      return;
+    }
+    if (typeof step === "number" && step < 6) setStep(step + 1);
+  };
+
+  const prev = () => {
+    if (typeof step === "number" && step > 1) setStep(step - 1);
+  };
+
+  const reset = () => {
+    setAnswers({});
+    setStep(1);
+  };
+
+  const handleRadio = (key: keyof Answers, value: string) => {
+    set(key, value);
+    if (typeof step === "number" && step < 6) {
+      setTimeout(() => {
+        if (key === "vol" && value === "lt100") {
+          setStep("block");
+        } else if (typeof step === "number" && step < 6) {
+          setStep((s) => (typeof s === "number" && s < 6 ? s + 1 : s));
+        }
+      }, 220);
+    }
+  };
+
+  const progressW =
+    step === "done"
+      ? "100%"
+      : step === "block"
+      ? "50%"
+      : `${(((step as number) || 1) / 6) * 100}%`;
+
+  const navHidden = step === "done" || step === "block";
+
+  return (
+    <section className="quiz" id="quiz">
+      <div className="container">
+        <header className="section-head section-head--center">
+          <div className="mono section-head__num">/02 · КОНВЕРСИЯ</div>
+          <h2 className="section-head__title">Рассчитайте стоимость доставки за 15 минут</h2>
+          <p className="section-head__lead">
+            Ответьте на 6 вопросов — пришлём расчёт в WhatsApp. Без обязательств и навязчивых звонков.
+          </p>
+        </header>
+
+        <div className="quiz__wrap" data-step={step}>
+          <div className="quiz__progress">
+            <div className="quiz__progress-bar">
+              <div style={{ width: progressW, height: "100%", background: step === "done" ? "#0E8B6C" : "#D9A441", borderRadius: 99, transition: "width 0.4s cubic-bezier(.4,0,.2,1)" }}></div>
+            </div>
+            <div className="quiz__progress-meta mono">
+              ШАГ <span>{typeof step === "number" ? step : 6}</span> / 6 ·{" "}
+              <span>{typeof step === "number" ? captions[step] : ""}</span>
+            </div>
+          </div>
+
+          <div className="quiz__stage">
+            {step === 1 && (
+              <fieldset className="qstep is-active">
+                <legend className="qstep__title">Откуда вы хотите доставить груз?</legend>
+                <div className="qstep__opts">
+                  {["Гуанчжоу", "Иу", "Шанхай", "Урумчи", "Шэньчжэнь", "Пекин", "Чэнду", "Другой"].map((c) => (
+                    <label key={c}>
+                      <input type="radio" name="from" value={c} checked={answers.from === c} onChange={() => handleRadio("from", c)} />
+                      <span>{c === "Другой" ? "Другой город" : c}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
+
+            {step === 2 && (
+              <fieldset className="qstep is-active">
+                <legend className="qstep__title">В какой город Казахстана нужна доставка?</legend>
+                <div className="qstep__opts">
+                  {["Алматы", "Астана", "Шымкент", "Актау", "Актобе", "Караганда", "Другой"].map((c) => (
+                    <label key={c}>
+                      <input type="radio" name="to" value={c} checked={answers.to === c} onChange={() => handleRadio("to", c)} />
+                      <span>{c === "Другой" ? "Другой город" : c}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
+
+            {step === 3 && (
+              <fieldset className="qstep is-active">
+                <legend className="qstep__title">Какой объём груза?</legend>
+                <div className="qstep__opts">
+                  <label className="opt--danger">
+                    <input type="radio" name="vol" value="lt100" checked={answers.vol === "lt100"} onChange={() => handleRadio("vol", "lt100")} />
+                    <span>До 100 кг <em>не подходит</em></span>
+                  </label>
+                  <label><input type="radio" name="vol" value="100-500" checked={answers.vol === "100-500"} onChange={() => handleRadio("vol", "100-500")} /><span>100–500 кг</span></label>
+                  <label><input type="radio" name="vol" value="500-2000" checked={answers.vol === "500-2000"} onChange={() => handleRadio("vol", "500-2000")} /><span>500 кг — 2 т</span></label>
+                  <label><input type="radio" name="vol" value="2-10t" checked={answers.vol === "2-10t"} onChange={() => handleRadio("vol", "2-10t")} /><span>2–10 т</span></label>
+                  <label><input type="radio" name="vol" value="container" checked={answers.vol === "container"} onChange={() => handleRadio("vol", "container")} /><span>Контейнер · от 10 т</span></label>
+                </div>
+              </fieldset>
+            )}
+
+            {step === 4 && (
+              <fieldset className="qstep is-active">
+                <legend className="qstep__title">Что за груз?</legend>
+                <div className="qstep__opts">
+                  {[
+                    ["apparel", "Одежда и аксессуары"],
+                    ["electronics", "Электроника и техника"],
+                    ["industry", "Промышленное оборудование"],
+                    ["build", "Стройматериалы и сантехника"],
+                    ["furniture", "Мебель и интерьер"],
+                    ["other", "Другое"],
+                  ].map(([v, l]) => (
+                    <label key={v}>
+                      <input type="radio" name="kind" value={v} checked={answers.kind === v} onChange={() => handleRadio("kind", v)} />
+                      <span>{l}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
+
+            {step === 5 && (
+              <fieldset className="qstep is-active">
+                <legend className="qstep__title">Как нужно доставить?</legend>
+                <div className="qstep__opts">
+                  <label><input type="radio" name="mode" value="air" checked={answers.mode === "air"} onChange={() => handleRadio("mode", "air")} /><span><b>Срочно</b> · авиа, 5–7 дней</span></label>
+                  <label><input type="radio" name="mode" value="road" checked={answers.mode === "road"} onChange={() => handleRadio("mode", "road")} /><span><b>Стандарт</b> · авто, 7–14 дней</span></label>
+                  <label><input type="radio" name="mode" value="rail" checked={answers.mode === "rail"} onChange={() => handleRadio("mode", "rail")} /><span><b>Эконом</b> · ЖД, 12–18 дней</span></label>
+                  <label><input type="radio" name="mode" value="advice" checked={answers.mode === "advice"} onChange={() => handleRadio("mode", "advice")} /><span>Не знаю — посоветуйте</span></label>
+                </div>
+              </fieldset>
+            )}
+
+            {step === 6 && (
+              <fieldset className="qstep is-active">
+                <legend className="qstep__title">Куда отправить расчёт?</legend>
+                <div className="qstep__form">
+                  <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
+                  <label className="field"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
+                  <label className="field"><span>WhatsApp (если другой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field"><span>Email · опционально</span><input type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
+                  <label className="check"><input type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
+                </div>
+              </fieldset>
+            )}
+
+            {step === "block" && (
+              <div className="qstep is-active qstep--block">
+                <div className="qstep__title">Извините — это меньше нашего минимума.</div>
+                <p>
+                  Наш сервис рассчитан на партии <b>от 100 кг / 1 м³</b>. Это премиальная B2B-доставка с договором,
+                  страховкой и НДС-документами. Если груз меньше — рекомендуем карго-сервисы.
+                </p>
+                <button className="btn btn--ghost" onClick={reset}>Начать заново</button>
+              </div>
+            )}
+
+            {step === "done" && (
+              <div className="qstep is-active qstep--done">
+                <div className="qstep__title">Спасибо! Заявка принята.</div>
+                <p className="qstep__price">Ориентировочно: <b>{price}</b> <span className="mono">за партию</span></p>
+                <p>Точную цену с учётом плотности, маркировки и таможни пришлём в WhatsApp <b>в течение 15 минут</b>.</p>
+                <div className="qstep__id mono">ЗАЯВКА #{orderId}</div>
+              </div>
+            )}
+          </div>
+
+          {!navHidden && (
+            <footer className="quiz__nav">
+              <button className="btn btn--ghost" onClick={prev} style={{ visibility: step === 1 ? "hidden" : "visible" }}>← Назад</button>
+              <button className="btn btn--gold" onClick={next}>
+                {step === 6 ? "Отправить заявку →" : "Далее →"}
+              </button>
+            </footer>
+          )}
+        </div>
+
+        <p className="quiz__sub mono">↳ Данные защищены. Расчёт пришлём в WhatsApp, не будем звонить без вашей просьбы.</p>
+      </div>
+    </section>
+  );
+}
