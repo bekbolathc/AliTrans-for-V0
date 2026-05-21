@@ -4,7 +4,7 @@ export function Footer() {
       <div className="container">
         <div className="footer__top">
           <div className="footer__col footer__col--brand">
-            <a className="logo logo--light" href="#">
+            <a className="logo logo--light" href="/">
               <span className="logo__mark" aria-hidden="true">
                 <svg viewBox="0 0 32 32" fill="none">
                   <path d="M5 5 H27 V9 L19 16 L27 23 V27 H5 V23 L13 16 L5 9 Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -56,8 +56,8 @@ export function Footer() {
           <div>© 2026 ТОО «Ali Trans Group» · все права защищены</div>
           <div className="mono">БИН · 191040009895</div>
           <div className="footer__legal">
-            <a href="#">Политика конфиденциальности</a>
-            <a href="#">Договор-оферта</a>
+            <a href="/privacy-policy">Политика конфиденциальности</a>
+            <a href="/terms">Договор-оферта</a>
           </div>
         </div>
       </div>
