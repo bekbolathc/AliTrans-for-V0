@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { FAQSchema } from "@/components/FAQSchema";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -100,6 +101,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <FAQSchema />
         <GoogleAnalytics />
         
         {/* Google Ads Event Tracking */}

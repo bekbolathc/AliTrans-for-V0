@@ -1,0 +1,21 @@
+# Ali Trans Group robots.txt
+# Инструкции для поисковых роботов
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /.next/
+Disallow: /admin/
+
+# Crawl delay для снижения нагрузки (в секундах)
+Crawl-delay: 1
+
+# Карта сайта
+Sitemap: https://alitrans.kz/sitemap.xml
+
+# Запреты для конкретных ботов
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
