@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,6 +14,60 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ru_RU",
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Ali Trans Group",
+  alternateName: "AXG",
+  url: "https://alitrans.kz",
+  logo: "https://alitrans.kz/logo.svg",
+  description:
+    "B2B логистика из Китая в Казахстан. Авиа, ЖД, авто доставка. 18 лет опыта. Договор, страховка, НДС.",
+  foundingDate: "2007",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "ул. Тимирязева 42, К23, БЦ Asia Most, офис 210",
+    addressLocality: "Алматы",
+    postalCode: "050000",
+    addressCountry: "KZ",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+77718000209",
+    contactType: "Customer Service",
+    areaServed: "KZ",
+    availableLanguage: "ru",
+  },
+  sameAs: ["https://instagram.com/alitrans.kz"],
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Ali Trans Group",
+  image: "https://alitrans.kz/logo.svg",
+  description:
+    "B2B логистика из Китая в Казахстан с 2007 года",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "ул. Тимирязева 42, К23, БЦ Asia Most, офис 210",
+    addressLocality: "Алматы",
+    addressCountry: "KZ",
+  },
+  telephone: "+77718000209",
+  email: "sales@alitrans.kz",
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "09:00",
+    closes: "18:00",
+  },
 };
 
 export default function RootLayout({
@@ -23,13 +79,47 @@ export default function RootLayout({
     <html lang="ru">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         />
+        <link rel="icon" href="/favicon.ico" />
+        
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        
+        {/* LocalBusiness Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <GoogleAnalytics />
+        
+        {/* Google Ads Event Tracking */}
+        <Script id="google-ads-events" strategy="afterInteractive">
+          {`
+            // Track form submissions and CTA clicks
+            document.addEventListener('DOMContentLoaded', function() {
+              // Track Quiz submission
+              const quizButtons = document.querySelectorAll('[data-track-conversion]');
+              quizButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                  if (typeof window.trackQuizConversion === 'function') {
+                    window.trackQuizConversion();
+                  }
+                });
+              });
+            });
+          `}
+        </Script>
+      </body>
     </html>
   );
 }

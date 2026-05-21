@@ -31,6 +31,8 @@ export function Quiz() {
   const [answers, setAnswers] = useState<Answers>({});
   const [price, setPrice] = useState("");
   const [orderId, setOrderId] = useState("AXG-000000");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string>("");
 
   // Auto-advance on radio select (except step 6)
   useEffect(() => {
@@ -48,13 +50,7 @@ export function Quiz() {
       return;
     }
     if (step === 6) {
-      const base = { "lt100": 150, "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 }[answers.vol ?? "100-500"] ?? 800;
-      const mult = { air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 }[answers.mode ?? "rail"] ?? 1;
-      const low = Math.round(base * mult);
-      const high = Math.round(base * mult * 1.35);
-      setPrice(`$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`);
-      setOrderId("AXG-" + (100000 + Math.floor(Math.random() * 899999)));
-      setStep("done");
+      submitQuiz();
       return;
     }
     if (typeof step === "number" && step < 6) setStep(step + 1);
@@ -67,6 +63,7 @@ export function Quiz() {
   const reset = () => {
     setAnswers({});
     setStep(1);
+    setError("");
   };
 
   const handleRadio = (key: keyof Answers, value: string) => {
@@ -79,6 +76,69 @@ export function Quiz() {
           setStep((s) => (typeof s === "number" && s < 6 ? s + 1 : s));
         }
       }, 220);
+    }
+  };
+
+  const submitQuiz = async () => {
+    // Валидирование обязательных полей
+    if (!answers.name?.trim() || !answers.phone?.trim()) {
+      setError("Пожалуйста, заполните имя и номер телефона");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      // Рассчитываем цену перед отправкой
+      const base = { "lt100": 150, "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 }[answers.vol ?? "100-500"] ?? 800;
+      const mult = { air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 }[answers.mode ?? "rail"] ?? 1;
+      const low = Math.round(base * mult);
+      const high = Math.round(base * mult * 1.35);
+      const calculatedPrice = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
+
+      const response = await fetch("/api/quiz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(answers),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Ошибка при отправке заявки");
+      }
+
+      setPrice(calculatedPrice);
+      setOrderId(data.orderId);
+      setStep("done");
+      
+      // Track conversion in Google Analytics and Google Ads
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "purchase", {
+          value: base * mult,
+          currency: "KZT",
+          transaction_id: data.orderId,
+        });
+        if (typeof (window as any).trackQuizConversion === "function") {
+          (window as any).trackQuizConversion();
+        }
+      }
+      
+      // Открываем WhatsApp автоматически
+      if (data.whatsappUrl) {
+        setTimeout(() => {
+          window.open(data.whatsappUrl, "_blank");
+        }, 500);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Ошибка при отправке заявки";
+      setError(message);
+      console.error("[v0] Quiz submission error:", err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -195,6 +255,7 @@ export function Quiz() {
               <fieldset className="qstep is-active">
                 <legend className="qstep__title">Куда отправить расчёт?</legend>
                 <div className="qstep__form">
+                  {error && <div style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
                   <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
                   <label className="field"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
                   <label className="field"><span>WhatsApp (если другой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
@@ -228,8 +289,8 @@ export function Quiz() {
           {!navHidden && (
             <footer className="quiz__nav">
               <button className="btn btn--ghost" onClick={prev} style={{ visibility: step === 1 ? "hidden" : "visible" }}>← Назад</button>
-              <button className="btn btn--gold" onClick={next}>
-                {step === 6 ? "Отправить заявку →" : "Далее →"}
+              <button className="btn btn--gold" onClick={next} disabled={isSubmitting}>
+                {isSubmitting ? "Отправляем..." : step === 6 ? "Отправить заявку →" : "Далее →"}
               </button>
             </footer>
           )}
