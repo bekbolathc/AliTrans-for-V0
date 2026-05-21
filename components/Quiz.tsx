@@ -48,7 +48,7 @@ export function Quiz() {
       return;
     }
     if (step === 6) {
-      const base = { "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 }[answers.vol ?? "100-500"] ?? 800;
+      const base = { "lt100": 150, "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 }[answers.vol ?? "100-500"] ?? 800;
       const mult = { air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 }[answers.mode ?? "rail"] ?? 1;
       const low = Math.round(base * mult);
       const high = Math.round(base * mult * 1.35);
