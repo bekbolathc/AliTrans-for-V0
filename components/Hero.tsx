@@ -48,7 +48,7 @@ export function Hero() {
           </h1>
 
           <p className="hero__lead">
-            Авиа, ЖД, авто и мультимодальная логистика. Договор, НДС-документы и страховка груза 0,2%.
+            Авиа, ЖД, авто и мультимодальная логистика. Договор, полный пакет документов и страховка груза 0,2%.
             Свои склады консолидации в Иу, Гуанчжоу, Урумчи и Хоргосе.
           </p>
 
@@ -56,7 +56,7 @@ export function Hero() {
             <li><span className="bullet-num mono">01</span><span>Цена <b>от $299</b> за м³</span></li>
             <li><span className="bullet-num mono">02</span><span>Срок <b>от 7 дней</b>, без преувеличений</span></li>
             <li><span className="bullet-num mono">03</span><span>Минимум <b>100 кг / 1 м³</b></span></li>
-            <li><span className="bullet-num mono">04</span><span>Все документы для бухгалтерии и возврата НДС</span></li>
+            <li><span className="bullet-num mono">04</span><span>Полный пакет документов для бухгалтерии</span></li>
           </ul>
 
           <div className="hero__actions">

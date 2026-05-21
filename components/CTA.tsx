@@ -9,7 +9,7 @@ export function CTA() {
 
           <ul className="cta__guarantees">
             <li><span className="mono">✓</span> Договор + страховка груза 0,2%</li>
-            <li><span className="mono">✓</span> Документы для бухгалтерии и возврата НДС</li>
+            <li><span className="mono">✓</span> Полный пакет документов и таможенное оформление</li>
             <li><span className="mono">✓</span> Расчёт за 15 минут, ответ в WhatsApp</li>
           </ul>
 

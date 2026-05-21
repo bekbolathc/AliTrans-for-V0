@@ -20,7 +20,7 @@ export function Pricing() {
               </span>
               Авиа
             </div>
-            <div>5–7 дней</div>
+            <div>от 2 дней</div>
             <div><b>$5</b><span className="mono">/кг</span></div>
             <div>100 кг</div>
             <div><a className="btn btn--ghost btn--sm" href="#quiz">Расчёт →</a></div>
@@ -48,7 +48,7 @@ export function Pricing() {
               </span>
               Авто · сборный
             </div>
-            <div>7–14 дней</div>
+            <div>9–16 дней</div>
             <div><b>$1</b><span className="mono">/кг</span></div>
             <div>100 кг</div>
             <div><a className="btn btn--ghost btn--sm" href="#quiz">Расчёт →</a></div>
@@ -62,7 +62,7 @@ export function Pricing() {
               </span>
               Авто · полный
             </div>
-            <div>7–14 дней</div>
+            <div>9–16 дней</div>
             <div className="mono">по запросу</div>
             <div>5 т</div>
             <div><a className="btn btn--ghost btn--sm" href="#quiz">Расчёт →</a></div>
