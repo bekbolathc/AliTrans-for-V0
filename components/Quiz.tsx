@@ -350,7 +350,7 @@ export function Quiz() {
                   {error && <div style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
                   <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
                   <label className="field"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
-                  <label className="field"><span>WhatsApp (если другой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field"><span>WhatsApp (если дру��ой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
                   <label className="field"><span>Email · опционально</span><input type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
                   <label className="check"><input type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
@@ -382,6 +382,7 @@ export function Quiz() {
                       `Здравствуйте! Я оставил заявку на расчёт доставки:\n\n` +
                       `👤 Имя: ${answers.name}\n` +
                       `📞 Телефон: ${answers.phone}\n` +
+                      `${answers.wa ? `📱 WhatsApp: ${answers.wa}\n` : ``}` +
                       `📧 ${answers.email ? `Email: ${answers.email}` : `Способ связи: WhatsApp`}\n` +
                       `📍 От: ${answers.from}\n` +
                       `📍 До: ${answers.to}\n` +
