@@ -152,15 +152,8 @@ export function Quiz() {
       sessionStorage.setItem("quiz_name", answers.name);
       sessionStorage.setItem("quiz_phone", answers.phone);
       
-      // На мобильных устройствах не перенаправляем автоматически
-      // Вместо этого показываем кнопку "Открыть WhatsApp" на экране done
-      // На десктопе открываем в новой вкладке
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      
-      if (!isMobile && data.whatsappUrl) {
-        // На десктопе открываем в новой вкладке для удобства
-        window.open(data.whatsappUrl, "_blank");
-      }
+      // На обоих устройствах показываем экран "done" с кнопкой "Открыть WhatsApp"
+      // Пользователь сможет нажать на кнопку когда будет готов
     } catch (err) {
       const message = err instanceof Error ? err.message : "Ошибка при отправке заявки";
       setError(message);
@@ -357,7 +350,7 @@ export function Quiz() {
                   {error && <div style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
                   <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
                   <label className="field"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
-                  <label className="field"><span>WhatsApp (если другой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field"><span>WhatsApp (если дру��ой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
                   <label className="field"><span>Email · опционально</span><input type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
                   <label className="check"><input type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
@@ -382,13 +375,15 @@ export function Quiz() {
                 <p>Точную цену с учётом плотности, маркировки и таможни пришлём в WhatsApp <b>в течение 15 минут</b>.</p>
                 <div className="qstep__id mono">ЗАЯВКА #{orderId}</div>
                 
-                {/* WhatsApp Button for mobile */}
+                {/* WhatsApp Button */}
                 <div style={{ marginTop: "24px" }}>
                   <a 
                     href={`https://wa.me/77718000209?text=${encodeURIComponent(
                       `Здравствуйте! Я оставил заявку на расчёт доставки:\n\n` +
                       `👤 Имя: ${answers.name}\n` +
                       `📞 Телефон: ${answers.phone}\n` +
+                      `${answers.wa ? `📱 WhatsApp: ${answers.wa}\n` : ``}` +
+                      `📧 ${answers.email ? `Email: ${answers.email}` : `Способ связи: WhatsApp`}\n` +
                       `📍 От: ${answers.from}\n` +
                       `📍 До: ${answers.to}\n` +
                       `📦 Объём: ${answers.vol}\n` +

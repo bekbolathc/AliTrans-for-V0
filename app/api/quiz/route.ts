@@ -13,12 +13,14 @@ function isValidPhone(phone: string): boolean {
 }
 
 // Отправка сообщения на рабочий WhatsApp
-async function sendToBusinessWhatsApp(orderId: string, from: string, to: string, vol: string, kind: string, mode: string, name: string, phone: string) {
+async function sendToBusinessWhatsApp(orderId: string, from: string, to: string, vol: string, kind: string, mode: string, name: string, phone: string, wa?: string, email?: string) {
   try {
     const businessPhone = "77718000209"; // Рабочий номер WhatsApp
     const message = `📋 *Новая заявка* #${orderId}\n\n` +
       `👤 Имя: ${name}\n` +
       `📞 Телефон: ${phone}\n` +
+      `${wa ? `📱 WhatsApp: ${wa}\n` : ``}` +
+      `${email ? `📧 Email: ${email}\n` : ``}` +
       `📍 От: ${from}\n` +
       `📍 До: ${to}\n` +
       `📦 Объём: ${vol}\n` +
@@ -101,20 +103,22 @@ export async function POST(request: NextRequest) {
     // Формируем сообщение для WhatsApp - отправляем на рабочий номер
     const businessPhone = "77718000209";
     const customerMessage = encodeURIComponent(
-      `Здравствуйте! Я оставил заявку на расчёт доставки:\n` +
-      `Имя: ${name}\n` +
-      `Телефон: ${phone}\n` +
-      `Откуда: ${from}\n` +
-      `Куда: ${to}\n` +
-      `Объём: ${vol}\n` +
-      `Тип груза: ${kind}\n` +
-      `Способ: ${mode}\n` +
-      `Заявка #${orderId}`
+      `Здравствуйте! Я оставил заявку на расчёт доставки:\n\n` +
+      `👤 Имя: ${name}\n` +
+      `📞 Телефон: ${phone}\n` +
+      `${wa ? `📱 WhatsApp: ${wa}\n` : ``}` +
+      `📧 ${email ? `Email: ${email}` : `Способ связи: WhatsApp`}\n` +
+      `📍 От: ${from}\n` +
+      `📍 До: ${to}\n` +
+      `📦 Объём: ${vol}\n` +
+      `🏷️ Тип груза: ${kind}\n` +
+      `🚚 Способ: ${mode}\n` +
+      `\nЗаявка #${orderId}`
     );
     const whatsappUrl = `https://wa.me/${businessPhone}?text=${customerMessage}`;
 
     // Отправляем сообщение на рабочий WhatsApp
-    const businessResult = await sendToBusinessWhatsApp(orderId, from, to, vol, kind, mode, name, phone);
+    const businessResult = await sendToBusinessWhatsApp(orderId, from, to, vol, kind, mode, name, phone, wa, email);
     
     console.log("[v0] New quiz submission:", {
       orderId,
