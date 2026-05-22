@@ -152,11 +152,14 @@ export function Quiz() {
       sessionStorage.setItem("quiz_name", answers.name);
       sessionStorage.setItem("quiz_phone", answers.phone);
       
-      // Открываем WhatsApp автоматически
-      if (data.whatsappUrl) {
-        setTimeout(() => {
-          window.open(data.whatsappUrl, "_blank");
-        }, 500);
+      // На мобильных устройствах не перенаправляем автоматически
+      // Вместо этого показываем кнопку "Открыть WhatsApp" на экране done
+      // На десктопе открываем в новой вкладке
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
+      if (!isMobile && data.whatsappUrl) {
+        // На десктопе открываем в новой вкладке для удобства
+        window.open(data.whatsappUrl, "_blank");
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Ошибка при отправке заявки";
@@ -378,6 +381,21 @@ export function Quiz() {
                 <p className="qstep__price">Ориентировочно: <b>{price}</b> <span className="mono">за партию</span></p>
                 <p>Точную цену с учётом плотности, маркировки и таможни пришлём в WhatsApp <b>в течение 15 минут</b>.</p>
                 <div className="qstep__id mono">ЗАЯВКА #{orderId}</div>
+                
+                {/* WhatsApp Button for mobile */}
+                <div style={{ marginTop: "24px" }}>
+                  <a 
+                    href={`https://wa.me/77718000209?text=${encodeURIComponent(
+                      `Здравствуйте! Я оставил заявку на расчёт доставки:\nЗаявка #${orderId}`
+                    )}`}
+                    className="btn btn--gold btn--full"
+                    style={{ display: "inline-block", width: "100%", textAlign: "center", textDecoration: "none" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Открыть WhatsApp ↗
+                  </a>
+                </div>
               </div>
             )}
           </div>
