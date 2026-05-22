@@ -98,9 +98,9 @@ export async function POST(request: NextRequest) {
     // Генерируем ID заявки
     const orderId = "AXG-" + (100000 + Math.floor(Math.random() * 899999));
 
-    // Формируем сообщение для WhatsApp
-    const whatsappPhone = (wa || phone).replace(/\D/g, "");
-    const message = encodeURIComponent(
+    // Формируем сообщение для WhatsApp - отправляем на рабочий номер
+    const businessPhone = "77718000209";
+    const customerMessage = encodeURIComponent(
       `Здравствуйте! Я оставил заявку на расчёт доставки:\n` +
       `Откуда: ${from}\n` +
       `Куда: ${to}\n` +
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
       `Способ: ${mode}\n` +
       `Заявка #${orderId}`
     );
-    const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${message}`;
+    const whatsappUrl = `https://wa.me/${businessPhone}?text=${customerMessage}`;
 
     // Отправляем сообщение на рабочий WhatsApp
     const businessResult = await sendToBusinessWhatsApp(orderId, from, to, vol, kind, mode, name, phone);
