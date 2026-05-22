@@ -386,7 +386,15 @@ export function Quiz() {
                 <div style={{ marginTop: "24px" }}>
                   <a 
                     href={`https://wa.me/77718000209?text=${encodeURIComponent(
-                      `Здравствуйте! Я оставил заявку на расчёт доставки:\nЗаявка #${orderId}`
+                      `Здравствуйте! Я оставил заявку на расчёт доставки:\n\n` +
+                      `👤 Имя: ${answers.name}\n` +
+                      `📞 Телефон: ${answers.phone}\n` +
+                      `📍 От: ${answers.from}\n` +
+                      `📍 До: ${answers.to}\n` +
+                      `📦 Объём: ${answers.vol}\n` +
+                      `🏷️ Тип груза: ${answers.kind}\n` +
+                      `🚚 Способ: ${answers.mode}\n` +
+                      `\nЗаявка #${orderId}`
                     )}`}
                     className="btn btn--gold btn--full"
                     style={{ display: "inline-block", width: "100%", textAlign: "center", textDecoration: "none" }}
