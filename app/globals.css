@@ -1485,7 +1485,10 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   .hero__actions { flex-direction: column; align-items: stretch; }
   .hero__actions .btn { width: 100%; }
 
-  .trustbar__row { grid-template-columns: 1fr 1fr; gap: 22px; }
+  .trustbar__row { grid-template-columns: 1fr 1fr; gap: 28px 18px; }
+  .stat { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .stat__num { font-size: clamp(28px, 2.8vw, 40px); }
+  .stat__label { font-size: 10px; }
 
   .forwhom__grid,
   .services__grid,
@@ -1519,4 +1522,11 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   .footer__top { grid-template-columns: 1fr; }
 
   .pricing__included { grid-template-columns: 1fr; gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .trustbar__row { grid-template-columns: 1fr; gap: 20px; }
+  .stat { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .stat__num { font-size: clamp(24px, 2.4vw, 32px); }
+  .stat__label { font-size: 9px; }
 }
