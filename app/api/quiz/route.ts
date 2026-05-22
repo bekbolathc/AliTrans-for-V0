@@ -102,6 +102,8 @@ export async function POST(request: NextRequest) {
     const businessPhone = "77718000209";
     const customerMessage = encodeURIComponent(
       `Здравствуйте! Я оставил заявку на расчёт доставки:\n` +
+      `Имя: ${name}\n` +
+      `Телефон: ${phone}\n` +
       `Откуда: ${from}\n` +
       `Куда: ${to}\n` +
       `Объём: ${vol}\n` +
