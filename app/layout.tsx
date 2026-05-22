@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { FAQSchema } from "@/components/FAQSchema";
 import "./globals.css";
@@ -103,6 +104,7 @@ export default function RootLayout({
         {children}
         <FAQSchema />
         <GoogleAnalytics />
+        <Analytics />
         
         {/* Google Ads Event Tracking */}
         <Script id="google-ads-events" strategy="afterInteractive">
