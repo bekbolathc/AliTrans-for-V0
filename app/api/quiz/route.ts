@@ -12,6 +12,50 @@ function isValidPhone(phone: string): boolean {
   return phoneRegex.test(phone);
 }
 
+// Отправка сообщения на рабочий WhatsApp
+async function sendToBusinessWhatsApp(orderId: string, from: string, to: string, vol: string, kind: string, mode: string, name: string, phone: string) {
+  try {
+    const businessPhone = "77718000209"; // Рабочий номер WhatsApp
+    const message = `📋 *Новая заявка* #${orderId}\n\n` +
+      `👤 Имя: ${name}\n` +
+      `📞 Телефон: ${phone}\n` +
+      `📍 От: ${from}\n` +
+      `📍 До: ${to}\n` +
+      `📦 Объём: ${vol}\n` +
+      `🏷️ Тип: ${kind}\n` +
+      `🚚 Способ: ${mode}`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappBusinessUrl = `https://wa.me/${businessPhone}?text=${encodedMessage}`;
+    
+    console.log("[v0] Business WhatsApp link generated:", whatsappBusinessUrl);
+    
+    // Попытка отправить через webhook (если настроен)
+    const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL;
+    if (webhookUrl) {
+      try {
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: businessPhone,
+            message: message,
+            orderId,
+          }),
+        });
+        console.log("[v0] Message sent to webhook");
+      } catch (webhookError) {
+        console.log("[v0] Webhook error (non-critical):", webhookError);
+      }
+    }
+    
+    return { success: true, businessUrl: whatsappBusinessUrl };
+  } catch (error) {
+    console.error("[v0] Error sending to business WhatsApp:", error);
+    return { success: false };
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -54,10 +98,12 @@ export async function POST(request: NextRequest) {
     // Генерируем ID заявки
     const orderId = "AXG-" + (100000 + Math.floor(Math.random() * 899999));
 
-    // Формируем сообщение для WhatsApp
-    const whatsappPhone = (wa || phone).replace(/\D/g, "");
-    const message = encodeURIComponent(
+    // Формируем сообщение для WhatsApp - отправляем на рабочий номер
+    const businessPhone = "77718000209";
+    const customerMessage = encodeURIComponent(
       `Здравствуйте! Я оставил заявку на расчёт доставки:\n` +
+      `Имя: ${name}\n` +
+      `Телефон: ${phone}\n` +
       `Откуда: ${from}\n` +
       `Куда: ${to}\n` +
       `Объём: ${vol}\n` +
@@ -65,10 +111,10 @@ export async function POST(request: NextRequest) {
       `Способ: ${mode}\n` +
       `Заявка #${orderId}`
     );
-    const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${message}`;
+    const whatsappUrl = `https://wa.me/${businessPhone}?text=${customerMessage}`;
 
-    // TODO: Здесь нужно добавить сохранение в БД и отправку email
-    // Сейчас возвращаем успешный ответ
+    // Отправляем сообщение на рабочий WhatsApp
+    const businessResult = await sendToBusinessWhatsApp(orderId, from, to, vol, kind, mode, name, phone);
     
     console.log("[v0] New quiz submission:", {
       orderId,

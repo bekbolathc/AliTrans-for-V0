@@ -1,4 +1,29 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 export function CTA() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+
+  // Get URL parameters on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlName = params.get("name");
+    const urlPhone = params.get("phone");
+    
+    if (urlName) setName(urlName);
+    if (urlPhone) setPhone(urlPhone);
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Store data in sessionStorage so Quiz component can access it
+    if (name) sessionStorage.setItem("quiz_name", name);
+    if (phone) sessionStorage.setItem("quiz_phone", phone);
+    document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section className="cta" id="contacts">
       <div className="container cta__inner">
@@ -29,9 +54,9 @@ export function CTA() {
               <div className="mono manager__role">РУКОВОДИТЕЛЬ ЛОГИСТИЧЕСКОГО ОТДЕЛА</div>
               <div className="manager__name">Аманжол</div>
               <p className="manager__quote">«Здравствуйте! Помогу с логистикой вашего груза — рассчитаю стоимость и подберу способ доставки.»</p>
-              <form className="manager__form" onSubmit={(e) => { e.preventDefault(); document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth" }); }}>
-                <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" /></label>
-                <label className="field"><span>Телефон</span><input type="tel" placeholder="+7 771 800 02 09" /></label>
+              <form className="manager__form" onSubmit={handleSubmit}>
+                <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} /></label>
+                <label className="field"><span>Телефон</span><input type="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} /></label>
                 <button className="btn btn--gold btn--full" type="submit">Жду расчёт →</button>
               </form>
             </div>

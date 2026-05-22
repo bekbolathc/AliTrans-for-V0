@@ -33,6 +33,27 @@ export function Quiz() {
   const [orderId, setOrderId] = useState("AXG-000000");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
+  const [showCustomFrom, setShowCustomFrom] = useState(false);
+  const [showCustomTo, setShowCustomTo] = useState(false);
+  const [customFrom, setCustomFrom] = useState("");
+  const [customTo, setCustomTo] = useState("");
+
+  // Load pre-filled data from sessionStorage and URL params
+  useEffect(() => {
+    const savedName = sessionStorage.getItem("quiz_name");
+    const savedPhone = sessionStorage.getItem("quiz_phone");
+    
+    if (savedName || savedPhone) {
+      setAnswers((prev) => ({
+        ...prev,
+        name: savedName || prev.name,
+        phone: savedPhone || prev.phone,
+      }));
+      // Clear sessionStorage after loading
+      sessionStorage.removeItem("quiz_name");
+      sessionStorage.removeItem("quiz_phone");
+    }
+  }, []);
 
   // Auto-advance on radio select (except step 6)
   useEffect(() => {
@@ -127,6 +148,10 @@ export function Quiz() {
         }
       }
       
+      // Сохраняем данные в sessionStorage для CTA компонента
+      sessionStorage.setItem("quiz_name", answers.name);
+      sessionStorage.setItem("quiz_phone", answers.phone);
+      
       // Открываем WhatsApp автоматически
       if (data.whatsappUrl) {
         setTimeout(() => {
@@ -180,11 +205,47 @@ export function Quiz() {
                 <div className="qstep__opts">
                   {["Гуанчжоу", "Иу", "Шанхай", "Урумчи", "Шэньчжэнь", "Пекин", "Чэнду", "Другой"].map((c) => (
                     <label key={c}>
-                      <input type="radio" name="from" value={c} checked={answers.from === c} onChange={() => handleRadio("from", c)} />
+                      <input 
+                        type="radio" 
+                        name="from" 
+                        value={c === "Другой" ? customFrom : c} 
+                        checked={c === "Другой" ? showCustomFrom : answers.from === c} 
+                        onChange={() => {
+                          if (c === "Другой") {
+                            setShowCustomFrom(true);
+                            setShowCustomTo(false);
+                          } else {
+                            setShowCustomFrom(false);
+                            handleRadio("from", c);
+                          }
+                        }}
+                      />
                       <span>{c === "Другой" ? "Другой город" : c}</span>
                     </label>
                   ))}
                 </div>
+                {showCustomFrom && (
+                  <div style={{ marginTop: "16px" }}>
+                    <input
+                      type="text"
+                      placeholder="Введите название города"
+                      value={customFrom}
+                      onChange={(e) => {
+                        setCustomFrom(e.target.value);
+                        set("from", e.target.value);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "12px",
+                        border: "1px solid #333",
+                        borderRadius: "8px",
+                        background: "transparent",
+                        color: "#fff",
+                        fontSize: "14px",
+                      }}
+                    />
+                  </div>
+                )}
               </fieldset>
             )}
 
@@ -194,11 +255,46 @@ export function Quiz() {
                 <div className="qstep__opts">
                   {["Алматы", "Астана", "Шымкент", "Актау", "Актобе", "Караганда", "Другой"].map((c) => (
                     <label key={c}>
-                      <input type="radio" name="to" value={c} checked={answers.to === c} onChange={() => handleRadio("to", c)} />
+                      <input 
+                        type="radio" 
+                        name="to" 
+                        value={c === "Другой" ? customTo : c} 
+                        checked={c === "Другой" ? showCustomTo : answers.to === c} 
+                        onChange={() => {
+                          if (c === "Другой") {
+                            setShowCustomTo(true);
+                          } else {
+                            setShowCustomTo(false);
+                            handleRadio("to", c);
+                          }
+                        }}
+                      />
                       <span>{c === "Другой" ? "Другой город" : c}</span>
                     </label>
                   ))}
                 </div>
+                {showCustomTo && (
+                  <div style={{ marginTop: "16px" }}>
+                    <input
+                      type="text"
+                      placeholder="Введите название города"
+                      value={customTo}
+                      onChange={(e) => {
+                        setCustomTo(e.target.value);
+                        set("to", e.target.value);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "12px",
+                        border: "1px solid #333",
+                        borderRadius: "8px",
+                        background: "transparent",
+                        color: "#fff",
+                        fontSize: "14px",
+                      }}
+                    />
+                  </div>
+                )}
               </fieldset>
             )}
 
