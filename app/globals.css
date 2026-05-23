@@ -118,7 +118,7 @@ a { color: inherit; }
   line-height: 1;
 }
 .logo__image {
-  height: 56px;
+  height: 60px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -1486,7 +1486,7 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 
 @media (max-width: 760px) {
   .header__row { grid-template-columns: auto auto; }
-  .logo__image { height: 44px; }
+  .logo__image { height: 48px; }
   .header__cta .phone { display: none; }
   .header__cta .btn { padding: 10px 14px; font-size: 13px; min-height: 40px; }
   .burger { display: block; }
