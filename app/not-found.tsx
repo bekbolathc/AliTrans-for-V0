@@ -1,9 +1,9 @@
 export default function NotFound() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', textAlign: 'center' }}>
+    <div className="not-found">
       <h1>404 — Not Found</h1>
-      <p>The page you're looking for doesn't exist.</p>
-      <a href="/" style={{ marginTop: '20px', padding: '10px 20px', background: '#D9A441', color: '#fff', textDecoration: 'none', borderRadius: '4px' }}>
+      <p>The page you&apos;re looking for doesn&apos;t exist.</p>
+      <a href="/" className="not-found__link">
         Back to Home
       </a>
     </div>
