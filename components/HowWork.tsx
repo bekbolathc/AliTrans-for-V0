@@ -11,7 +11,7 @@ export function HowWork() {
     <section className="howwork">
       <div className="container">
         <header className="section-head">
-          <div className="mono section-head__num">/07 · ПРОЦЕСС</div>
+          <div className="mono section-head__num">/08 · ПРОЦЕСС</div>
           <h2 className="section-head__title">Пять простых шагов до доставки</h2>
         </header>
         <ol className="steps">
