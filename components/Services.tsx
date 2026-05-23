@@ -19,7 +19,7 @@ export function Services() {
             </div>
             <h3 className="svc__title">Авиа доставка</h3>
             <div className="svc__meta">
-              <div><span className="mono">срок</span><b>5–7 дней</b></div>
+              <div><span className="mono">срок</span><b>от 2 дней</b></div>
               <div><span className="mono">от</span><b>$5/кг</b></div>
             </div>
             <p className="svc__when mono">КОГДА ВЫБИРАТЬ</p>
