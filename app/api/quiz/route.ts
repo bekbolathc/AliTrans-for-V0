@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Простое валидирование email
+// Улучшенная валидация email
 function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
   return emailRegex.test(email);
 }
 
-// Валидирование номера телефона
+// Валидация номера телефона Казахстана
 function isValidPhone(phone: string): boolean {
-  const phoneRegex = /^\+?[\d\s\-()]{10,}$/;
-  return phoneRegex.test(phone);
+  // Формат: +7, 8, или без кода | 7XXXXXXXXXX (10 цифр)
+  const phoneRegex = /^(\+7|8)?[- ]?7[0-9]{9}$|^7[0-9]{9}$/;
+  return phoneRegex.test(phone.replace(/\s+/g, ''));
 }
 
 // Отправка сообщения на рабочий WhatsApp
@@ -30,8 +31,6 @@ async function sendToBusinessWhatsApp(orderId: string, from: string, to: string,
     const encodedMessage = encodeURIComponent(message);
     const whatsappBusinessUrl = `https://wa.me/${businessPhone}?text=${encodedMessage}`;
     
-    console.log("[v0] Business WhatsApp link generated:", whatsappBusinessUrl);
-    
     // Попытка отправить через webhook (если настроен)
     const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL;
     if (webhookUrl) {
@@ -45,21 +44,53 @@ async function sendToBusinessWhatsApp(orderId: string, from: string, to: string,
             orderId,
           }),
         });
-        console.log("[v0] Message sent to webhook");
       } catch (webhookError) {
-        console.log("[v0] Webhook error (non-critical):", webhookError);
+        // Webhook ошибка не критична
       }
     }
     
     return { success: true, businessUrl: whatsappBusinessUrl };
   } catch (error) {
-    console.error("[v0] Error sending to business WhatsApp:", error);
     return { success: false };
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    // Базовая защита от DDoS - проверка IP и limit requests
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const key = `rate-limit:${ip}`;
+    
+    // Используем простой in-memory rate limiting (для production используйте Redis)
+    const globalCache = globalThis as any;
+    if (!globalCache._rateLimits) {
+      globalCache._rateLimits = new Map();
+    }
+    
+    const now = Date.now();
+    const limits = globalCache._rateLimits;
+    const limitData = limits.get(key) || { count: 0, reset: now + 60000 };
+    
+    // Reset если прошла минута
+    if (now > limitData.reset) {
+      limitData.count = 0;
+      limitData.reset = now + 60000;
+    }
+    
+    // Лимит 5 заявок в минуту с одного IP
+    if (limitData.count >= 5) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: "Слишком много заявок. Попробуйте позже." 
+        },
+        { status: 429 }
+      );
+    }
+    
+    limitData.count++;
+    limits.set(key, limitData);
+    
     const body = await request.json();
     
     const { from, to, vol, kind, mode, name, phone, wa, email } = body;
@@ -119,20 +150,6 @@ export async function POST(request: NextRequest) {
 
     // Отправляем сообщение на рабочий WhatsApp
     const businessResult = await sendToBusinessWhatsApp(orderId, from, to, vol, kind, mode, name, phone, wa, email);
-    
-    console.log("[v0] New quiz submission:", {
-      orderId,
-      from,
-      to,
-      vol,
-      kind,
-      mode,
-      name,
-      phone,
-      wa,
-      email,
-      timestamp: new Date().toISOString(),
-    });
 
     return NextResponse.json(
       {
@@ -144,8 +161,6 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("[v0] Quiz API Error:", error);
-    
     return NextResponse.json(
       { 
         success: false, 

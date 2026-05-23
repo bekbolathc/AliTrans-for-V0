@@ -118,14 +118,20 @@ export function Quiz() {
       const high = Math.round(base * mult * 1.35);
       const calculatedPrice = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
 
+      // Fetch с timeout (10 секунд)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       const response = await fetch("/api/quiz", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(answers),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
       const data = await response.json();
 
       if (!response.ok) {
@@ -151,13 +157,18 @@ export function Quiz() {
       // Сохраняем данные в sessionStorage для CTA компонента
       sessionStorage.setItem("quiz_name", answers.name);
       sessionStorage.setItem("quiz_phone", answers.phone);
-      
-      // На обоих устройствах показываем экран "done" с кнопкой "Открыть WhatsApp"
-      // Пользователь сможет нажать на кнопку когда будет готов
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Ошибка при отправке заявки";
+      let message = "Ошибка при отправке заявки";
+      
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
+          message = "Сервер не ответил. Попробуйте снова или напишите в WhatsApp +77718000209";
+        } else {
+          message = err.message;
+        }
+      }
+      
       setError(message);
-      console.error("[v0] Quiz submission error:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -350,7 +361,7 @@ export function Quiz() {
                   {error && <div style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
                   <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
                   <label className="field"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
-                  <label className="field"><span>WhatsApp (если дру��ой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field"><span>WhatsApp (если дру����ой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
                   <label className="field"><span>Email · опционально</span><input type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
                   <label className="check"><input type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
