@@ -1465,12 +1465,13 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 
 .fab-ig {
   bottom: 168px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 10px 26px rgba(102, 126, 234, 0.4);
+  background: #E73258;
+  border-radius: 20%;
+  box-shadow: 0 10px 26px rgba(231, 50, 88, 0.4);
 }
 .fab-ig:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 14px 32px rgba(231, 50, 88, 0.5);
 }
 .fab-ig svg {
   width: 26px;

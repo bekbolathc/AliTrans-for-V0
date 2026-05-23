@@ -39,11 +39,9 @@ export function Floating() {
         title="Позвонить"
       >
         <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <path
-            d="M8 4c-1.1 0-2 .9-2 2v20c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H8zm8 22c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"
-            fill="currentColor"
-          />
-          <circle cx="16" cy="13" r="1.5" fill="currentColor" opacity="0.5" />
+          <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="16" cy="16" r="10" fill="currentColor" />
+          <path d="M16 11c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm1.5 6.5c0 .3-.2.5-.5.5h-2c-.3 0-.5-.2-.5-.5v-3c0-.3.2-.5.5-.5h2c.3 0 .5.2.5.5v3z" fill="white" />
         </svg>
       </a>
 
@@ -56,10 +54,8 @@ export function Floating() {
         aria-label="Instagram"
         title="Instagram"
       >
-        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <rect x="6" y="6" width="20" height="20" rx="4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="16" cy="16" r="5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="23" cy="9" r="1" fill="currentColor" />
+        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+          <path d="M9 2c-3.9 0-7 3.1-7 7v12c0 3.9 3.1 7 7 7h12c3.9 0 7-3.1 7-7V9c0-3.9-3.1-7-7-7H9zm0 2h12c2.8 0 5 2.2 5 5v12c0 2.8-2.2 5-5 5H9c-2.8 0-5-2.2-5-5V9c0-2.8 2.2-5 5-5zm6 4c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zm0 2c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4zm5.5-1c.8 0 1.5.7 1.5 1.5S21.3 11 20.5 11 19 10.3 19 9.5 19.7 8 20.5 8z" />
         </svg>
       </a>
 
