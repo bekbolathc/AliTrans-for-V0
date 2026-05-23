@@ -194,7 +194,7 @@ export function Quiz() {
           </p>
         </header>
 
-        <div className="quiz__wrap" data-step={step}>
+        <div className="quiz__wrap" data-step={step} role="region" aria-live="polite" aria-label="Quiz форма">
           <div className="quiz__progress">
             <div className="quiz__progress-bar">
               <div style={{ width: progressW, height: "100%", background: step === "done" ? "#0E8B6C" : "#D9A441", borderRadius: 99, transition: "width 0.4s cubic-bezier(.4,0,.2,1)" }}></div>
@@ -358,12 +358,12 @@ export function Quiz() {
               <fieldset className="qstep is-active">
                 <legend className="qstep__title">Куда отправить расчёт?</legend>
                 <div className="qstep__form">
-                  {error && <div style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
-                  <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
-                  <label className="field"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
-                  <label className="field"><span>WhatsApp (если дру����ой)</span><input type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
-                  <label className="field"><span>Email · опционально</span><input type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
-                  <label className="check"><input type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
+                  {error && <div role="alert" style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
+                  <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-phone"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input id="quiz-phone" type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-wa"><span>WhatsApp (если другой)</span><input id="quiz-wa" type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-email"><span>Email · опционально</span><input id="quiz-email" type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
+                  <label className="check" htmlFor="quiz-consent"><input id="quiz-consent" type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
               </fieldset>
             )}

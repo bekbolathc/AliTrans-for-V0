@@ -43,7 +43,12 @@ export function Header() {
           </a>
         </div>
 
-        <button className="burger" aria-label="Меню" onClick={() => setOpen(!open)}>
+        <button 
+          className="burger" 
+          aria-label="Меню" 
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
           <span></span>
           <span></span>
           <span></span>

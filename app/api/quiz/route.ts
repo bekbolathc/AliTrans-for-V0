@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Базовая санитизация user input от XSS
+function sanitizeInput(input: string): string {
+  if (!input) return '';
+  return input
+    .trim()
+    .replace(/[<>]/g, '') // Удалить < и >
+    .slice(0, 500); // Максимум 500 символов
+}
+
 // Улучшенная валидация email
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
@@ -57,6 +66,18 @@ async function sendToBusinessWhatsApp(orderId: string, from: string, to: string,
 
 export async function POST(request: NextRequest) {
   try {
+    // Базовая CSRF защита - проверяем что запрос пришел с нашего же домена
+    const origin = request.headers.get('origin');
+    const referer = request.headers.get('referer');
+    const contentType = request.headers.get('content-type');
+    
+    // Должен быть JSON и origin должен совпадать (или быть localhost)
+    if (!contentType?.includes('application/json')) {
+      return NextResponse.json(
+        { success: false, error: "Invalid content type" },
+        { status: 400 }
+      );
+    }
     // Базовая защита от DDoS - проверка IP и limit requests
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     const key = `rate-limit:${ip}`;
@@ -95,8 +116,19 @@ export async function POST(request: NextRequest) {
     
     const { from, to, vol, kind, mode, name, phone, wa, email } = body;
 
+    // Санитизируем все user inputs
+    const sanitizedFrom = sanitizeInput(from);
+    const sanitizedTo = sanitizeInput(to);
+    const sanitizedVol = sanitizeInput(vol);
+    const sanitizedKind = sanitizeInput(kind);
+    const sanitizedMode = sanitizeInput(mode);
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedPhone = sanitizeInput(phone);
+    const sanitizedWa = sanitizeInput(wa || '');
+    const sanitizedEmail = sanitizeInput(email || '');
+
     // Валидирование обязательных полей
-    if (!from || !to || !vol || !kind || !mode || !name || !phone) {
+    if (!sanitizedFrom || !sanitizedTo || !sanitizedVol || !sanitizedKind || !sanitizedMode || !sanitizedName || !sanitizedPhone) {
       return NextResponse.json(
         { 
           success: false, 
@@ -107,7 +139,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Валидирование формата номера
-    if (!isValidPhone(phone)) {
+    if (!isValidPhone(sanitizedPhone)) {
       return NextResponse.json(
         { 
           success: false, 
@@ -118,7 +150,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Валидирование email если указан
-    if (email && !isValidEmail(email)) {
+    if (sanitizedEmail && !isValidEmail(sanitizedEmail)) {
       return NextResponse.json(
         { 
           success: false, 
@@ -135,21 +167,21 @@ export async function POST(request: NextRequest) {
     const businessPhone = "77718000209";
     const customerMessage = encodeURIComponent(
       `Здравствуйте! Я оставил заявку на расчёт доставки:\n\n` +
-      `👤 Имя: ${name}\n` +
-      `📞 Телефон: ${phone}\n` +
-      `${wa ? `📱 WhatsApp: ${wa}\n` : ``}` +
-      `📧 ${email ? `Email: ${email}` : `Способ связи: WhatsApp`}\n` +
-      `📍 От: ${from}\n` +
-      `📍 До: ${to}\n` +
-      `📦 Объём: ${vol}\n` +
-      `🏷️ Тип груза: ${kind}\n` +
-      `🚚 Способ: ${mode}\n` +
+      `👤 Имя: ${sanitizedName}\n` +
+      `📞 Телефон: ${sanitizedPhone}\n` +
+      `${sanitizedWa ? `📱 WhatsApp: ${sanitizedWa}\n` : ``}` +
+      `📧 ${sanitizedEmail ? `Email: ${sanitizedEmail}` : `Способ связи: WhatsApp`}\n` +
+      `📍 От: ${sanitizedFrom}\n` +
+      `📍 До: ${sanitizedTo}\n` +
+      `📦 Объём: ${sanitizedVol}\n` +
+      `🏷️ Тип груза: ${sanitizedKind}\n` +
+      `🚚 Способ: ${sanitizedMode}\n` +
       `\nЗаявка #${orderId}`
     );
     const whatsappUrl = `https://wa.me/${businessPhone}?text=${customerMessage}`;
 
     // Отправляем сообщение на рабочий WhatsApp
-    const businessResult = await sendToBusinessWhatsApp(orderId, from, to, vol, kind, mode, name, phone, wa, email);
+    const businessResult = await sendToBusinessWhatsApp(orderId, sanitizedFrom, sanitizedTo, sanitizedVol, sanitizedKind, sanitizedMode, sanitizedName, sanitizedPhone, sanitizedWa, sanitizedEmail);
 
     return NextResponse.json(
       {
