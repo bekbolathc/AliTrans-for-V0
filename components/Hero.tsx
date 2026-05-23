@@ -54,7 +54,7 @@ export function Hero() {
 
           <ul className="hero__bullets">
             <li><span className="bullet-num mono">01</span><span>Цена <b>от $299</b> за м³</span></li>
-            <li><span className="bullet-num mono">02</span><span>Срок <b>от 7 дней</b>, без преувеличений</span></li>
+            <li><span className="bullet-num mono">02</span><span>Срок <b>от 2 дней</b>, без преувеличений</span></li>
             <li><span className="bullet-num mono">03</span><span>Минимум <b>100 кг / 1 м³</b></span></li>
             <li><span className="bullet-num mono">04</span><span>Полный пакет документов для бухгалтерии</span></li>
           </ul>
