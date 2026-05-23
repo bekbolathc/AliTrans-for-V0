@@ -1435,8 +1435,22 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   cursor: pointer;
 }
 
-.fab-wa {
+.fab-phone {
   bottom: 24px;
+  background: #2F88FF;
+  box-shadow: 0 10px 26px rgba(47, 136, 255, 0.4);
+}
+.fab-phone:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(47, 136, 255, 0.5);
+}
+.fab-phone svg {
+  width: 28px;
+  height: 28px;
+}
+
+.fab-wa {
+  bottom: 96px;
   background: var(--emerald);
   box-shadow: 0 10px 26px rgba(14, 139, 108, 0.4);
 }
@@ -1447,20 +1461,6 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 .fab-wa svg {
   width: 30px;
   height: 30px;
-}
-
-.fab-phone {
-  bottom: 96px;
-  background: #0066cc;
-  box-shadow: 0 10px 26px rgba(0, 102, 204, 0.4);
-}
-.fab-phone:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(0, 102, 204, 0.5);
-}
-.fab-phone svg {
-  width: 28px;
-  height: 28px;
 }
 
 .fab-ig {

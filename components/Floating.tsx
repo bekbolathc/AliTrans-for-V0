@@ -14,7 +14,19 @@ export function Floating() {
 
   return (
     <>
-      {/* WhatsApp Button */}
+      {/* Phone Call Button - First */}
+      <a
+        className="fab fab-phone"
+        href="tel:+77718000209"
+        aria-label="Позвонить"
+        title="Позвонить"
+      >
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M16.9963 7.68583C17.7228 7.68583 18.3922 8.07985 18.7449 8.71509L21.1913 13.1219C21.5116 13.6989 21.5267 14.3968 21.2315 14.9871L18.8747 19.7008C18.8747 19.7008 19.5577 23.2122 22.4161 26.0706C25.2746 28.929 28.7742 29.6002 28.7742 29.6002L33.4871 27.2438C34.0778 26.9484 34.7762 26.9637 35.3534 27.2846L39.7727 29.7416C40.4074 30.0945 40.8009 30.7635 40.8009 31.4896L40.8009 36.5631C40.8009 39.1468 38.401 41.0129 35.953 40.1868C30.925 38.4903 23.1203 35.2601 18.1735 30.3132C13.2267 25.3664 9.99643 17.5617 8.29989 12.5338C7.47387 10.0857 9.33996 7.68583 11.9236 7.68583L16.9963 7.68583Z" fill="white" stroke="none" strokeWidth="0" strokeLinejoin="round"/>
+        </svg>
+      </a>
+
+      {/* WhatsApp Button - Second */}
       <a
         className="fab fab-wa"
         href="https://wa.me/77718000209?text=Здравствуйте,%20хочу%20уточнить%20по%20доставке%20из%20Китая"
@@ -31,21 +43,7 @@ export function Floating() {
         </svg>
       </a>
 
-      {/* Phone Call Button */}
-      <a
-        className="fab fab-phone"
-        href="tel:+77718000209"
-        aria-label="Позвонить"
-        title="Позвонить"
-      >
-        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="16" cy="16" r="10" fill="currentColor" />
-          <path d="M16 11c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm1.5 6.5c0 .3-.2.5-.5.5h-2c-.3 0-.5-.2-.5-.5v-3c0-.3.2-.5.5-.5h2c.3 0 .5.2.5.5v3z" fill="white" />
-        </svg>
-      </a>
-
-      {/* Instagram Button */}
+      {/* Instagram Button - Third */}
       <a
         className="fab fab-ig"
         href="https://instagram.com/alitrans.kz"
