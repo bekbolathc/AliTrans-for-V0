@@ -3,7 +3,7 @@ export function Pricing() {
     <section className="pricing" id="pricing">
       <div className="container">
         <header className="section-head">
-          <div className="mono section-head__num">/06 · ТАРИФЫ</div>
+          <div className="mono section-head__num">/07 · ТАРИФЫ</div>
           <h2 className="section-head__title">Прозрачные тарифы — никаких скрытых платежей</h2>
         </header>
 

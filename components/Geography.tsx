@@ -3,7 +3,7 @@ export function Geography() {
     <section className="geo">
       <div className="container">
         <header className="section-head">
-          <div className="mono section-head__num">/08 · ГЕОГРАФИЯ</div>
+          <div className="mono section-head__num">/09 · ГЕОГРАФИЯ</div>
           <h2 className="section-head__title">Доставляем из 30+ городов Китая в любую точку Казахстана</h2>
         </header>
 

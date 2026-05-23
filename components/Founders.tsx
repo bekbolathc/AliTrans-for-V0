@@ -3,7 +3,7 @@ export function Founders() {
     <section className="founders" id="about">
       <div className="container">
         <header className="section-head">
-          <div className="mono section-head__num">/09 · ЛЮДИ</div>
+          <div className="mono section-head__num">/10 · ЛЮДИ</div>
           <h2 className="section-head__title">Семейный бизнес с 2007 года</h2>
           <p className="section-head__lead">
             Мы строим логистику так, как делали бы её для своего бизнеса. Это не call-центр, это люди, с которыми вы общаетесь напрямую.
