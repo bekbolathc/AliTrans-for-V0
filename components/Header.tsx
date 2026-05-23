@@ -16,22 +16,12 @@ export function Header() {
   return (
     <header className={`header${stuck ? " is-stuck" : ""}`} id="header">
       <div className="container header__row">
-        <a className="logo" href="#" aria-label="Ali Trans Group">
-          <span className="logo__mark" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none">
-              <path
-                d="M5 5 H27 V9 L19 16 L27 23 V27 H5 V23 L13 16 L5 9 Z"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-              />
-              <circle cx="16" cy="16" r="1.5" fill="currentColor" />
-            </svg>
-          </span>
-          <span className="logo__text">
-            <strong>Ali Trans</strong>
-            <span className="logo__sub">Group · AXG</span>
-          </span>
+        <a className="logo" href="/" aria-label="Ali Trans Group - доставка грузов из Китая">
+          <img 
+            src="/logo.png" 
+            alt="Ali Trans Group логотип" 
+            className="logo__image"
+          />
         </a>
 
         <nav className="nav" aria-label="Основная навигация" style={open ? mobileNavStyle : undefined}>
