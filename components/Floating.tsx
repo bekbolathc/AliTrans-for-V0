@@ -40,9 +40,10 @@ export function Floating() {
       >
         <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
           <path
-            d="M5 8c0-2.2 1.8-4 4-4h3l2.3 2.3c.4.4.6.9.6 1.4v7.8c0 1.1-.9 2-2 2h-2l-1.7 1.7c.5 1.3 1.4 2.5 2.5 3.5l1.7-1.7h2c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2H9c-2.2 0-4-1.8-4-4V8Z"
+            d="M8 4c-1.1 0-2 .9-2 2v20c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H8zm8 22c-.6 0-1 .4-1 1s.4 1 1 1 1-.4 1-1-.4-1-1-1z"
             fill="currentColor"
           />
+          <circle cx="16" cy="13" r="1.5" fill="currentColor" opacity="0.5" />
         </svg>
       </a>
 
