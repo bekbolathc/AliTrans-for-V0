@@ -1435,18 +1435,19 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   cursor: pointer;
 }
 
-.fab-phone {
+.fab-ig {
   bottom: 24px;
-  background: #2F88FF;
-  box-shadow: 0 10px 26px rgba(47, 136, 255, 0.4);
+  background: #E73258;
+  border-radius: 20%;
+  box-shadow: 0 10px 26px rgba(231, 50, 88, 0.4);
 }
-.fab-phone:hover {
+.fab-ig:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(47, 136, 255, 0.5);
+  box-shadow: 0 14px 32px rgba(231, 50, 88, 0.5);
 }
-.fab-phone svg {
-  width: 28px;
-  height: 28px;
+.fab-ig svg {
+  width: 26px;
+  height: 26px;
 }
 
 .fab-wa {
@@ -1463,19 +1464,18 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   height: 30px;
 }
 
-.fab-ig {
+.fab-phone {
   bottom: 168px;
-  background: #E73258;
-  border-radius: 20%;
-  box-shadow: 0 10px 26px rgba(231, 50, 88, 0.4);
+  background: #2F88FF;
+  box-shadow: 0 10px 26px rgba(47, 136, 255, 0.4);
 }
-.fab-ig:hover {
+.fab-phone:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(231, 50, 88, 0.5);
+  box-shadow: 0 14px 32px rgba(47, 136, 255, 0.5);
 }
-.fab-ig svg {
-  width: 26px;
-  height: 26px;
+.fab-phone svg {
+  width: 28px;
+  height: 28px;
 }
 
 .fab-top {
