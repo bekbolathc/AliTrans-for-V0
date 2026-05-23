@@ -15,7 +15,7 @@ export function FAQ() {
     <section className="faq" id="faq">
       <div className="container faq__inner">
         <aside className="faq__side">
-          <div className="mono section-head__num">/11 · ВОПРОСЫ</div>
+          <div className="mono section-head__num">/12 · ВОПРОСЫ</div>
           <h2 className="section-head__title">Частые вопросы</h2>
           <p className="section-head__lead">9 вопросов, которые задают клиенты перед первой отгрузкой.</p>
           <a href="https://wa.me/77718000209" className="btn btn--gold" target="_blank" rel="noopener">
