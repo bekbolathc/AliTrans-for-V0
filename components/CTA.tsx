@@ -28,7 +28,7 @@ export function CTA() {
     <section className="cta" id="contacts">
       <div className="container cta__inner">
         <div className="cta__left">
-          <div className="mono section-head__num section-head__num--light">/12 · ГОТОВЫ НАЧАТЬ</div>
+          <div className="mono section-head__num section-head__num--light">/13 · ГОТОВЫ НАЧАТЬ</div>
           <h2 className="cta__title">Готовы доставить груз<br />из Китая?</h2>
           <p className="cta__lead">Расчёт за 15 минут. Без обязательств. Без навязчивых звонков.</p>
 

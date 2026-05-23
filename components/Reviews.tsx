@@ -14,7 +14,7 @@ export function Reviews() {
     <section className="reviews">
       <div className="container">
         <header className="section-head">
-          <div className="mono section-head__num">/10 · ОТЗЫВЫ</div>
+          <div className="mono section-head__num">/11 · ОТЗЫВЫ</div>
           <h2 className="section-head__title">Что говорят клиенты</h2>
         </header>
 
