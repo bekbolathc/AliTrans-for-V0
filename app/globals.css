@@ -1726,14 +1726,15 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   height: 44px;
   min-width: 44px;
   min-height: 44px;
-  background: var(--gold);
+  background: var(--accent, #0066cc);
   border: none;
-  border-radius: var(--r);
+  border-radius: 50%;
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
 }
 
 .testimonials__arrow svg {
@@ -1743,8 +1744,9 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 }
 
 .testimonials__arrow:hover {
-  background: var(--gold-dark, #c9932a);
+  background: #0052a3;
   transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.35);
 }
 
 .testimonials__arrow:active {
@@ -1769,16 +1771,17 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   position: relative;
   width: 100%;
   aspect-ratio: 9 / 11;
-  background: var(--background, #fff);
-  border-radius: var(--r);
+  background: white;
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--line);
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .testimonials__image-wrapper:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 .testimonials__image {
@@ -1904,7 +1907,7 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: var(--ink-4, #e0e0e0);
+  background: #d0d0d0;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
@@ -1913,18 +1916,18 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 }
 
 .testimonials__dot:hover {
-  background: var(--ink-3, #b0b0b0);
+  background: #a0a0a0;
   transform: scale(1.2);
 }
 
 .testimonials__dot--active {
-  background: var(--gold);
+  background: var(--accent, #0066cc);
   width: 12px;
   height: 12px;
 }
 
 .testimonials__dot--active:hover {
-  background: var(--gold-dark, #c9932a);
+  background: #0052a3;
 }
 
 @media (max-width: 1024px) {

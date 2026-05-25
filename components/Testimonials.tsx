@@ -115,7 +115,7 @@ export function Testimonials() {
         <div className="testimonials__container">
           <div className="testimonials__header">
             <span className="testimonials__number">/06</span>
-            <h2 className="testimonials__title">Рекомендации наших партнёров</h2>
+            <h2 className="testimonials__title">Нас рекомендуют</h2>
           </div>
 
           <div
