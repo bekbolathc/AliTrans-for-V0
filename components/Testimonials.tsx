@@ -3,44 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
-const testimonials = [
-  {
-    id: 1,
-    image: '/images/letter-eko-shina.png',
-    alt: 'Рекомендательное письмо от ТОО "ЭКО Шина"',
-    company: 'ТОО "ЭКО Шина"',
-  },
-  {
-    id: 2,
-    image: '/images/letter-aziashintorg.png',
-    alt: 'Рекомендательное письмо от ТОО "АзияШинТорг"',
-    company: 'ТОО "АзияШинТорг"',
-  },
-  {
-    id: 3,
-    image: '/images/letter-prisma.png',
-    alt: 'Благодарственное письмо от PRISMA',
-    company: 'PRISMA',
-  },
-  {
-    id: 4,
-    image: '/images/letter-almatherm.png',
-    alt: 'Рекомендательное письмо от ИШ "Байтелов Б.Ж."',
-    company: 'Алматерм',
-  },
-  {
-    id: 5,
-    image: '/images/letter-unit.png',
-    alt: 'Рекомендательное письмо от ТОО "UNIT-CO.KZ"',
-    company: 'UNIT-CO.KZ',
-  },
-  {
-    id: 6,
-    image: '/images/letter-ashk.png',
-    alt: 'Рекомендательное письмо от ТОО "АШК"',
-    company: 'ТОО "АШК"',
-  },
-];
+const testimonials: Array<{id: number; image: string; alt: string; company: string}> = [];
 
 export function Testimonials() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
