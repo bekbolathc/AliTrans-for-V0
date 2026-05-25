@@ -139,14 +139,16 @@ export function Testimonials() {
               </svg>
             </button>
 
-            <div className="testimonials__track">
+            <div 
+              className="testimonials__track"
+              style={{
+                transform: `translateX(calc(-${currentIndex} * (33.333% + clamp(13px, 2vw, 24px))))`,
+              }}
+            >
               {testimonials.map((item, index) => (
                 <div
                   key={item.id}
                   className={`testimonials__item ${index === currentIndex ? 'testimonials__item--active' : ''}`}
-                  style={{
-                    transform: `translateX(calc((${index - currentIndex}) * 100%))`,
-                  }}
                 >
                   <button
                     className="testimonials__image-wrapper"

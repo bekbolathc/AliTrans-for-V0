@@ -1699,17 +1699,21 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 
 .testimonials__track {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(20px, 3vw, 36px);
+  display: flex;
+  align-items: stretch;
   width: 100%;
   overflow: hidden;
+  gap: clamp(20px, 3vw, 36px);
+  padding: 0 clamp(10px, 1.5vw, 18px);
+  margin: 0 clamp(-10px, -1.5vw, -18px);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .testimonials__item {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 0 0 calc(33.333% - clamp(13px, 2vw, 24px));
   transition: none;
 }
 
@@ -1923,14 +1927,14 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 }
 
 @media (max-width: 1024px) {
-  .testimonials__track {
-    grid-template-columns: repeat(2, 1fr);
+  .testimonials__item {
+    flex: 0 0 calc(50% - clamp(10px, 1.5vw, 18px));
   }
 }
 
 @media (max-width: 640px) {
-  .testimonials__track {
-    grid-template-columns: 1fr;
+  .testimonials__item {
+    flex: 0 0 100%;
   }
   
   .testimonials__arrow {
