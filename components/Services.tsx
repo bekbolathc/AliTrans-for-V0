@@ -20,7 +20,7 @@ export function Services() {
             <h3 className="svc__title">Авиа доставка</h3>
             <div className="svc__meta">
               <div><span className="mono">срок</span><b>от 2 дней</b></div>
-              <div><span className="mono">от</span><b>$5/кг</b></div>
+              <div><span className="mono">от</span><b>$500/м³</b></div>
             </div>
             <p className="svc__when mono">КОГДА ВЫБИРАТЬ</p>
             <ul className="svc__list">
@@ -48,7 +48,7 @@ export function Services() {
             <h3 className="svc__title">ЖД доставка</h3>
             <div className="svc__meta">
               <div><span className="mono">срок</span><b>12–18 дней</b></div>
-              <div><span className="mono">от</span><b>$299/м³</b></div>
+              <div><span className="mono">от</span><b>$120/м³</b></div>
             </div>
             <p className="svc__when mono">КОГДА ВЫБИРАТЬ</p>
             <ul className="svc__list">
@@ -75,7 +75,7 @@ export function Services() {
             <h3 className="svc__title">Авто доставка</h3>
             <div className="svc__meta">
               <div><span className="mono">срок</span><b>7–14 дней</b></div>
-              <div><span className="mono">от</span><b>$1/кг</b></div>
+              <div><span className="mono">от</span><b>$150/м³</b></div>
             </div>
             <p className="svc__when mono">КОГДА ВЫБИРАТЬ</p>
             <ul className="svc__list">
