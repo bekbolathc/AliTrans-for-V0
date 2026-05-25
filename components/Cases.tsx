@@ -45,7 +45,7 @@ export function Cases() {
                 <li>Цех запущен вовремя</li>
               </ul>
               <blockquote>«Сложная сборка с допуском к точности. Привезли как ювелирку.»
-                <cite>— TODO · цитата клиента</cite>
+                <cite>— Баймуратов Н.Р, коммерческий директор ТОО "Pomo Design"</cite>
               </blockquote>
             </div>
           </article>
