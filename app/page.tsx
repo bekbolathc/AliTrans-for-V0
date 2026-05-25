@@ -8,6 +8,7 @@ import { Quiz } from "@/components/Quiz";
 import { Services } from "@/components/Services";
 import { Why } from "@/components/Why";
 import { Cases } from "@/components/Cases";
+import { Testimonials } from "@/components/Testimonials";
 import { Pricing } from "@/components/Pricing";
 import { HowWork } from "@/components/HowWork";
 import { Geography } from "@/components/Geography";
@@ -32,6 +33,7 @@ export default function Page() {
         <Services />
         <Why />
         <Cases />
+        <Testimonials />
         <Pricing />
         <HowWork />
         <Geography />
