@@ -13,10 +13,11 @@ export function Founders() {
         <div className="founders__grid">
           <article className="founder">
             <div className="founder__photo" aria-hidden="true">
-              <div className="founder__photo-inner">
-                <div className="mono founder__photo-lbl">PORTRAIT · TODO · 800×1000</div>
-                <div className="founder__photo-init">ТН</div>
-              </div>
+              <img 
+                src="/images/founders/talgat-nurekeev.png" 
+                alt="Талгат Нурекеев - сооснователь Ali Trans Group"
+                className="founder__image"
+              />
             </div>
             <div className="founder__body">
               <div className="mono founder__role">СООСНОВАТЕЛЬ · 18 ЛЕТ В ЛОГИСТИКЕ</div>
@@ -33,10 +34,11 @@ export function Founders() {
 
           <article className="founder founder--reverse">
             <div className="founder__photo" aria-hidden="true">
-              <div className="founder__photo-inner">
-                <div className="mono founder__photo-lbl">PORTRAIT · TODO · 800×1000</div>
-                <div className="founder__photo-init">КУ</div>
-              </div>
+              <img 
+                src="/images/founders/karlygash-umarova.png" 
+                alt="Карлыгаш Умарова - сооснователь Ali Trans Group"
+                className="founder__image"
+              />
             </div>
             <div className="founder__body">
               <div className="mono founder__role">СООСНОВАТЕЛЬ · 16 ЛЕТ В ЛОГИСТИКЕ</div>
