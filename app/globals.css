@@ -1715,6 +1715,7 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   gap: 12px;
   flex: 0 0 calc(33.333% - clamp(13px, 2vw, 24px));
   transition: none;
+  min-height: 400px;
 }
 
 .testimonials__arrow {
@@ -1935,6 +1936,7 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 @media (max-width: 640px) {
   .testimonials__item {
     flex: 0 0 100%;
+    min-height: 300px;
   }
   
   .testimonials__arrow {
