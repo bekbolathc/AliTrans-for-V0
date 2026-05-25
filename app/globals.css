@@ -1596,7 +1596,8 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 @media (max-width: 480px) {
   .header__row { gap: 12px; }
   .header__cta { gap: 8px; }
-  .header__cta .btn { padding: 8px 12px; font-size: 12px; min-height: 40px; }
+  .header__cta .phone { display: none; }
+  .header__cta .btn--gold { display: none; }
   .burger { padding: 6px; }
   .burger span { width: 20px; height: 1.5px; margin: 3px 0; }
   
