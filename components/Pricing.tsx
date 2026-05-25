@@ -21,8 +21,8 @@ export function Pricing() {
               Авиа
             </div>
             <div>от 2 дней</div>
-            <div><b>$5</b><span className="mono">/кг</span></div>
-            <div>100 кг</div>
+            <div><b>$500</b><span className="mono">/м³</span></div>
+            <div>1 м³</div>
             <div><a className="btn btn--ghost btn--sm" href="#quiz">Расчёт →</a></div>
           </div>
           <div className="ptable__row ptable__row--accent">
@@ -35,8 +35,8 @@ export function Pricing() {
               ЖД
             </div>
             <div>12–18 дней</div>
-            <div><b>$0,5</b><span className="mono">/кг</span> <span className="mono ptable__or">или</span> <b>$299</b><span className="mono">/м³</span></div>
-            <div>100 кг · 1 м³</div>
+            <div><b>$120</b><span className="mono">/м³</span></div>
+            <div>1 м³</div>
             <div><a className="btn btn--gold btn--sm" href="#quiz">Расчёт →</a></div>
           </div>
           <div className="ptable__row">
@@ -49,8 +49,8 @@ export function Pricing() {
               Авто · сборный
             </div>
             <div>9–16 дней</div>
-            <div><b>$1</b><span className="mono">/кг</span></div>
-            <div>100 кг</div>
+            <div><b>$150</b><span className="mono">/м³</span></div>
+            <div>1 м³</div>
             <div><a className="btn btn--ghost btn--sm" href="#quiz">Расчёт →</a></div>
           </div>
           <div className="ptable__row">
