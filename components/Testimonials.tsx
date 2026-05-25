@@ -61,6 +61,11 @@ export function Testimonials() {
     resetAutoPlay();
   };
 
+  const handleDotClick = (index: number) => {
+    setCurrentIndex(index);
+    resetAutoPlay();
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       handlePrev();
@@ -164,6 +169,19 @@ export function Testimonials() {
                   </button>
                   <p className="testimonials__company">{item.company}</p>
                 </div>
+              ))}
+            </div>
+
+            <div className="testimonials__dots">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  className={`testimonials__dot ${index === currentIndex ? 'testimonials__dot--active' : ''}`}
+                  onClick={() => handleDotClick(index)}
+                  aria-label={`Перейти к письму ${index + 1} из ${testimonials.length}`}
+                  aria-current={index === currentIndex ? 'true' : 'false'}
+                  type="button"
+                />
               ))}
             </div>
 
