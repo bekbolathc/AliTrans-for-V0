@@ -28,7 +28,7 @@ const config: Config = {
         rose: { DEFAULT: "#B23A48" },
       },
       fontFamily: {
-        sans: ["var(--ff)", "system-ui", "sans-serif"],
+        sans: ["var(--ff-manrope)", "system-ui", "sans-serif"],
         mono: ["var(--ff-mono)", "ui-monospace", "monospace"],
       },
     },

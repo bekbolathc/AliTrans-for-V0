@@ -29,9 +29,9 @@
   --emerald:   #0E8B6C;
   --rose:      #B23A48;
 
-  /* type */
-  --ff: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --ff-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  /* type - now using CSS variables from next/font */
+  --ff: var(--ff-manrope), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ff-mono: var(--ff-mono), ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   /* spacing */
   --pad-x: clamp(20px, 4vw, 56px);
@@ -273,8 +273,12 @@ section, .hero, .services, .pricing, .founders, .faq, .cases, .testimonials, .re
   background: var(--gold);
   box-shadow: 0 0 0 4px rgba(217,164,65,0.18);
   animation: pulse 2.2s infinite;
+  will-change: opacity, transform;
 }
-@keyframes pulse { 50% { box-shadow: 0 0 0 8px rgba(217,164,65,0); } }
+@keyframes pulse { 
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.1); } 
+}
 
 .hero__title {
   font-size: clamp(40px, 5.6vw, 78px);

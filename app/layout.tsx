@@ -1,8 +1,24 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Manrope, JetBrains_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { FAQSchema } from "@/components/FAQSchema";
 import "./globals.css";
+
+// Self-hosted fonts via Next.js - eliminates render-blocking Google Fonts CDN request
+const manrope = Manrope({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--ff-manrope",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  variable: "--ff-mono",
+});
 
 export const metadata: Metadata = {
   title: "Доставка грузов из Китая в Казахстан — Ali Trans Group · от 100 кг, договор, страховка",
@@ -81,7 +97,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru">
+    <html lang="ru" className={`${manrope.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Critical CSS inline to prevent FOUC and blocking */}
         <style dangerouslySetInnerHTML={{__html: `
@@ -119,10 +135,10 @@ img { display: block; max-width: 100%; height: auto; }
 .header__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         `}} />
         
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager - moved to lazyOnload to prevent blocking critical rendering */}
         <Script
           id="google-tag-manager"
-          strategy="beforeInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -132,21 +148,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
         
-        {/* Font optimization - load asynchronously to prevent blocking */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Load fonts with media query and onload swap strategy */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        />
-        {/* Fallback for no-JS - use different strategy */}
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-          />
-        </noscript>
+        {/* DNS Prefetch for GTM - allows faster connection after lazyOnload triggers */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
         {/* Logo preload for LCP optimization */}
         <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" />
