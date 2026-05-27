@@ -13,7 +13,7 @@ export function Pricing() {
           </div>
           <div className="ptable__row">
             <div className="ptable__type">
-              <span className="ptable__icon" aria-label="Авиа доставка">
+              <span className="ptable__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M17.8 19.2 16 11h.01M5.2 5h12.6M6 9l6-7 6 7M9 19h6M5 8h14" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -27,7 +27,7 @@ export function Pricing() {
           </div>
           <div className="ptable__row ptable__row--accent">
             <div className="ptable__type">
-              <span className="ptable__icon" aria-label="ЖД доставка">
+              <span className="ptable__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="4" cy="18" r="2" /><circle cx="20" cy="18" r="2" /><path d="M6 16h12M4 8h16v8H4z" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -41,7 +41,7 @@ export function Pricing() {
           </div>
           <div className="ptable__row">
             <div className="ptable__type">
-              <span className="ptable__icon" aria-label="Авто доставка сборный">
+              <span className="ptable__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="4" cy="17" r="2" /><circle cx="20" cy="17" r="2" /><path d="M6 17h8M2 9h16l-2-6H4z" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -55,7 +55,7 @@ export function Pricing() {
           </div>
           <div className="ptable__row">
             <div className="ptable__type">
-              <span className="ptable__icon" aria-label="Авто доставка полный контейнер">
+              <span className="ptable__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M4 5h16v14H4z" strokeLinecap="round" strokeLinejoin="round" /><line x1="4" y1="9" x2="20" y2="9" />
                 </svg>
