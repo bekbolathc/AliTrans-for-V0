@@ -258,7 +258,9 @@ section, .hero, .services, .pricing, .founders, .faq, .cases, .testimonials, .re
   gap: clamp(40px, 6vw, 96px);
   align-items: center;
 }
-.hero__left {}
+.hero__left {
+  contain: layout style;
+}
 .kicker {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 8px 14px;
@@ -340,6 +342,9 @@ section, .hero, .services, .pricing, .founders, .faq, .cases, .testimonials, .re
   border-radius: 18px;
   padding: 20px;
   backdrop-filter: blur(8px);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
   box-shadow: 0 30px 80px rgba(0,0,0,0.4);
 }
 .panel__head {
