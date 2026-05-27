@@ -34,6 +34,8 @@ const nextConfig = {
   // Enable experimental optimizations for better bundle size
   experimental: {
     optimizePackageImports: ['react', 'react-dom'],
+    // Enable critical CSS optimization to inline critical path and async load the rest
+    optimizeCss: true,
   },
 };
 

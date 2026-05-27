@@ -29,9 +29,9 @@
   --emerald:   #0E8B6C;
   --rose:      #B23A48;
 
-  /* type */
-  --ff: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --ff-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  /* type - now using CSS variables from next/font */
+  --ff: var(--ff-manrope), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ff-mono: var(--ff-mono), ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   /* spacing */
   --pad-x: clamp(20px, 4vw, 56px);
