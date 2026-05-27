@@ -461,7 +461,7 @@ section, .hero, .services, .pricing, .founders, .faq, .cases, .testimonials, .re
   letter-spacing: 0.06em;
 }
 .stat--last {
-  grid-column: 1 / -1;
+  grid-column: auto;
 }
 
 /* ============================================================== */
