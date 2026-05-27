@@ -75,8 +75,8 @@ export function Hero() {
           </div>
         </div>
 
-        <aside className="hero__panel" aria-label="Живая статистика" style={{ contentVisibility: 'auto' }}>
-          <div className="panel" style={{ contain: 'layout style paint' }}>
+        <aside className="hero__panel" aria-label="Живая статистика">
+          <div className="panel">
             <div className="panel__head">
               <div className="panel__title">
                 <span className="led"></span>
@@ -85,7 +85,7 @@ export function Hero() {
               <LiveClock />
             </div>
 
-            <div className="panel__map" role="img" aria-label="Карта маршрутов из Китая в Казахстан" style={{ willChange: 'contents' }}>
+            <div className="panel__map" role="img" aria-label="Карта маршрутов из Китая в Казахстан">
               <svg viewBox="0 0 480 280" preserveAspectRatio="xMidYMid slice">
                 <defs>
                   <pattern id="dotgrid" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
