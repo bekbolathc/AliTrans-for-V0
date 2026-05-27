@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function useCountUp(target: number, duration = 1400) {
+export function useCountUp(target: number, duration = 800) {
   const [val, setVal] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
@@ -21,7 +21,8 @@ export function useCountUp(target: number, duration = 1400) {
             const start = performance.now();
             const frame = (t: number) => {
               const p = Math.min(1, (t - start) / duration);
-              const eased = 1 - Math.pow(1 - p, 3);
+              // Use faster easing function for speedier animation
+              const eased = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
               setVal(Math.floor(target * eased));
               if (p < 1) requestAnimationFrame(frame);
             };

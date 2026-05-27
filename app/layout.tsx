@@ -153,7 +153,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
         {/* Logo preload for LCP optimization */}
-        <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" />
+        <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" fetchPriority="high" />
+        
+        {/* Preload fonts with high priority for text rendering */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Favicon */}
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
