@@ -19,11 +19,11 @@ export function Header() {
       <div className="container header__row">
         <a className="logo" href="/" aria-label="Ali Trans Group - доставка грузов из Китая">
           <Image 
-            src="/logo.svg" 
+            src="/logo.png" 
             alt="Ali Trans Group логотип" 
             className="logo__image"
-            width={140}
-            height={52}
+            width={180}
+            height={100}
             priority
           />
         </a>
