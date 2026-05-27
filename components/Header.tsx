@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export function Header() {
   const [stuck, setStuck] = useState(false);
@@ -17,10 +18,13 @@ export function Header() {
     <header className={`header${stuck ? " is-stuck" : ""}`} id="header">
       <div className="container header__row">
         <a className="logo" href="/" aria-label="Ali Trans Group - доставка грузов из Китая">
-          <img 
-            src="/logo.png" 
+          <Image 
+            src="/logo.svg" 
             alt="Ali Trans Group логотип" 
             className="logo__image"
+            width={140}
+            height={52}
+            priority
           />
         </a>
 
