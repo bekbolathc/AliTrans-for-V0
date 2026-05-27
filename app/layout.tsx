@@ -119,10 +119,10 @@ img { display: block; max-width: 100%; height: auto; }
 .header__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         `}} />
         
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager - moved to lazyOnload to prevent blocking critical rendering */}
         <Script
           id="google-tag-manager"
-          strategy="beforeInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -131,6 +131,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KZ36W5SJ');`,
           }}
         />
+        
+        {/* DNS Prefetch for GTM - allows faster connection after lazyOnload triggers */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
         {/* Font optimization - load asynchronously to prevent blocking */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
