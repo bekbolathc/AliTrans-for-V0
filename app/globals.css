@@ -61,6 +61,11 @@ img { max-width: 100%; display: block; }
 button { font: inherit; color: inherit; cursor: pointer; }
 a { color: inherit; }
 
+/* CSS Containment for performance - isolates layout calculations */
+section, .hero, .services, .pricing, .founders, .faq, .cases, .testimonials, .reviews {
+  contain: layout style;
+}
+
 .container {
   width: 100%;
   max-width: var(--max);
