@@ -1,24 +1,27 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { ForWhom } from "@/components/ForWhom";
 import { Quiz } from "@/components/Quiz";
-import { Services } from "@/components/Services";
-import { Why } from "@/components/Why";
-import { Cases } from "@/components/Cases";
-import { Testimonials } from "@/components/Testimonials";
-import { Pricing } from "@/components/Pricing";
-import { HowWork } from "@/components/HowWork";
-import { Geography } from "@/components/Geography";
-import { Founders } from "@/components/Founders";
-import { Reviews } from "@/components/Reviews";
-import { FAQ } from "@/components/FAQ";
-import { CTA } from "@/components/CTA";
-import { Footer } from "@/components/Footer";
-import { Floating } from "@/components/Floating";
 import { ScrollProgress } from "@/components/ScrollProgress";
+
+// Lazy load components below the fold to reduce main thread work
+const Services = dynamic(() => import("@/components/Services").then(mod => ({ default: mod.Services })), { ssr: true });
+const Why = dynamic(() => import("@/components/Why").then(mod => ({ default: mod.Why })), { ssr: true });
+const Cases = dynamic(() => import("@/components/Cases").then(mod => ({ default: mod.Cases })), { ssr: true });
+const Testimonials = dynamic(() => import("@/components/Testimonials").then(mod => ({ default: mod.Testimonials })), { ssr: true });
+const Pricing = dynamic(() => import("@/components/Pricing").then(mod => ({ default: mod.Pricing })), { ssr: true });
+const HowWork = dynamic(() => import("@/components/HowWork").then(mod => ({ default: mod.HowWork })), { ssr: true });
+const Geography = dynamic(() => import("@/components/Geography").then(mod => ({ default: mod.Geography })), { ssr: true });
+const Founders = dynamic(() => import("@/components/Founders").then(mod => ({ default: mod.Founders })), { ssr: true });
+const Reviews = dynamic(() => import("@/components/Reviews").then(mod => ({ default: mod.Reviews })), { ssr: true });
+const FAQ = dynamic(() => import("@/components/FAQ").then(mod => ({ default: mod.FAQ })), { ssr: true });
+const CTA = dynamic(() => import("@/components/CTA").then(mod => ({ default: mod.CTA })), { ssr: true });
+const Footer = dynamic(() => import("@/components/Footer").then(mod => ({ default: mod.Footer })), { ssr: true });
+const Floating = dynamic(() => import("@/components/Floating").then(mod => ({ default: mod.Floating })), { ssr: false });
 
 export default function Page() {
   return (
