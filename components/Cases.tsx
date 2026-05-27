@@ -71,27 +71,45 @@ export function Cases() {
             </div>
           </article>
 
-          <article className="cs cs--small">
+          <article className="cs">
             <div className="cs__media cs__media--d" aria-hidden="true">
               <div className="cs__route mono"><span>URM</span><span className="cs__arrow">→</span><span>KGF</span></div>
-              <div className="cs__tagline mono">BUILD · ROAD</div>
+              <div className="cs__tagline mono">INDUSTRY · ROAD · 12 ДНЕЙ</div>
             </div>
             <div className="cs__body">
               <div className="cs__client mono">КЛИЕНТ · ТОО «ЖАККО КАРАГАНДА»</div>
-              <h3 className="cs__title">Стройматериалы для коммерческого объекта</h3>
-              <p className="cs__short"><span className="mono">TODO ·</span> объём и сроки — уточнить у клиента и заполнить.</p>
+              <h3 className="cs__title">Сырьё для производства полипропиленовых труб</h3>
+              <p className="cs__task"><b>Задача —</b> обеспечить стабильные поставки производственного сырья для завода без простоев конвейера.</p>
+              <p className="cs__solve"><b>Решение —</b> автоперевозки через Хоргос с консолидацией на складе в Урумчи, полный пакет документов для импорта.</p>
+              <ul className="cs__result">
+                <li>Ежемесячные поставки <b>12 дней</b></li>
+                <li>Хоргос · автомобильный коридор</li>
+                <li>Производство без простоев</li>
+              </ul>
+              <blockquote>«Поставки идут как часы — производственный график выдерживаем без сбоев.»
+                <cite>— Таужанов М.К., директор ТОО «Жакко Караганда»</cite>
+              </blockquote>
             </div>
           </article>
 
-          <article className="cs cs--small">
+          <article className="cs">
             <div className="cs__media cs__media--e" aria-hidden="true">
               <div className="cs__route mono"><span>TSN</span><span className="cs__arrow">→</span><span>AKX</span></div>
-              <div className="cs__tagline mono">RAW · CONTAINER</div>
+              <div className="cs__tagline mono">RAW · CONTAINER · 18 ДНЕЙ</div>
             </div>
             <div className="cs__body">
               <div className="cs__client mono">КЛИЕНТ · АО «АРАЛТУЗ»</div>
-              <h3 className="cs__title">Промышленное сырьё контейнером</h3>
-              <p className="cs__short"><span className="mono">TODO ·</span> объём и сроки — уточнить у клиента и заполнить.</p>
+              <h3 className="cs__title">Промышленные материалы контейнером</h3>
+              <p className="cs__task"><b>Задача —</b> наладить регулярные контейнерные поставки производственных материалов из Китая.</p>
+              <p className="cs__solve"><b>Решение —</b> морско-железнодорожная схема через порт Тяньцзинь, прямая подача контейнеров.</p>
+              <ul className="cs__result">
+                <li>Доставка за <b>18 дней</b></li>
+                <li>Тяньцзинь · морско-ж/д</li>
+                <li>Полный пакет документов</li>
+              </ul>
+              <blockquote>«Контейнеры приходят стабильно, документы оформлены корректно.»
+                <cite>— Ишанова М.А., президент АО «Аралтуз»</cite>
+              </blockquote>
             </div>
           </article>
         </div>
