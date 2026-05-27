@@ -17,6 +17,8 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
+  // Disable source maps in production for smaller bundle
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;

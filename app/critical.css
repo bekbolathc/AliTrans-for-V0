@@ -1,0 +1,98 @@
+/* Critical CSS - inline in head to prevent FOUC */
+
+:root {
+  /* palette */
+  --navy-900: #08152F;
+  --navy-800: #0B1B3A;
+  --navy-700: #102347;
+  --navy-600: #1A2E5C;
+  --navy-500: #2A3F70;
+
+  --gold:        #D9A441;
+  --gold-soft:   #E8B965;
+  --gold-deep:   #B9842B;
+
+  --ink:    #1A1F2E;
+  --ink-2:  #4A5063;
+  --mute:   #7B8299;
+
+  --paper:     #F5F2EB;
+  --paper-2:   #EFEAE0;
+  --line:      #E2DCCE;
+  --line-2:    #D4CDBC;
+  --white:     #FFFFFF;
+  --emerald:   #0E8B6C;
+  --rose:      #B23A48;
+
+  --ff-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --ff-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+
+  --max: 1320px;
+  --pad-x: 20px;
+
+  --r-sm: 0.375rem;
+  --r-md: 0.5rem;
+  --r-lg: 0.75rem;
+  --r-xl: 1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--paper);
+}
+
+body {
+  font-family: var(--ff-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.logo__image {
+  width: auto;
+  height: 52px;
+  display: block;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+  transition: all 0.2s ease-out;
+}
+
+.header.is-stuck {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+
+.header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
