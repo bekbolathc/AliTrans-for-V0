@@ -46,7 +46,7 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Ali Trans Group",
-  alternateName: "AXG",
+  alternateName: "ATG",
   url: "https://alitrans.kz",
   logo: "https://alitrans.kz/logo.svg",
   description:

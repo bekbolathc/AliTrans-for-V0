@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Генерируем ID заявки
-    const orderId = "AXG-" + (100000 + Math.floor(Math.random() * 899999));
+    const orderId = "ATG-" + (100000 + Math.floor(Math.random() * 899999));
 
     // Формируем сообщение для WhatsApp - отправляем на рабочий номер
     const businessPhone = "77718000209";
