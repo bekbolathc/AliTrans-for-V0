@@ -30,7 +30,7 @@ export function Quiz() {
   const [step, setStep] = useState<number | "block" | "done">(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [price, setPrice] = useState("");
-  const [orderId, setOrderId] = useState("AXG-000000");
+  const [orderId, setOrderId] = useState("ATG-000000");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
   const [showCustomFrom, setShowCustomFrom] = useState(false);

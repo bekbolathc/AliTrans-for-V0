@@ -154,7 +154,7 @@ module.exports = {
 {
   "success": true,
   "message": "Заявка принята...",
-  "orderId": "AXG-123456",
+  "orderId": "ATG-123456",
   "whatsappUrl": "https://wa.me/..."
 }
 ```

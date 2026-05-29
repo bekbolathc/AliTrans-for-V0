@@ -158,7 +158,7 @@ export function Hero() {
             </ul>
           </div>
 
-          <div className="hero__plate mono">AXG · KZ-CN OPS — 24 / 7</div>
+          <div className="hero__plate mono">ATG · KZ-CN OPS — 24 / 7</div>
         </aside>
       </div>
     </section>
