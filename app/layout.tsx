@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Manrope, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { FAQSchema } from "@/components/FAQSchema";
 import "./globals.css";
@@ -187,6 +188,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {children}
         <FAQSchema />
         <GoogleAnalytics />
+        <Analytics />
         
         {/* Google Ads Event Tracking */}
         <Script id="google-ads-events" strategy="afterInteractive">
