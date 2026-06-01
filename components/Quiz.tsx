@@ -371,7 +371,7 @@ export function Quiz() {
 
             {step === 6 && (
               <fieldset className="qstep is-active">
-                <legend className="qstep__title">Куда отправ��ть расчёт?</legend>
+                <legend className="qstep__title">Куда отправить расчёт?</legend>
                 <div className="qstep__form">
                   {error && <div role="alert" style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
                   <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
