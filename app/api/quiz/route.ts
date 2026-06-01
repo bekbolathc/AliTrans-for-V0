@@ -88,11 +88,6 @@ async function sendToBitrix24(params: {
       }),
     });
     const contactData = await contactRes.json();
-    
-    if (!contactRes.ok || !contactData.result) {
-      logError('Bitrix24 contact creation failed', JSON.stringify(contactData), { orderId: params.orderId, statusCode: contactRes.status });
-    }
-    
     if (contactData.result) contactId = contactData.result;
 
     // 2. Создаём сделку
@@ -113,10 +108,6 @@ async function sendToBitrix24(params: {
       body: JSON.stringify(dealBody),
     });
     const dealData = await dealRes.json();
-    
-    if (!dealRes.ok || !dealData.result) {
-      logError('Bitrix24 deal creation failed', JSON.stringify(dealData), { orderId: params.orderId, statusCode: dealRes.status, contactId });
-    }
 
     return { success: true, dealId: dealData.result, contactId };
   } catch (error) {
