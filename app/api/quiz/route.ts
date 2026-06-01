@@ -49,7 +49,7 @@ async function sendToBitrix24(params: {
   mode: string;
   price: string;
 }): Promise<{ success: boolean; dealId?: number; contactId?: number | null; error?: string }> {
-  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/69/8e6x3s4u3n10kzgp';
+  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
   
   if (!BITRIX_WEBHOOK) {
     logError('sendToBitrix24', 'BITRIX_WEBHOOK_URL not configured');
