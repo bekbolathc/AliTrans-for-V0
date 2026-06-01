@@ -48,7 +48,7 @@ async function sendToBitrix24(params: {
   kind: string;
   mode: string;
   price: string;
-}): Promise<{ success: boolean; dealId?: number; contactId?: number | null; error?: string }> {
+}): Promise<{ success: boolean; dealId?: number; error?: string }> {
   const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
   
   if (!BITRIX_WEBHOOK) {
@@ -72,31 +72,13 @@ async function sendToBitrix24(params: {
     `Ориентировочная цена: ${params.price}`;
 
   try {
-    // 1. Создаём контакт
-    let contactId: number | null = null;
-    const contactRes = await fetch(`${BITRIX_WEBHOOK}/crm.contact.add.json`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fields: {
-          NAME: params.name,
-          PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
-          ...(params.email ? { EMAIL: [{ VALUE: params.email, VALUE_TYPE: 'WORK' }] } : {}),
-          SOURCE_ID: 'WEB',
-        },
-      }),
-    });
-    const contactData = await contactRes.json();
-    if (contactData.result) contactId = contactData.result;
-
-    // 2. Создаём сделку
+    // Создаём сделку
     const dealBody: any = {
       fields: {
         TITLE: title,
         COMMENTS: comment,
         STAGE_ID: 'C1:NEW',
         SOURCE_ID: 'WEB',
-        ...(contactId ? { CONTACT_ID: contactId } : {}),
       },
     };
 
@@ -109,7 +91,7 @@ async function sendToBitrix24(params: {
     
     console.log('Bitrix24 response:', JSON.stringify(dealData));
 
-    return { success: true, dealId: dealData.result, contactId };
+    return { success: true, dealId: dealData.result };
   } catch (error) {
     logError('sendToBitrix24', error, { orderId: params.orderId });
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
