@@ -7,6 +7,8 @@ import { TrustBar } from "@/components/TrustBar";
 import { ForWhom } from "@/components/ForWhom";
 import { Quiz } from "@/components/Quiz";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { SkipToContent } from "@/components/SkipToContent";
 
 // Lazy load components below the fold to reduce main thread work
 const Services = dynamic(() => import("@/components/Services").then(mod => ({ default: mod.Services })), { ssr: true });
@@ -25,10 +27,11 @@ const Floating = dynamic(() => import("@/components/Floating").then(mod => ({ de
 
 export default function Page() {
   return (
-    <>
+    <ErrorBoundary>
+      <SkipToContent />
       <ScrollProgress />
       <Header />
-      <main>
+      <main id="main-content">
         <Hero />
         <TrustBar />
         <ForWhom />
@@ -47,6 +50,6 @@ export default function Page() {
         <Footer />
       </main>
       <Floating />
-    </>
+    </ErrorBoundary>
   );
 }

@@ -1,12 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Базовая санитизация user input от XSS
+// Улучшенная санитизация user input от XSS и инъекций
 function sanitizeInput(input: string): string {
   if (!input) return '';
   return input
     .trim()
-    .replace(/[<>]/g, '')
+    .replace(/[<>'"&\\]/g, '') // Убираем опасные символы
+    .replace(/javascript:/gi, '') // Предотвращаем JS URI
+    .replace(/on\w+=/gi, '') // Убираем event handlers
     .slice(0, 500);
+}
+
+// Логирование ошибок (для продакшена можно заменить на Sentry/LogRocket)
+function logError(context: string, error: unknown, metadata?: Record<string, unknown>) {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    context,
+    error: errorMessage,
+    ...metadata,
+  };
+  console.error('[ATG API Error]', JSON.stringify(logEntry));
 }
 
 // Валидация email
@@ -34,8 +48,13 @@ async function sendToBitrix24(params: {
   kind: string;
   mode: string;
   price: string;
-}) {
-  const BITRIX_WEBHOOK = 'https://alitrans.bitrix24.kz/rest/69/8e6x3s4u3n10kzgp';
+}): Promise<{ success: boolean; dealId?: number; contactId?: number | null; error?: string }> {
+  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/69/8e6x3s4u3n10kzgp';
+  
+  if (!BITRIX_WEBHOOK) {
+    logError('sendToBitrix24', 'BITRIX_WEBHOOK_URL not configured');
+    return { success: false, error: 'Bitrix webhook not configured' };
+  }
 
   const title = `Заявка с сайта #${params.orderId} — ${params.name}`;
   const comment =
@@ -92,8 +111,8 @@ async function sendToBitrix24(params: {
 
     return { success: true, dealId: dealData.result, contactId };
   } catch (error) {
-    console.error('Bitrix24 error:', error);
-    return { success: false };
+    logError('sendToBitrix24', error, { orderId: params.orderId });
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 
@@ -132,24 +151,40 @@ async function sendToBusinessWhatsApp(orderId: string, from: string, to: string,
 
 export async function POST(request: NextRequest) {
   try {
+    // CSRF protection: проверяем origin
+    const origin = request.headers.get('origin');
+    const allowedOrigins = ['https://alitrans.kz', 'https://www.alitrans.kz', 'http://localhost:3000'];
+    if (origin && !allowedOrigins.includes(origin)) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+
     const contentType = request.headers.get('content-type');
     if (!contentType?.includes('application/json')) {
       return NextResponse.json({ success: false, error: "Invalid content type" }, { status: 400 });
     }
 
-    // Rate limiting
-    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    const globalCache = globalThis as any;
+    // Rate limiting (с учётом ограничений in-memory хранилища)
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown';
+    const globalCache = globalThis as unknown as { _rateLimits?: Map<string, { count: number; reset: number }> };
     if (!globalCache._rateLimits) globalCache._rateLimits = new Map();
     const now = Date.now();
     const limits = globalCache._rateLimits;
-    const limitData = limits.get(`rate:${ip}`) || { count: 0, reset: now + 60000 };
+    const limitKey = `rate:${ip}`;
+    const limitData = limits.get(limitKey) || { count: 0, reset: now + 60000 };
+    
+    // Очистка старых записей (простая garbage collection)
+    if (limits.size > 10000) {
+      const keysToDelete: string[] = [];
+      limits.forEach((v, k) => { if (now > v.reset) keysToDelete.push(k); });
+      keysToDelete.forEach(k => limits.delete(k));
+    }
+    
     if (now > limitData.reset) { limitData.count = 0; limitData.reset = now + 60000; }
     if (limitData.count >= 5) {
       return NextResponse.json({ success: false, error: "Слишком много заявок. Попробуйте позже." }, { status: 429 });
     }
     limitData.count++;
-    limits.set(`rate:${ip}`, limitData);
+    limits.set(limitKey, limitData);
 
     const body = await request.json();
     const { from, to, vol, kind, mode, name, phone, wa, email } = body;
@@ -186,11 +221,19 @@ export async function POST(request: NextRequest) {
     const high = Math.round(base * mult * 1.35);
     const price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
 
-    // Отправляем в Битрикс24 и WhatsApp параллельно
-    await Promise.allSettled([
+    // Отправляем в Битрикс24 и WhatsApp параллельно с проверкой результатов
+    const [bitrixResult, whatsappResult] = await Promise.allSettled([
       sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
     ]);
+
+    // Логируем ошибки интеграций (но не блокируем ответ клиенту)
+    if (bitrixResult.status === 'rejected' || (bitrixResult.status === 'fulfilled' && !bitrixResult.value.success)) {
+      logError('Bitrix24 integration failed', bitrixResult.status === 'rejected' ? bitrixResult.reason : 'API returned failure', { orderId });
+    }
+    if (whatsappResult.status === 'rejected') {
+      logError('WhatsApp integration failed', whatsappResult.reason, { orderId });
+    }
 
     // WhatsApp ссылка для клиента
     const whatsappUrl = `https://wa.me/77718000209?text=${encodeURIComponent(
@@ -215,6 +258,7 @@ export async function POST(request: NextRequest) {
     }, { status: 200 });
 
   } catch (error) {
+    logError('POST /api/quiz', error);
     return NextResponse.json({ success: false, error: "Ошибка при обработке заявки. Попробуйте позже." }, { status: 500 });
   }
 }

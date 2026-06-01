@@ -31,6 +31,16 @@ export const metadata: Metadata = {
       "B2B-логистика из Китая в Казахстан. Авиа, ЖД, авто. Минимум 100 кг. Свои склады в Иу, Гуанчжоу, Урумчи, Хоргос.",
     type: "website",
     locale: "ru_RU",
+    url: "https://alitrans.kz",
+    siteName: "Ali Trans Group",
+    images: [
+      {
+        url: "https://alitrans.kz/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Ali Trans Group — доставка грузов из Китая в Казахстан",
+      },
+    ],
   },
   robots: {
     index: true,
@@ -64,7 +74,7 @@ const organizationSchema = {
     telephone: "+77718000209",
     contactType: "Customer Service",
     areaServed: "KZ",
-    availableLanguage: "ru",
+    availableLanguage: ["ru", "kk"],
   },
   sameAs: ["https://instagram.com/alitrans.kz"],
 };
