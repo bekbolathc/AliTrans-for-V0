@@ -1,3 +1,4 @@
+// Deploy: 2026-06-01 15:00:00 UTC
 import { NextRequest, NextResponse } from "next/server";
 
 // Улучшенная санитизация user input от XSS и инъекций
