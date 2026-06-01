@@ -342,7 +342,7 @@ export function Quiz() {
                 <div className="qstep__opts">
                   {[
                     ["apparel", "Одежда и аксессуары"],
-                    ["electronics", "Эле��троника и техника"],
+                    ["electronics", "Электроника и техника"],
                     ["industry", "Промышленное оборудование"],
                     ["build", "Стройматериалы и сантехника"],
                     ["furniture", "Мебель и интерьер"],
