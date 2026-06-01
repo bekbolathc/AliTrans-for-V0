@@ -71,9 +71,6 @@ async function sendToBitrix24(params: {
     fields: {
       TITLE: title,
       COMMENTS: comment,
-      STAGE_ID: 'C1:NEW',
-      SOURCE_ID: 'WEB',
-      SOURCE_DESCRIPTION: `Квиз на alitrans.kz, заявка #${params.orderId}`,
     }
   };
 
