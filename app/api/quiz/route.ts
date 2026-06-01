@@ -204,6 +204,8 @@ export async function POST(request: NextRequest) {
     const price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
 
     // Отправляем в Битрикс24 и WhatsApp параллельно с проверкой результатов
+    console.log('Sending to Bitrix24:', { name: sName, phone: sPhone, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, orderId });
+    
     const [bitrixResult, whatsappResult] = await Promise.allSettled([
       sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
