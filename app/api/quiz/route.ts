@@ -125,6 +125,52 @@ async function sendToBusinessWhatsApp(orderId: string, from: string, to: string,
   }
 }
 
+// Отправка заявки в Telegram
+async function sendToTelegram(params: {
+  orderId: string;
+  name: string;
+  phone: string;
+  wa?: string;
+  email?: string;
+  from: string;
+  to: string;
+  vol: string;
+  kind: string;
+  mode: string;
+  price: string;
+}) {
+  const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8612057155:AAH6HJtzs5onFYFypiE3lOptfxdbojl2zeE';
+  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '218753191';
+
+  const text = 
+    `📋 *Новая заявка #${params.orderId}*\n\n` +
+    `👤 Имя: ${params.name}\n` +
+    `📞 Телефон: ${params.phone}\n` +
+    (params.wa ? `📱 WhatsApp: ${params.wa}\n` : '') +
+    (params.email ? `📧 Email: ${params.email}\n` : '') +
+    `📍 Откуда: ${params.from}\n` +
+    `📍 Куда: ${params.to}\n` +
+    `📦 Объём: ${params.vol}\n` +
+    `🏷️ Тип груза: ${params.kind}\n` +
+    `🚚 Способ: ${params.mode}\n` +
+    `💰 Цена: ${params.price}\n\n` +
+    `🌐 Источник: alitrans.kz`;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text,
+        parse_mode: 'Markdown',
+      }),
+    });
+  } catch (error) {
+    logError('sendToTelegram', error, { orderId: params.orderId });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     // CSRF protection: проверяем origin
@@ -197,12 +243,13 @@ export async function POST(request: NextRequest) {
     const high = Math.round(base * mult * 1.35);
     const price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
 
-    // Отправляем в Битрикс24 и WhatsApp параллельно с проверкой результатов
+    // Отправляем в Битрикс24, WhatsApp и Telegram параллельно с проверкой результатов
     console.log('Sending to Bitrix24:', { name: sName, phone: sPhone, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, orderId });
     
-    const [bitrixResult, whatsappResult] = await Promise.allSettled([
+    const [bitrixResult, whatsappResult, telegramResult] = await Promise.allSettled([
       sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
+      sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
     ]);
 
     // Логируем ошибки интеграций (но не блокируем ответ клиенту)
@@ -211,6 +258,9 @@ export async function POST(request: NextRequest) {
     }
     if (whatsappResult.status === 'rejected') {
       logError('WhatsApp integration failed', whatsappResult.reason, { orderId });
+    }
+    if (telegramResult.status === 'rejected') {
+      logError('Telegram integration failed', telegramResult.reason, { orderId });
     }
 
     // WhatsApp ссылка для клиента
