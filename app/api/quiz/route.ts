@@ -48,13 +48,8 @@ async function sendToBitrix24(params: {
   kind: string;
   mode: string;
   price: string;
-}): Promise<{ success: boolean; dealId?: number; error?: string }> {
+}) {
   const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
-  
-  if (!BITRIX_WEBHOOK) {
-    logError('sendToBitrix24', 'BITRIX_WEBHOOK_URL not configured');
-    return { success: false, error: 'Bitrix webhook not configured' };
-  }
 
   const title = `Заявка с сайта #${params.orderId} — ${params.name}`;
   const comment =
@@ -71,31 +66,32 @@ async function sendToBitrix24(params: {
     `Способ доставки: ${params.mode}\n` +
     `Ориентировочная цена: ${params.price}`;
 
-  try {
-    // Создаём сделку
-    const dealBody: any = {
-      fields: {
-        TITLE: title,
-        COMMENTS: comment,
-        STAGE_ID: 'C1:NEW',
-        SOURCE_ID: 'WEB',
-      },
-    };
+  const payload = {
+    fields: {
+      TITLE: title,
+      COMMENTS: comment,
+      STAGE_ID: 'C1:NEW',
+      SOURCE_ID: 'WEB',
+      SOURCE_DESCRIPTION: `Квиз на alitrans.kz, заявка #${params.orderId}`,
+    }
+  };
 
-    const dealRes = await fetch(`${BITRIX_WEBHOOK}/crm.deal.add.json`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dealBody),
-    });
-    const dealData = await dealRes.json();
-    
-    console.log('Bitrix24 response:', JSON.stringify(dealData));
+  console.log('Bitrix24 payload:', JSON.stringify(payload));
 
-    return { success: true, dealId: dealData.result };
-  } catch (error) {
-    logError('sendToBitrix24', error, { orderId: params.orderId });
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  const dealRes = await fetch(`${BITRIX_WEBHOOK}/crm.deal.add.json`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  const dealData = await dealRes.json();
+  console.log('Bitrix24 response:', JSON.stringify(dealData));
+
+  if (!dealData.result) {
+    throw new Error(`Bitrix24 error: ${JSON.stringify(dealData)}`);
   }
+
+  return { success: true, dealId: dealData.result };
 }
 
 // Отправка на рабочий WhatsApp через webhook
