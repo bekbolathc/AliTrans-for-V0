@@ -260,6 +260,7 @@ export function Testimonials() {
                         src={item.image}
                         alt={item.alt}
                         fill
+                        loading="lazy"
                         className="testimonials__image"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
@@ -323,6 +324,7 @@ export function Testimonials() {
               width={800}
               height={1100}
               quality={95}
+              loading="eager"
               className="testimonials__modal-image"
             />
           </div>

@@ -31,7 +31,7 @@ export function Floating() {
         className="fab fab-wa"
         href="https://wa.me/77718000209?text=Здравствуйте,%20хочу%20уточнить%20по%20доставке%20из%20Китая"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         aria-label="WhatsApp"
         title="WhatsApp"
       >
@@ -48,7 +48,7 @@ export function Floating() {
         className="fab fab-ig"
         href="https://instagram.com/alitrans.kz"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         aria-label="Instagram"
         title="Instagram"
       >

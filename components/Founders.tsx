@@ -24,6 +24,7 @@ export function Founders() {
                 width={800}
                 height={1000}
                 quality={80}
+                loading="lazy"
                 priority={false}
               />
             </div>
@@ -34,7 +35,7 @@ export function Founders() {
                 «Логистика — это про надёжность. Каждая задержка — это срыв бизнеса клиента.
                 Поэтому мы строим процессы так, как делали бы для себя.»
               </blockquote>
-              <a className="founder__ig" href="https://instagram.com/talgat.atg" target="_blank" rel="noopener">
+              <a className="founder__ig" href="https://instagram.com/talgat.atg" target="_blank" rel="noopener noreferrer">
                 <span className="mono">↳ INSTAGRAM</span> @talgat.atg
               </a>
             </div>
@@ -49,6 +50,7 @@ export function Founders() {
                 width={800}
                 height={1000}
                 quality={80}
+                loading="lazy"
                 priority={false}
               />
             </div>
@@ -58,7 +60,7 @@ export function Founders() {
               <blockquote className="founder__quote">
                 «Для нас Ali Trans — это семейное дело. Мы лично знаем многих клиентов и переживаем за каждый груз.»
               </blockquote>
-              <a className="founder__ig" href="https://instagram.com/karlygash_umarova_" target="_blank" rel="noopener">
+              <a className="founder__ig" href="https://instagram.com/karlygash_umarova_" target="_blank" rel="noopener noreferrer">
                 <span className="mono">↳ INSTAGRAM</span> @karlygash_umarova_
               </a>
             </div>

@@ -3,6 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+// Extend Window interface for gtag and custom tracking
+declare global {
+  interface Window {
+    gtag?: (command: string, action: string, params?: Record<string, unknown>) => void;
+    trackQuizConversion?: () => void;
+  }
+}
+
 type Mode = "air" | "rail" | "road" | "advice";
 type Volume = "lt100" | "100-500" | "500-2000" | "2-10t" | "container";
 
@@ -150,14 +158,14 @@ export function Quiz() {
       }, 1500);
       
       // Track conversion in Google Analytics and Google Ads
-      if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", "purchase", {
+      if (typeof window !== "undefined" && window.gtag) {
+        window.gtag("event", "purchase", {
           value: base * mult,
           currency: "KZT",
           transaction_id: data.orderId,
         });
-        if (typeof (window as any).trackQuizConversion === "function") {
-          (window as any).trackQuizConversion();
+        if (typeof window.trackQuizConversion === "function") {
+          window.trackQuizConversion();
         }
       }
       
