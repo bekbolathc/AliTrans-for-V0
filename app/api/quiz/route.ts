@@ -83,7 +83,6 @@ async function sendToBitrix24(params: {
           PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
           ...(params.email ? { EMAIL: [{ VALUE: params.email, VALUE_TYPE: 'WORK' }] } : {}),
           SOURCE_ID: 'WEB',
-          ASSIGNED_BY_ID: 69,
         },
       }),
     });
@@ -95,8 +94,7 @@ async function sendToBitrix24(params: {
       fields: {
         TITLE: title,
         COMMENTS: comment,
-        STAGE_ID: 'NEW',
-        ASSIGNED_BY_ID: 69,
+        STAGE_ID: 'C1:NEW',
         SOURCE_ID: 'WEB',
         ...(contactId ? { CONTACT_ID: contactId } : {}),
       },
@@ -108,6 +106,8 @@ async function sendToBitrix24(params: {
       body: JSON.stringify(dealBody),
     });
     const dealData = await dealRes.json();
+    
+    console.log('Bitrix24 response:', JSON.stringify(dealData));
 
     return { success: true, dealId: dealData.result, contactId };
   } catch (error) {
