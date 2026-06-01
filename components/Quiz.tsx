@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 type Mode = "air" | "rail" | "road" | "advice";
 type Volume = "lt100" | "100-500" | "500-2000" | "2-10t" | "container";
@@ -27,6 +28,7 @@ const captions: Record<number, string> = {
 };
 
 export function Quiz() {
+  const router = useRouter();
   const [step, setStep] = useState<number | "block" | "done">(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [price, setPrice] = useState("");
@@ -141,6 +143,11 @@ export function Quiz() {
       setPrice(calculatedPrice);
       setOrderId(data.orderId);
       setStep("done");
+      
+      // Redirect to thank-you page after 1.5 seconds
+      setTimeout(() => {
+        router.push(`/thank-you?id=${data.orderId}`);
+      }, 1500);
       
       // Track conversion in Google Analytics and Google Ads
       if (typeof window !== "undefined" && (window as any).gtag) {
@@ -327,7 +334,7 @@ export function Quiz() {
                 <div className="qstep__opts">
                   {[
                     ["apparel", "Одежда и аксессуары"],
-                    ["electronics", "Электроника и техника"],
+                    ["electronics", "Эле��троника и техника"],
                     ["industry", "Промышленное оборудование"],
                     ["build", "Стройматериалы и сантехника"],
                     ["furniture", "Мебель и интерьер"],
@@ -356,7 +363,7 @@ export function Quiz() {
 
             {step === 6 && (
               <fieldset className="qstep is-active">
-                <legend className="qstep__title">Куда отправить расчёт?</legend>
+                <legend className="qstep__title">Куда отправ��ть расчёт?</legend>
                 <div className="qstep__form">
                   {error && <div role="alert" style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
                   <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
