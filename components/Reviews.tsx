@@ -10,6 +10,8 @@ const reviews = [
 const logos = ["OLIMP MEDICUS", "АРАЛТУЗ", "FREEDOM FINANCE", "POMO DESIGN", "ЖАККО КАРАГАНДА", "ПРИЗМА ОВЕРСИЗ"];
 
 export function Reviews() {
+  const showVideoReviews = false; // TODO: Включить, когда видео будут готовы
+
   return (
     <section className="reviews">
       <div className="container">
@@ -34,17 +36,19 @@ export function Reviews() {
           ))}
         </div>
 
-        <div className="videos">
-          <div className="mono videos__label">↳ ВИДЕООТЗЫВЫ · СКОРО</div>
-          <div className="videos__grid">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="vid">
-                <div className="vid__play">▶</div>
-                <div className="mono vid__lbl">VIDEO · TODO 16:9</div>
-              </div>
-            ))}
+        {showVideoReviews && (
+          <div className="videos">
+            <div className="mono videos__label">↳ ВИДЕООТЗЫВЫ · СКОРО</div>
+            <div className="videos__grid">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="vid">
+                  <div className="vid__play">▶</div>
+                  <div className="mono vid__lbl">VIDEO · TODO 16:9</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="logos">
           <div className="logos__track">
