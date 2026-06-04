@@ -159,9 +159,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
         
-        {/* DNS Prefetch for GTM - allows faster connection after lazyOnload triggers */}
+        {/* Preconnect for Google services - establishes connection early */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
+        
+        {/* DNS Prefetch fallback for older browsers */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        
+        {/* Preload non-critical CSS to load in parallel without blocking rendering */}
+        <link rel="preload" as="style" href="/styles.css" />
+        
+        {/* Preconnect to external domains for faster connections */}
+        <link rel="preconnect" href="https://instagram.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://schema.org" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://wa.me" />
         
         {/* Logo preload for LCP optimization */}
         <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" />
