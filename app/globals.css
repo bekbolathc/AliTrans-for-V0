@@ -217,6 +217,11 @@
     height: 40px;
     font-size: 18px;
   }
+
+  .hero__proof {
+    font-size: 12px;
+    line-height: 1.5;
+  }
 }
 
 img { max-width: 100%; display: block; }
