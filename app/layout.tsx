@@ -167,9 +167,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         
-        {/* Preconnect to external domains for faster connections */}
-        <link rel="preconnect" href="https://instagram.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://schema.org" crossOrigin="anonymous" />
+        {/* DNS Prefetch for external domains */}
         <link rel="dns-prefetch" href="https://wa.me" />
         
         {/* Logo preload for LCP optimization */}
