@@ -25,6 +25,7 @@ export function Header() {
             width={180}
             height={100}
             priority
+            sizes="(max-width: 768px) 60px, 80px"
           />
         </a>
 
