@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 export function Header() {
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
   const [stuck, setStuck] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -30,12 +33,12 @@ export function Header() {
         </a>
 
         <nav className="nav" aria-label="Основная навигация" style={open ? mobileNavStyle : undefined}>
-          <a href="#services" onClick={() => setOpen(false)}>Услуги</a>
-          <a href="#pricing" onClick={() => setOpen(false)}>Цены</a>
-          <a href="#about" onClick={() => setOpen(false)}>О компании</a>
-          <a href="#cases" onClick={() => setOpen(false)}>Кейсы</a>
-          <a href="#faq" onClick={() => setOpen(false)}>FAQ</a>
-          <a href="#contacts" onClick={() => setOpen(false)}>Контакты</a>
+          <a href={isHomepage ? "#services" : "/#services"} onClick={() => setOpen(false)}>Услуги</a>
+          <a href={isHomepage ? "#pricing" : "/#pricing"} onClick={() => setOpen(false)}>Цены</a>
+          <a href={isHomepage ? "#about" : "/#about"} onClick={() => setOpen(false)}>О компании</a>
+          <a href={isHomepage ? "#cases" : "/#cases"} onClick={() => setOpen(false)}>Кейсы</a>
+          <a href={isHomepage ? "#faq" : "/#faq"} onClick={() => setOpen(false)}>FAQ</a>
+          <a href={isHomepage ? "#contacts" : "/#contacts"} onClick={() => setOpen(false)}>Контакты</a>
         </nav>
 
         <div className="header__cta">
@@ -43,7 +46,7 @@ export function Header() {
             <span className="phone__label">Алматы</span>
             <span className="phone__num">+7 771 800 02 09</span>
           </a>
-          <a className="btn btn--gold" href="#quiz">
+          <a className="btn btn--gold" href={isHomepage ? "#quiz" : "#quiz-cta"}>
             Заявка <span aria-hidden="true">→</span>
           </a>
         </div>
