@@ -1,10 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-export function CTA() {
+interface CTAProps {
+  withQuizOnPage?: boolean;
+}
+
+export function CTA({ withQuizOnPage = true }: CTAProps) {
+  const pathname = usePathname();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   // Get URL parameters on mount
   useEffect(() => {
@@ -16,12 +24,60 @@ export function CTA() {
     if (urlPhone) setPhone(urlPhone);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Store data in sessionStorage so Quiz component can access it
-    if (name) sessionStorage.setItem("quiz_name", name);
-    if (phone) sessionStorage.setItem("quiz_phone", phone);
-    document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth" });
+    
+    if (withQuizOnPage) {
+      // Main page behavior: save to sessionStorage and scroll to Quiz
+      if (name) sessionStorage.setItem("quiz_name", name);
+      if (phone) sessionStorage.setItem("quiz_phone", phone);
+      document.getElementById("quiz")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Subpage behavior: validate and send directly to API
+      if (!name.trim()) {
+        setMessage("Пожалуйста, укажите имя");
+        return;
+      }
+      if (!phone.trim()) {
+        setMessage("Пожалуйста, укажите телефон");
+        return;
+      }
+
+      setIsLoading(true);
+      setMessage("");
+
+      try {
+        const response = await fetch("/api/quiz", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: "Иу (Вилхонг)",
+            to: "Алматы/Астана",
+            vol: "1 м³",
+            kind: "сборка",
+            mode: "ЖД",
+            name: name.trim(),
+            phone: phone.trim(),
+            source: "zhd-dostavka",
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setMessage("✓ Спасибо! Расчёт придёт в WhatsApp в течение 15 минут.");
+          setName("");
+          setPhone("");
+        } else {
+          setMessage(data.error || "Ошибка при отправке заявки. Попробуйте позже.");
+        }
+      } catch (err) {
+        setMessage("Ошибка при отправке заявки. Попробуйте позже.");
+        console.error("[v0] CTA API error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   return (
@@ -39,7 +95,7 @@ export function CTA() {
           </ul>
 
           <div className="cta__actions">
-            <a className="btn btn--gold btn--lg" href="#quiz">Рассчитать стоимость →</a>
+            <a className="btn btn--gold btn--lg" href={withQuizOnPage ? "#quiz" : "#quiz-cta"}>Рассчитать стоимость →</a>
             <a className="btn btn--ghost-light btn--lg" href="https://wa.me/77718000209" target="_blank" rel="noopener">WhatsApp</a>
           </div>
         </div>
@@ -55,9 +111,10 @@ export function CTA() {
               <div className="manager__name">Аманжол</div>
               <p className="manager__quote">«Здравствуйте! Помогу с логистикой вашего груза — рассчитаю стоимость и подберу способ доставки.»</p>
               <form className="manager__form" onSubmit={handleSubmit}>
-                <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} /></label>
-                <label className="field"><span>Телефон</span><input type="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} /></label>
-                <button className="btn btn--gold btn--full" type="submit">Жду расчёт →</button>
+                <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
+                <label className="field"><span>Телефон</span><input type="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
+                {message && <p style={{ fontSize: "14px", color: message.startsWith("✓") ? "var(--emerald)" : "var(--rose)", marginTop: "8px" }}>{message}</p>}
+                <button className="btn btn--gold btn--full" type="submit" disabled={isLoading}>{isLoading ? "Отправляем..." : "Жду расчёт →"}</button>
               </form>
             </div>
           </div>

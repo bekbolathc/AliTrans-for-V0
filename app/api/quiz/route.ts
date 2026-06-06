@@ -138,6 +138,7 @@ async function sendToTelegram(params: {
   kind: string;
   mode: string;
   price: string;
+  source?: string;
 }) {
   const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8612057155:AAH6HJtzs5onFYFypiE3lOptfxdbojl2zeE';
   const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '218753191';
@@ -154,7 +155,7 @@ async function sendToTelegram(params: {
     `🏷️ Тип груза: ${params.kind}\n` +
     `🚚 Способ: ${params.mode}\n` +
     `💰 Цена: ${params.price}\n\n` +
-    `🌐 Источник: alitrans.kz`;
+    `🌐 Источник: alitrans.kz${params.source ? ` (${params.source})` : ''}`;
 
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -209,7 +210,7 @@ export async function POST(request: NextRequest) {
     limits.set(limitKey, limitData);
 
     const body = await request.json();
-    const { from, to, vol, kind, mode, name, phone, wa, email } = body;
+    const { from, to, vol, kind, mode, name, phone, wa, email, source } = body;
 
     // Санитизация
     const sFrom  = sanitizeInput(from);
@@ -249,7 +250,7 @@ export async function POST(request: NextRequest) {
     const [bitrixResult, whatsappResult, telegramResult] = await Promise.allSettled([
       sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
-      sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
+      sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source }),
     ]);
 
     // Логируем ошибки интеграций (но не блокируем ответ клиенту)
