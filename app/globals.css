@@ -426,7 +426,6 @@ section, .hero, .services, .pricing, .founders, .faq, .cases, .testimonials, .re
   align-items: center;
 }
 .hero__left {}
-.hero__right { display: flex; align-items: center; justify-content: center; }
 .kicker {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 8px 14px;
