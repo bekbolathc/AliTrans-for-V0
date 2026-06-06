@@ -32,7 +32,7 @@ export function Footer() {
           <div className="footer__col">
             <div className="mono footer__label">УСЛУГИ</div>
             <a href="#services">Авиа доставка</a>
-            <a href="#services">ЖД доставка</a>
+            <a href="/zhd-dostavka-iz-kitaya">ЖД доставка</a>
             <a href="#services">Авто доставка</a>
             <a href="#services">Сборные грузы</a>
             <a href="#services">Растаможка</a>

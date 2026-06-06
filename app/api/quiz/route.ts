@@ -49,23 +49,27 @@ async function sendToBitrix24(params: {
   kind: string;
   mode: string;
   price: string;
+  source?: string;
 }) {
   const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
 
   const title = `Заявка с сайта #${params.orderId} — ${params.name}`;
-  const comment =
-    `Источник: alitrans.kz (квиз)\n` +
+  
+  let comment =
+    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}\n` +
     `Заявка: ${params.orderId}\n` +
     `Имя: ${params.name}\n` +
     `Телефон: ${params.phone}\n` +
     (params.wa ? `WhatsApp: ${params.wa}\n` : '') +
-    (params.email ? `Email: ${params.email}\n` : '') +
-    `Откуда: ${params.from}\n` +
-    `Куда: ${params.to}\n` +
-    `Объём: ${params.vol}\n` +
-    `Тип груза: ${params.kind}\n` +
-    `Способ доставки: ${params.mode}\n` +
-    `Ориентировочная цена: ${params.price}`;
+    (params.email ? `Email: ${params.email}\n` : '');
+  
+  // Добавляем детали доставки только если они указаны (заполнены)
+  if (params.from) comment += `Откуда: ${params.from}\n`;
+  if (params.to) comment += `Куда: ${params.to}\n`;
+  if (params.vol) comment += `Объём: ${params.vol}\n`;
+  if (params.kind) comment += `Тип груза: ${params.kind}\n`;
+  if (params.mode) comment += `Способ доставки: ${params.mode}\n`;
+  if (params.price && params.price !== '$0 – $0') comment += `Ориентировочная цена: ${params.price}`;
 
   const payload = {
     fields: {
@@ -96,17 +100,19 @@ async function sendToBitrix24(params: {
 async function sendToBusinessWhatsApp(orderId: string, from: string, to: string, vol: string, kind: string, mode: string, name: string, phone: string, wa?: string, email?: string) {
   try {
     const businessPhone = "77718000209";
-    const message =
+    let message =
       `📋 *Новая заявка* #${orderId}\n\n` +
       `👤 Имя: ${name}\n` +
       `📞 Телефон: ${phone}\n` +
       (wa ? `📱 WhatsApp: ${wa}\n` : '') +
-      (email ? `📧 Email: ${email}\n` : '') +
-      `📍 От: ${from}\n` +
-      `📍 До: ${to}\n` +
-      `📦 Объём: ${vol}\n` +
-      `🏷️ Тип: ${kind}\n` +
-      `🚚 Способ: ${mode}`;
+      (email ? `📧 Email: ${email}\n` : '');
+    
+    // Добавляем детали доставки только если они указаны
+    if (from) message += `📍 От: ${from}\n`;
+    if (to) message += `📍 До: ${to}\n`;
+    if (vol) message += `📦 Объём: ${vol}\n`;
+    if (kind) message += `🏷️ Тип: ${kind}\n`;
+    if (mode) message += `🚚 Способ: ${mode}`;
 
     const webhookUrl = process.env.WHATSAPP_WEBHOOK_URL;
     if (webhookUrl) {
@@ -143,19 +149,22 @@ async function sendToTelegram(params: {
   const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8612057155:AAH6HJtzs5onFYFypiE3lOptfxdbojl2zeE';
   const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '218753191';
 
-  const text = 
+  let text = 
     `📋 *Новая заявка #${params.orderId}*\n\n` +
     `👤 Имя: ${params.name}\n` +
     `📞 Телефон: ${params.phone}\n` +
     (params.wa ? `📱 WhatsApp: ${params.wa}\n` : '') +
-    (params.email ? `📧 Email: ${params.email}\n` : '') +
-    `📍 Откуда: ${params.from}\n` +
-    `📍 Куда: ${params.to}\n` +
-    `📦 Объём: ${params.vol}\n` +
-    `🏷️ Тип груза: ${params.kind}\n` +
-    `🚚 Способ: ${params.mode}\n` +
-    `💰 Цена: ${params.price}\n\n` +
-    `🌐 Источник: alitrans.kz${params.source ? ` (${params.source})` : ''}`;
+    (params.email ? `📧 Email: ${params.email}\n` : '');
+  
+  // Добавляем детали доставки только если они указаны
+  if (params.from) text += `📍 Откуда: ${params.from}\n`;
+  if (params.to) text += `📍 Куда: ${params.to}\n`;
+  if (params.vol) text += `📦 Объём: ${params.vol}\n`;
+  if (params.kind) text += `🏷️ Тип груза: ${params.kind}\n`;
+  if (params.mode) text += `🚚 Способ: ${params.mode}\n`;
+  if (params.price && params.price !== '$0 – $0') text += `💰 Цена: ${params.price}\n`;
+  
+  text += `\n🌐 Источник: alitrans.kz${params.source ? ` (${params.source})` : ''}`;
 
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -222,9 +231,14 @@ export async function POST(request: NextRequest) {
     const sPhone = sanitizeInput(phone);
     const sWa    = sanitizeInput(wa || '');
     const sEmail = sanitizeInput(email || '');
+    const sSource = sanitizeInput(source || '');
 
     // Валидация обязательных полей
-    if (!sFrom || !sTo || !sVol || !sKind || !sMode || !sName || !sPhone) {
+    // Для заявок с источника (например с подстраниц) достаточно имени и телефона
+    const isFromSubpage = sSource && sSource !== '';
+    const requiredFieldsMissing = !sName || !sPhone || (!isFromSubpage && (!sFrom || !sTo || !sVol || !sKind || !sMode));
+    
+    if (requiredFieldsMissing) {
       return NextResponse.json({ success: false, error: "Заполните все обязательные поля" }, { status: 400 });
     }
     if (!isValidPhone(sPhone)) {
@@ -237,20 +251,23 @@ export async function POST(request: NextRequest) {
     // Генерируем ID заявки
     const orderId = "ATG-" + (100000 + Math.floor(Math.random() * 899999));
 
-    // Считаем цену
-    const base = ({ "lt100": 150, "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 } as any)[sVol] ?? 800;
-    const mult = ({ air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 } as any)[sMode] ?? 1;
-    const low  = Math.round(base * mult);
-    const high = Math.round(base * mult * 1.35);
-    const price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
+    // Считаем цену только если объём и способ указаны
+    let price = '';
+    if (sVol && sMode) {
+      const base = ({ "lt100": 150, "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 } as any)[sVol] ?? 800;
+      const mult = ({ air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 } as any)[sMode] ?? 1;
+      const low  = Math.round(base * mult);
+      const high = Math.round(base * mult * 1.35);
+      price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
+    }
 
     // Отправляем в Битрикс24, WhatsApp и Telegram параллельно с проверкой результатов
     console.log('Sending to Bitrix24:', { name: sName, phone: sPhone, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, orderId });
     
     const [bitrixResult, whatsappResult, telegramResult] = await Promise.allSettled([
-      sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price }),
+      sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source: sSource }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
-      sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source }),
+      sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source: sSource }),
     ]);
 
     // Логируем ошибки интеграций (но не блокируем ответ клиенту)
