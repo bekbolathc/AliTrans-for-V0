@@ -279,11 +279,11 @@ export default function ZhdDostavkaIzKitaya() {
               </div>
             </div>
 
-            <div className="hero__right" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "400px" }}>
+            <div className="hero__right">
               <img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%D0%96%D0%94%20%281%29-WUFuN5wr04A2H62USPgkuRISCz1oyI.webp"
                 alt="Поезд с грузовыми контейнерами — ЖД доставка из Китая"
-                style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}
+                style={{ width: "100%", height: "auto", display: "block" }}
               />
             </div>
           </div>
