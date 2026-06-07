@@ -245,6 +245,10 @@ export default function ZhdDostavkaIzKitaya() {
                 </span>
               </nav>
 
+              <div className="hero__badge">
+                <span className="mono">RAIL · ОПТИМАЛЬНЫЙ БАЛАНС</span>
+              </div>
+
               <h1 className="hero__title">
                 ЖД доставка грузов<br />из Китая в Казахстан<br />
                 <span className="hero__title-accent">— контейнерные и сборные перевозки.</span>
@@ -265,7 +269,7 @@ export default function ZhdDostavkaIzKitaya() {
 
               <div className="hero__actions">
                 <a className="btn btn--gold btn--lg" href="#quiz-cta">
-                  Рассчитать стоимость
+                  Рассчитать за 15 минут
                   <span aria-hidden="true" className="btn__arrow">→</span>
                 </a>
                 <a className="btn btn--ghost btn--lg" href="https://wa.me/77718000209" target="_blank" rel="noopener">
@@ -277,6 +281,36 @@ export default function ZhdDostavkaIzKitaya() {
                 <span className="mono">↳</span> <b>18 лет</b> на рынке логистики Китай — Казахстан{" "}
                 <span className="dot-sep">·</span> собственный брокер на Хоргосе
               </div>
+            </div>
+
+            <div className="hero__right">
+              <article className="hero__card">
+                <div className="hero__card-price">
+                  <div className="mono hero__card-label">ЦЕНА ОТ</div>
+                  <div className="hero__card-value">$120<span className="hero__card-unit">/м³</span></div>
+                </div>
+
+                <div className="hero__card-details">
+                  <div className="hero__card-row">
+                    <span>Срок доставки</span>
+                    <span className="hero__card-accent">12–18 дней</span>
+                  </div>
+                  <div className="hero__card-row">
+                    <span>Минимальная партия</span>
+                    <span className="hero__card-accent">1 м³</span>
+                  </div>
+                </div>
+
+                <div className="hero__card-included">
+                  <div className="mono hero__card-label">В СТОИМОСТЬ ВКЛЮЧЕНО</div>
+                  <ul>
+                    <li><span className="checkmark">✓</span> Страхование 0,2%</li>
+                    <li><span className="checkmark">✓</span> Растаможка на Хоргосе</li>
+                    <li><span className="checkmark">✓</span> Документы для бухгалтерии</li>
+                    <li><span className="checkmark">✓</span> SMS-оповещения</li>
+                  </ul>
+                </div>
+              </article>
             </div>
           </div>
         </section>
