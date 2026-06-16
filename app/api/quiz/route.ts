@@ -54,46 +54,51 @@ async function sendToBitrix24(params: {
   const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
 
   const title = `Заявка с сайта #${params.orderId} — ${params.name}`;
-  
-  let comment =
-    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}\n` +
-    `Заявка: ${params.orderId}\n` +
-    `Имя: ${params.name}\n` +
-    `Телефон: ${params.phone}\n` +
-    (params.wa ? `WhatsApp: ${params.wa}\n` : '') +
-    (params.email ? `Email: ${params.email}\n` : '');
-  
-  // Добавляем детали доставки только если они указаны (заполнены)
-  if (params.from) comment += `Откуда: ${params.from}\n`;
-  if (params.to) comment += `Куда: ${params.to}\n`;
-  if (params.vol) comment += `Объём: ${params.vol}\n`;
-  if (params.kind) comment += `Тип груза: ${params.kind}\n`;
-  if (params.mode) comment += `Способ доставки: ${params.mode}\n`;
-  if (params.price && params.price !== '$0 – $0') comment += `Ориентировочная цена: ${params.price}`;
+
+  const comment = [
+    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}`,
+    `Заявка: ${params.orderId}`,
+    params.from && `Откуда: ${params.from}`,
+    params.to && `Куда: ${params.to}`,
+    params.vol && `Объём: ${params.vol}`,
+    params.kind && `Тип груза: ${params.kind}`,
+    params.mode && `Способ доставки: ${params.mode}`,
+    params.price && params.price !== '$0 – $0' && `Ориентировочная цена: ${params.price}`,
+    params.wa && `WhatsApp клиента: ${params.wa}`,
+    params.email && `Email: ${params.email}`,
+  ].filter(Boolean).join('\n');
 
   const payload = {
     fields: {
       TITLE: title,
+      NAME: params.name,
+      PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
+      EMAIL: params.email
+        ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
+        : undefined,
+      SOURCE_ID: 'WEB',
       COMMENTS: comment,
-    }
+    },
+    params: { REGISTER_SONET_EVENT: 'Y' },
   };
 
   console.log('Bitrix24 payload:', JSON.stringify(payload));
 
-  const dealRes = await fetch(`${BITRIX_WEBHOOK}/crm.deal.add.json`, {
+  // ← Исправлено: crm.lead.add вместо crm.deal.add
+  const res = await fetch(`${BITRIX_WEBHOOK}/crm.lead.add.json`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 
-  const dealData = await dealRes.json();
-  console.log('Bitrix24 response:', JSON.stringify(dealData));
+  const data = await res.json();
+  console.log('Bitrix24 response:', JSON.stringify(data));
 
-  if (!dealData.result) {
-    throw new Error(`Bitrix24 error: ${JSON.stringify(dealData)}`);
+  if (!data.result) {
+    throw new Error(`Bitrix24 error: ${JSON.stringify(data)}`);
   }
 
-  return { success: true, dealId: dealData.result };
+  return { success: true, leadId: data.result };
 }
 
 // Отправка на рабочий WhatsApp через webhook
