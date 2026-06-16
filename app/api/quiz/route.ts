@@ -50,52 +50,94 @@ async function sendToBitrix24(params: {
   mode: string;
   price: string;
   source?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
 }) {
-  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
+  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL 
+    || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
 
-  const title = `Заявка с сайта #${params.orderId} — ${params.name}`;
+  // Маршрут в читаемом виде
+  const marshrut = [
+    params.from && params.to ? `${params.from} → ${params.to}` : '',
+    params.mode ? `Способ: ${params.mode}` : '',
+    params.vol ? `Объём: ${params.vol}` : '',
+    params.kind ? `Тип груза: ${params.kind}` : '',
+    params.price && params.price !== '$0 – $0' ? `Цена: ${params.price}` : '',
+  ].filter(Boolean).join(' | ');
 
+  // Полный комментарий
   const comment = [
-    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}`,
     `Заявка: ${params.orderId}`,
-    params.from && `Откуда: ${params.from}`,
-    params.to && `Куда: ${params.to}`,
-    params.vol && `Объём: ${params.vol}`,
-    params.kind && `Тип груза: ${params.kind}`,
-    params.mode && `Способ доставки: ${params.mode}`,
-    params.price && params.price !== '$0 – $0' && `Ориентировочная цена: ${params.price}`,
-    params.wa && `WhatsApp клиента: ${params.wa}`,
+    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}`,
+    params.wa    && `WhatsApp: ${params.wa}`,
     params.email && `Email: ${params.email}`,
   ].filter(Boolean).join('\n');
 
-  const payload: Record<string, unknown> = {
-  fields: {
-    TITLE: `Заявка с сайта #${params.orderId} — ${params.name}`,
-    STAGE_ID: 'NEW',       // ← «Новый лид (Неразобранное)» ✅
-    SOURCE_ID: 'WEB',
-    COMMENTS: comment,
-    ...(contactId ? { CONTACT_ID: contactId } : {}),
-  },
-  params: { REGISTER_SONET_EVENT: 'Y' },
-};
+  // Название сделки — видно в списке без открытия карточки
+  const title = `#${params.orderId} | ${params.name} | ${params.from || '?'} → ${params.to || '?'} | ${params.mode || '?'}`;
+
+  const payload = {
+    fields: {
+      TITLE:      title,
+      STAGE_ID:   'NEW',
+      SOURCE_ID:  'WEB',
+      COMMENTS:   comment,
+
+      // ← Кастомное поле «Маршрут» — теперь заполнится
+      UF_CRM_1712231584793: marshrut,
+
+      // ← UTM-поля — для аналитики рекламы
+      UTM_SOURCE:   params.utm_source   || '',
+      UTM_MEDIUM:   params.utm_medium   || '',
+      UTM_CAMPAIGN: params.utm_campaign || '',
+      UTM_TERM:     params.utm_term     || '',
+      UTM_CONTENT:  params.utm_content  || '',
+    },
+    params: { REGISTER_SONET_EVENT: 'Y' },
+  };
 
   console.log('Bitrix24 payload:', JSON.stringify(payload));
 
-  // ← Исправлено: crm.lead.add вместо crm.deal.add
-  const res = await fetch(`${BITRIX_WEBHOOK}/crm.lead.add.json`, {
+  // Создаём контакт
+  const contactRes = await fetch(`${BITRIX_WEBHOOK}/crm.contact.add.json`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields: {
+        NAME:  params.name,
+        PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
+        EMAIL: params.email
+          ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
+          : undefined,
+        SOURCE_ID: 'WEB',
+      }
+    }),
+  });
+  const contactData = await contactRes.json();
+  const contactId = contactData.result;
+
+  if (contactId) {
+    payload.fields['CONTACT_IDS'] = [contactId];
+  }
+
+  // Создаём сделку
+  const dealRes = await fetch(`${BITRIX_WEBHOOK}/crm.deal.add.json`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 
-  const data = await res.json();
-  console.log('Bitrix24 response:', JSON.stringify(data));
+  const dealData = await dealRes.json();
+  console.log('Bitrix24 response:', JSON.stringify(dealData));
 
-  if (!data.result) {
-    throw new Error(`Bitrix24 error: ${JSON.stringify(data)}`);
+  if (!dealData.result) {
+    throw new Error(`Bitrix24 error: ${JSON.stringify(dealData)}`);
   }
 
-  return { success: true, leadId: data.result };
+  return { success: true, dealId: dealData.result };
 }
 
 // Отправка на рабочий WhatsApp через webhook
