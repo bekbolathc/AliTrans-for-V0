@@ -17,6 +17,7 @@ export default function Page() {
     slug: SLUG,
     breadcrumbLabel: "Авиадоставка из Китая",
     ctaSource: "avia",
+    ctaMode: "air",
     hero: {
       kicker: "B2B · AIR · CHINA → KZ · ОТ 100 КГ",
       title: (
