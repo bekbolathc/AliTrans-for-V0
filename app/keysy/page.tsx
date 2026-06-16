@@ -207,7 +207,7 @@ export default function Page() {
         </section>
 
         <div id="quiz-cta">
-          <CTA withQuizOnPage={false} />
+          <CTA withQuizOnPage={false} source="cases" defaultMode="Консультация" />
         </div>
       </main>
 

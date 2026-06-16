@@ -17,6 +17,7 @@ export default function Page() {
     slug: SLUG,
     breadcrumbLabel: "Сборные грузы из Китая",
     ctaSource: "sbornye",
+    ctaDefaultMode: "Сборный груз",
     hero: {
       kicker: "B2B · LCL · CHINA → KZ · ОТ 100 КГ",
       title: (

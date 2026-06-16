@@ -17,6 +17,7 @@ export default function Page() {
     slug: SLUG,
     breadcrumbLabel: "ВЭД под ключ",
     ctaSource: "ved",
+    ctaDefaultMode: "ВЭД под ключ",
     hero: {
       kicker: "B2B · FULL-SERVICE · CHINA → KZ",
       title: (

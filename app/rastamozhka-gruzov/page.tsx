@@ -17,6 +17,7 @@ export default function Page() {
     slug: SLUG,
     breadcrumbLabel: "Растаможка грузов",
     ctaSource: "rastamozhka",
+    ctaDefaultMode: "Растаможка",
     hero: {
       kicker: "B2B · CUSTOMS · CHINA → KZ · СВОЙ БРОКЕР",
       title: (
