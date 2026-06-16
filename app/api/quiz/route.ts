@@ -68,18 +68,13 @@ async function sendToBitrix24(params: {
     params.email && `Email: ${params.email}`,
   ].filter(Boolean).join('\n');
 
-  const payload = {
+  const payload: Record<string, unknown> = {
   fields: {
-    TITLE: title,
-    NAME: params.name,
-    PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
-    EMAIL: params.email
-      ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
-      : undefined,
+    TITLE: `Заявка с сайта #${params.orderId} — ${params.name}`,
+    STAGE_ID: 'NEW',       // ← «Новый лид (Неразобранное)» ✅
     SOURCE_ID: 'WEB',
-    STATUS_ID: 'NEW',   // ← Не обработан
-    // ASSIGNED_BY_ID — НЕ указываем, пусть Битрикс сам назначает
     COMMENTS: comment,
+    ...(contactId ? { CONTACT_ID: contactId } : {}),
   },
   params: { REGISTER_SONET_EVENT: 'Y' },
 };
