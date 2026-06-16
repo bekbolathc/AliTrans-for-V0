@@ -2297,6 +2297,16 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   opacity: 1;
   outline: none;
 }
+/* .header.is-stuck .nav a задаёт светлый цвет (#F5F2EB) для всех ссылок в .nav —
+   эта специфичность (.header.is-stuck .nav a) выше нашего общего override выше,
+   поэтому пункты дропдауна на белом фоне меню становились почти невидимыми. */
+.header.is-stuck .nav-dropdown__menu .nav-dropdown__item {
+  color: var(--ink);
+}
+.header.is-stuck .nav-dropdown__menu .nav-dropdown__item:hover,
+.header.is-stuck .nav-dropdown__menu .nav-dropdown__item:focus-visible {
+  color: var(--gold-deep);
+}
 
 /* ── LanguageSwitcher ────────────────────────────────────── */
 .lang {
