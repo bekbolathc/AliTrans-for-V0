@@ -69,18 +69,19 @@ async function sendToBitrix24(params: {
   ].filter(Boolean).join('\n');
 
   const payload = {
-    fields: {
-      TITLE: title,
-      NAME: params.name,
-      PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
-      EMAIL: params.email
-        ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
-        : undefined,
-      SOURCE_ID: 'WEB',
-      COMMENTS: comment,
-    },
-    params: { REGISTER_SONET_EVENT: 'Y' },
-  };
+  fields: {
+    TITLE: title,
+    NAME: params.name,
+    PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
+    EMAIL: params.email
+      ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
+      : undefined,
+    SOURCE_ID: 'WEB',
+    STATUS_ID: 'NEW',        // ← добавить эту строку
+    COMMENTS: comment,
+  },
+  params: { REGISTER_SONET_EVENT: 'Y' },
+};
 
   console.log('Bitrix24 payload:', JSON.stringify(payload));
 
