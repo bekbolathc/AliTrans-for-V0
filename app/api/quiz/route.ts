@@ -77,7 +77,8 @@ async function sendToBitrix24(params: {
       ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
       : undefined,
     SOURCE_ID: 'WEB',
-    STATUS_ID: 'NEW',        // ← добавить эту строку
+    STATUS_ID: 'NEW',   // ← Не обработан
+    // ASSIGNED_BY_ID — НЕ указываем, пусть Битрикс сам назначает
     COMMENTS: comment,
   },
   params: { REGISTER_SONET_EVENT: 'Y' },
