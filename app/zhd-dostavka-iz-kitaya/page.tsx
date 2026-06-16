@@ -278,6 +278,39 @@ export default function ZhdDostavkaIzKitaya() {
                 <span className="dot-sep">·</span> собственный брокер на Хоргосе
               </div>
             </div>
+
+            <aside className="hero__panel" aria-label="Условия услуги">
+              <div className="price-card">
+                <div className="price-card__kicker">ЦЕНА ОТ</div>
+                <div className="price-card__amount">
+                  $120
+                  <span className="price-card__amount-unit">/м³</span>
+                </div>
+                <div className="price-card__rows">
+                  <div className="price-card__row">
+                    <span className="price-card__row-label">Срок доставки</span>
+                    <span className="price-card__row-value">12–18 дней</span>
+                  </div>
+                  <div className="price-card__row">
+                    <span className="price-card__row-label">Минимальная партия</span>
+                    <span className="price-card__row-value">100 кг / 1 м³</span>
+                  </div>
+                  <div className="price-card__row">
+                    <span className="price-card__row-label">Складов в Китае</span>
+                    <span className="price-card__row-value">4 собственных</span>
+                  </div>
+                </div>
+                <div className="price-card__divider" />
+                <div className="price-card__incl-label">В СТОИМОСТЬ ВКЛЮЧЕНО</div>
+                <ul className="price-card__incl">
+                  <li>Страхование 0,2%</li>
+                  <li>Растаможка на Хоргосе</li>
+                  <li>Документы для бухгалтерии</li>
+                  <li>SMS-оповещения</li>
+                  <li>Доставка по адресу</li>
+                </ul>
+              </div>
+            </aside>
           </div>
         </section>
 
