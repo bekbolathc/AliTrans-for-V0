@@ -569,7 +569,7 @@ export default function ZhdDostavkaIzKitaya() {
 
         {/* CTA — conversion block (existing component) */}
         <div id="quiz-cta">
-          <CTA withQuizOnPage={false} />
+          <CTA withQuizOnPage={false} source="zhd-dostavka" defaultMode="rail" />
         </div>
       </main>
 

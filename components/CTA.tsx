@@ -14,7 +14,7 @@ interface CTAProps {
 export function CTA({
   withQuizOnPage = true,
   source = "zhd-dostavka",
-  defaultMode = "ЖД",
+  defaultMode = "",
 }: CTAProps) {
   const pathname = usePathname();
   const [name, setName] = useState("");

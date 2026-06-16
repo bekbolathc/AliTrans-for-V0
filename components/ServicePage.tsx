@@ -114,7 +114,7 @@ export type ServicePageData = {
   /** source-параметр для /api/quiz (передаётся в CTA). */
   ctaSource: string;
   /** Способ доставки для поля "mode" в заявке (по умолчанию совпадает с ctaSource). */
-  ctaDefaultMode: string;
+  ctaMode?: string;
 };
 
 export function ServicePage({ data }: { data: ServicePageData }) {
@@ -441,7 +441,7 @@ export function ServicePage({ data }: { data: ServicePageData }) {
 
         {/* CTA */}
         <div id="quiz-cta">
-          <CTA withQuizOnPage={false} source={data.ctaSource} defaultMode={data.ctaDefaultMode} />
+          <CTA withQuizOnPage={false} source={data.ctaSource} defaultMode={data.ctaMode} />
         </div>
       </main>
 
