@@ -17,6 +17,7 @@ export default function Page() {
     slug: SLUG,
     breadcrumbLabel: "Авто доставка из Китая",
     ctaSource: "avto",
+    ctaMode: "road",
     hero: {
       kicker: "B2B · ROAD · CHINA → KZ · ДО ДВЕРИ",
       title: (
