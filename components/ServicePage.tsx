@@ -439,7 +439,7 @@ export function ServicePage({ data }: { data: ServicePageData }) {
 
         {/* CTA */}
         <div id="quiz-cta">
-          <CTA withQuizOnPage={false} source={data.ctaSource} />
+          <CTA withQuizOnPage={false} source={data.ctaSource} defaultMode={data.ctaMode} />
         </div>
       </main>
 
