@@ -61,6 +61,7 @@ async function sendToBitrix24(params: {
 
   // Маршрут в читаемом виде → попадёт в поле «Маршрут» в карточке
   const marshrut = [
+    params.source ? `Страница: ${params.source}` : '',
     params.from && params.to ? `${params.from} → ${params.to}` : '',
     params.mode ? `Способ: ${params.mode}` : '',
     params.vol ? `Объём: ${params.vol}` : '',
