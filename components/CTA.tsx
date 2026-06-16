@@ -5,9 +5,17 @@ import { usePathname } from "next/navigation";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
+  /** Источник заявки — попадает в payload `/api/quiz` и далее в Bitrix24/Telegram для сегментации. */
+  source?: string;
+  /** Базовый mode для API (рус. название способа доставки). */
+  defaultMode?: string;
 }
 
-export function CTA({ withQuizOnPage = true }: CTAProps) {
+export function CTA({
+  withQuizOnPage = true,
+  source = "zhd-dostavka",
+  defaultMode = "ЖД",
+}: CTAProps) {
   const pathname = usePathname();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -55,10 +63,10 @@ export function CTA({ withQuizOnPage = true }: CTAProps) {
             to: "",
             vol: "",
             kind: "",
-            mode: "ЖД",
+            mode: defaultMode,
             name: name.trim(),
             phone: phone.trim(),
-            source: "zhd-dostavka",
+            source,
           }),
         });
 

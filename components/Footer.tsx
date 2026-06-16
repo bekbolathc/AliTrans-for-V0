@@ -1,48 +1,63 @@
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer__top">
           <div className="footer__col footer__col--brand">
-            <a className="logo logo--light" href="/" aria-label="Ali Trans Group - доставка грузов из Китая">
-              <img 
-                src="/logo.png" 
-                alt="Ali Trans Group логотип" 
+            <Link className="logo logo--light" href="/" aria-label="Ali Trans Group">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="Ali Trans Group логотип"
                 className="logo__image"
                 style={{ height: "60px", width: "auto" }}
               />
-            </a>
-            <p>B2B-логистика из Китая в Казахстан с 2007 года. Авиа, ЖД, авто. Свои склады в Иу, Гуанчжоу, Урумчи, Хоргосе.</p>
+            </Link>
+            <p>
+              B2B-логистика из Китая в Казахстан с 2007 года. Авиа, ЖД, авто. Свои склады в
+              Иу, Гуанчжоу, Урумчи, Хоргосе.
+            </p>
             <div className="footer__social">
-              <a href="https://instagram.com/alitrans.kz" target="_blank" rel="noopener"><span className="mono">IG</span> @alitrans.kz</a>
-              <a href="https://wa.me/77718000209" target="_blank" rel="noopener"><span className="mono">WA</span> +7 771 800 02 09</a>
+              <a href="https://instagram.com/alitrans.kz" target="_blank" rel="noopener">
+                <span className="mono">IG</span> @alitrans.kz
+              </a>
+              <a href="https://wa.me/77718000209" target="_blank" rel="noopener">
+                <span className="mono">WA</span> +7 771 800 02 09
+              </a>
             </div>
           </div>
 
           <div className="footer__col">
             <div className="mono footer__label">НАВИГАЦИЯ</div>
-            <a href="#services">Услуги</a>
-            <a href="#pricing">Цены</a>
-            <a href="#about">О компании</a>
-            <a href="#cases">Кейсы</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contacts">Контакты</a>
+            <Link href="/keysy">Кейсы</Link>
+            <Link href="/o-kompanii">О компании</Link>
+            <Link href="/kontakty">Контакты</Link>
+            <Link href="/privacy-policy">Политика конфиденциальности</Link>
+            <Link href="/terms">Договор-оферта</Link>
           </div>
 
           <div className="footer__col">
             <div className="mono footer__label">УСЛУГИ</div>
-            <a href="#services">Авиа доставка</a>
-            <a href="/zhd-dostavka-iz-kitaya">ЖД доставка</a>
-            <a href="#services">Авто доставка</a>
-            <a href="#services">Сборные грузы</a>
-            <a href="#services">Растаможка</a>
-            <a href="#services">Страхование</a>
+            <Link href="/avia-dostavka-iz-kitaya">Авиа доставка</Link>
+            <Link href="/zhd-dostavka-iz-kitaya">ЖД доставка</Link>
+            <Link href="/avto-dostavka-iz-kitaya">Авто доставка</Link>
+            <Link href="/sbornye-gruzy-iz-kitaya">Сборные грузы</Link>
+            <Link href="/rastamozhka-gruzov">Растаможка</Link>
+            <Link href="/ved-pod-klyuch">ВЭД под ключ</Link>
           </div>
 
           <div className="footer__col">
             <div className="mono footer__label">КОНТАКТЫ</div>
-            <p>г. Алматы, ул. Тимирязева 42, К23<br />БЦ «Asia Most», офис 210</p>
-            <a className="footer__phone" href="tel:+77718000209">+7 (771) 800 02 09</a>
+            <p>
+              г. Алматы, ул. Тимирязева 42, К23
+              <br />
+              БЦ «Asia Most», офис 210
+            </p>
+            <a className="footer__phone" href="tel:+77718000209">
+              +7 (771) 800 02 09
+            </a>
             <a href="mailto:sales@alitrans.kz">sales@alitrans.kz</a>
             <p className="mono footer__hours">ПН–ПТ · 09:00 – 18:00</p>
           </div>
@@ -52,8 +67,8 @@ export function Footer() {
           <div>© 2026 ТОО «Ali Trans Group» · все права защищены</div>
           <div className="mono">БИН · 191040009895</div>
           <div className="footer__legal">
-            <a href="/privacy-policy">Политика конфиденциальности</a>
-            <a href="/terms">Договор-оферта</a>
+            <Link href="/privacy-policy">Политика конфиденциальности</Link>
+            <Link href="/terms">Договор-оферта</Link>
           </div>
         </div>
       </div>

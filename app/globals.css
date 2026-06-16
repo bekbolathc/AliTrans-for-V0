@@ -2137,3 +2137,431 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   flex-wrap: wrap;
 }
 
+
+/* ============================================================
+ * B2B-расширение · итерация 1 — новые BEM-блоки.
+ * Все значения из существующих CSS-переменных (см. :root в head).
+ * Без новых цветов / шрифтов / радиусов.
+ * ============================================================ */
+
+/* ── BreadcrumbNav ───────────────────────────────────────── */
+.breadcrumbs {
+  padding: 16px 0 0;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.breadcrumbs__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+.breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.breadcrumbs__sep {
+  color: var(--line-2);
+}
+.breadcrumbs__link {
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.breadcrumbs__link:hover {
+  color: var(--gold-deep);
+}
+.breadcrumbs__current {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ── NavDropdown (мини-мегаменю «Услуги» в Header) ───────── */
+.nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-dropdown__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  opacity: 0.85;
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.18s;
+}
+.nav-dropdown__trigger:hover,
+.nav-dropdown.is-open .nav-dropdown__trigger {
+  opacity: 1;
+}
+.nav-dropdown__trigger::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 14px;
+  bottom: -6px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s;
+}
+.nav-dropdown:hover .nav-dropdown__trigger::after,
+.nav-dropdown.is-open .nav-dropdown__trigger::after {
+  transform: scaleX(1);
+}
+.nav-dropdown__caret {
+  font-size: 10px;
+  opacity: 0.7;
+  transition: transform 0.2s;
+}
+.nav-dropdown.is-open .nav-dropdown__caret,
+.nav-dropdown:hover .nav-dropdown__caret {
+  transform: rotate(180deg);
+}
+.nav-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translate(-50%, -8px);
+  min-width: 260px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 8px;
+  box-shadow: 0 24px 48px rgba(8, 21, 47, 0.18), 0 6px 12px rgba(8, 21, 47, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 130;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+}
+.nav-dropdown:hover .nav-dropdown__menu,
+.nav-dropdown.is-open .nav-dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+.nav-dropdown__menu::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 14px;
+}
+/* Перебиваем глобальный .nav a (opacity + золотая полоска ::after),
+   чтобы пункты дропдауна были чёткие и без подчёркивания. */
+.nav .nav-dropdown__menu .nav-dropdown__item,
+.nav-dropdown__menu .nav-dropdown__item {
+  display: block;
+  padding: 10px 14px;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: var(--r-sm);
+  font-size: 14.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 1;
+  transition: background 0.15s, color 0.15s;
+}
+.nav .nav-dropdown__menu .nav-dropdown__item::after,
+.nav-dropdown__menu .nav-dropdown__item::after {
+  content: none;
+  display: none;
+}
+.nav .nav-dropdown__menu .nav-dropdown__item:hover,
+.nav .nav-dropdown__menu .nav-dropdown__item:focus-visible,
+.nav-dropdown__menu .nav-dropdown__item:hover,
+.nav-dropdown__menu .nav-dropdown__item:focus-visible {
+  background: var(--paper-2);
+  color: var(--gold-deep);
+  opacity: 1;
+  outline: none;
+}
+/* .header.is-stuck .nav a задаёт светлый цвет (#F5F2EB) для всех ссылок в .nav —
+   эта специфичность (.header.is-stuck .nav a) выше нашего общего override выше,
+   поэтому пункты дропдауна на белом фоне меню становились почти невидимыми. */
+.header.is-stuck .nav-dropdown__menu .nav-dropdown__item {
+  color: var(--ink);
+}
+.header.is-stuck .nav-dropdown__menu .nav-dropdown__item:hover,
+.header.is-stuck .nav-dropdown__menu .nav-dropdown__item:focus-visible {
+  color: var(--gold-deep);
+}
+
+/* ── LanguageSwitcher ────────────────────────────────────── */
+.lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 2px;
+  background: var(--paper-2);
+}
+.lang__btn {
+  background: transparent;
+  border: 0;
+  padding: 4px 8px;
+  color: var(--mute);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+.lang__btn:hover:not(:disabled) {
+  color: var(--ink);
+}
+.lang__btn--active {
+  background: var(--white);
+  color: var(--ink);
+  font-weight: 600;
+}
+.lang__btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.lang--compact {
+  margin-right: 8px;
+}
+
+/* ── Services-карточки: actions + Подробнее ──────────────── */
+.svc__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+.svc__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: 6px 0;
+  transition: color 0.15s;
+}
+.svc__more:hover {
+  color: var(--gold-deep);
+}
+
+/* ── Floating sticky mini-CTA (мобиле) — задел под Иter. 4 */
+.floating-cta {
+  display: none;
+}
+@media (max-width: 767px) {
+  .floating-cta {
+    display: inline-flex;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+    z-index: 95;
+    padding: 12px 18px;
+    background: var(--gold);
+    color: var(--navy-900);
+    border: 0;
+    border-radius: var(--r-md);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(217, 164, 65, 0.4);
+  }
+}
+
+/* ============================================================
+ * B2B-расширение · итерация 3 — Cases-фильтр, About-сетки, Map.
+ * Используем только существующие токены.
+ * ============================================================ */
+
+.cases-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.cases-filter__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cases-filter__chip {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 8px 14px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.cases-filter__chip:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.cases-filter__chip.is-active {
+  background: var(--navy-900);
+  border-color: var(--navy-900);
+  color: var(--paper);
+}
+.cases__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--mute);
+  padding: 32px;
+  border: 1px dashed var(--line);
+  border-radius: var(--r-md);
+}
+
+.why__grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.why__grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .why__grid--2,
+  .why__grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.map-embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.map-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ============================================================
+ * B2B-расширение · итерация 5 — Hero price-card (правая колонка).
+ * Используется на всех новых посадочных + корпоративных страницах.
+ * Стиль повторяет .panel из главной, но с фокусом на B2B-факт.
+ * ============================================================ */
+
+.price-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 20px;
+  padding: 28px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  color: #F5F2EB;
+}
+.price-card__kicker {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245,242,235,0.55);
+  margin-bottom: 12px;
+}
+.price-card__amount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: clamp(40px, 4vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #F5F2EB;
+}
+.price-card__amount-unit {
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(245,242,235,0.6);
+}
+.price-card__rows {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.price-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 15px;
+}
+.price-card__row:first-child { border-top: 0; padding-top: 0; }
+.price-card__row-label {
+  color: rgba(245,242,235,0.7);
+}
+.price-card__row-value {
+  color: var(--gold);
+  font-weight: 600;
+  text-align: right;
+}
+.price-card__divider {
+  margin: 18px 0 14px;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}
+.price-card__incl-label {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245,242,235,0.55);
+  margin-bottom: 10px;
+}
+.price-card__incl {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.price-card__incl li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  color: rgba(245,242,235,0.85);
+}
+.price-card__incl li::before {
+  content: '✓';
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 14px;
+}
+@media (max-width: 980px) {
+  .price-card { padding: 22px; }
+  .price-card__amount { font-size: 38px; }
+}
