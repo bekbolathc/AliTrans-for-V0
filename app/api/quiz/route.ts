@@ -1,4 +1,4 @@
-// Deploy: 2026-06-01 15:00:00 UTC
+// Deploy: 2026-06-16 17:00:00 UTC
 import { NextRequest, NextResponse } from "next/server";
 
 // Улучшенная санитизация user input от XSS и инъекций
@@ -50,36 +50,80 @@ async function sendToBitrix24(params: {
   mode: string;
   price: string;
   source?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
 }) {
-  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
+  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL
+    || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
 
-  const title = `Заявка с сайта #${params.orderId} — ${params.name}`;
-  
-  let comment =
-    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}\n` +
-    `Заявка: ${params.orderId}\n` +
-    `Имя: ${params.name}\n` +
-    `Телефон: ${params.phone}\n` +
-    (params.wa ? `WhatsApp: ${params.wa}\n` : '') +
-    (params.email ? `Email: ${params.email}\n` : '');
-  
-  // Добавляем детали доставки только если они указаны (заполнены)
-  if (params.from) comment += `Откуда: ${params.from}\n`;
-  if (params.to) comment += `Куда: ${params.to}\n`;
-  if (params.vol) comment += `Объём: ${params.vol}\n`;
-  if (params.kind) comment += `Тип груза: ${params.kind}\n`;
-  if (params.mode) comment += `Способ доставки: ${params.mode}\n`;
-  if (params.price && params.price !== '$0 – $0') comment += `Ориентировочная цена: ${params.price}`;
+  // Маршрут в читаемом виде → попадёт в поле «Маршрут» в карточке
+  const marshrut = [
+    params.from && params.to ? `${params.from} → ${params.to}` : '',
+    params.mode ? `Способ: ${params.mode}` : '',
+    params.vol ? `Объём: ${params.vol}` : '',
+    params.kind ? `Тип груза: ${params.kind}` : '',
+    params.price && params.price !== '$0 – $0' ? `Цена: ${params.price}` : '',
+  ].filter(Boolean).join(' | ');
 
-  const payload = {
+  // Полный комментарий
+  const comment = [
+    `Заявка: ${params.orderId}`,
+    `Источник: alitrans.kz${params.source ? ` (${params.source})` : ' (квиз)'}`,
+    params.wa    && `WhatsApp: ${params.wa}`,
+    params.email && `Email: ${params.email}`,
+  ].filter(Boolean).join('\n');
+
+  // Название сделки — видно в списке без открытия карточки
+  const title = `#${params.orderId} | ${params.name} | ${params.from || '?'} → ${params.to || '?'} | ${params.mode || '?'}`;
+
+  const payload: Record<string, unknown> = {
     fields: {
-      TITLE: title,
-      COMMENTS: comment,
-    }
+      TITLE:     title,
+      STAGE_ID:  'NEW',
+      SOURCE_ID: 'WEB',
+      COMMENTS:  comment,
+
+      // Кастомное поле «Маршрут»
+      UF_CRM_1712231584793: marshrut,
+
+      // UTM-поля для аналитики рекламы
+      UTM_SOURCE:   params.utm_source   || '',
+      UTM_MEDIUM:   params.utm_medium   || '',
+      UTM_CAMPAIGN: params.utm_campaign || '',
+      UTM_TERM:     params.utm_term     || '',
+      UTM_CONTENT:  params.utm_content  || '',
+    },
+    params: { REGISTER_SONET_EVENT: 'Y' },
   };
 
   console.log('Bitrix24 payload:', JSON.stringify(payload));
 
+  // Создаём контакт
+  const contactRes = await fetch(`${BITRIX_WEBHOOK}/crm.contact.add.json`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields: {
+        NAME:  params.name,
+        PHONE: [{ VALUE: params.phone, VALUE_TYPE: 'WORK' }],
+        EMAIL: params.email
+          ? [{ VALUE: params.email, VALUE_TYPE: 'WORK' }]
+          : undefined,
+        SOURCE_ID: 'WEB',
+      }
+    }),
+  });
+  const contactData = await contactRes.json();
+  const contactId = contactData.result;
+
+  if (contactId) {
+    (payload.fields as Record<string, unknown>)['CONTACT_IDS'] = [contactId];
+  }
+
+  // Создаём сделку
   const dealRes = await fetch(`${BITRIX_WEBHOOK}/crm.deal.add.json`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -106,11 +150,10 @@ async function sendToBusinessWhatsApp(orderId: string, from: string, to: string,
       `📞 Телефон: ${phone}\n` +
       (wa ? `📱 WhatsApp: ${wa}\n` : '') +
       (email ? `📧 Email: ${email}\n` : '');
-    
-    // Добавляем детали доставки только если они указаны
+
     if (from) message += `📍 От: ${from}\n`;
-    if (to) message += `📍 До: ${to}\n`;
-    if (vol) message += `📦 Объём: ${vol}\n`;
+    if (to)   message += `📍 До: ${to}\n`;
+    if (vol)  message += `📦 Объём: ${vol}\n`;
     if (kind) message += `🏷️ Тип: ${kind}\n`;
     if (mode) message += `🚚 Способ: ${mode}`;
 
@@ -149,21 +192,20 @@ async function sendToTelegram(params: {
   const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8612057155:AAH6HJtzs5onFYFypiE3lOptfxdbojl2zeE';
   const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '218753191';
 
-  let text = 
+  let text =
     `📋 *Новая заявка #${params.orderId}*\n\n` +
     `👤 Имя: ${params.name}\n` +
     `📞 Телефон: ${params.phone}\n` +
     (params.wa ? `📱 WhatsApp: ${params.wa}\n` : '') +
     (params.email ? `📧 Email: ${params.email}\n` : '');
-  
-  // Добавляем детали доставки только если они указаны
+
   if (params.from) text += `📍 Откуда: ${params.from}\n`;
-  if (params.to) text += `📍 Куда: ${params.to}\n`;
-  if (params.vol) text += `📦 Объём: ${params.vol}\n`;
+  if (params.to)   text += `📍 Куда: ${params.to}\n`;
+  if (params.vol)  text += `📦 Объём: ${params.vol}\n`;
   if (params.kind) text += `🏷️ Тип груза: ${params.kind}\n`;
   if (params.mode) text += `🚚 Способ: ${params.mode}\n`;
   if (params.price && params.price !== '$0 – $0') text += `💰 Цена: ${params.price}\n`;
-  
+
   text += `\n🌐 Источник: alitrans.kz${params.source ? ` (${params.source})` : ''}`;
 
   try {
@@ -195,7 +237,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Invalid content type" }, { status: 400 });
     }
 
-    // Rate limiting (с учётом ограничений in-memory хранилища)
+    // Rate limiting
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown';
     const globalCache = globalThis as unknown as { _rateLimits?: Map<string, { count: number; reset: number }> };
     if (!globalCache._rateLimits) globalCache._rateLimits = new Map();
@@ -203,14 +245,13 @@ export async function POST(request: NextRequest) {
     const limits = globalCache._rateLimits;
     const limitKey = `rate:${ip}`;
     const limitData = limits.get(limitKey) || { count: 0, reset: now + 60000 };
-    
-    // Очистка старых записей (простая garbage collection)
+
     if (limits.size > 10000) {
       const keysToDelete: string[] = [];
       limits.forEach((v, k) => { if (now > v.reset) keysToDelete.push(k); });
       keysToDelete.forEach(k => limits.delete(k));
     }
-    
+
     if (now > limitData.reset) { limitData.count = 0; limitData.reset = now + 60000; }
     if (limitData.count >= 5) {
       return NextResponse.json({ success: false, error: "Слишком много заявок. Попробуйте позже." }, { status: 429 });
@@ -219,25 +260,29 @@ export async function POST(request: NextRequest) {
     limits.set(limitKey, limitData);
 
     const body = await request.json();
-    const { from, to, vol, kind, mode, name, phone, wa, email, source } = body;
+
+    // ✅ ИСПРАВЛЕНИЕ 1: добавлены utm-параметры
+    const {
+      from, to, vol, kind, mode, name, phone, wa, email, source,
+      utm_source, utm_medium, utm_campaign, utm_term, utm_content
+    } = body;
 
     // Санитизация
-    const sFrom  = sanitizeInput(from);
-    const sTo    = sanitizeInput(to);
-    const sVol   = sanitizeInput(vol);
-    const sKind  = sanitizeInput(kind);
-    const sMode  = sanitizeInput(mode);
-    const sName  = sanitizeInput(name);
-    const sPhone = sanitizeInput(phone);
-    const sWa    = sanitizeInput(wa || '');
-    const sEmail = sanitizeInput(email || '');
+    const sFrom   = sanitizeInput(from);
+    const sTo     = sanitizeInput(to);
+    const sVol    = sanitizeInput(vol);
+    const sKind   = sanitizeInput(kind);
+    const sMode   = sanitizeInput(mode);
+    const sName   = sanitizeInput(name);
+    const sPhone  = sanitizeInput(phone);
+    const sWa     = sanitizeInput(wa || '');
+    const sEmail  = sanitizeInput(email || '');
     const sSource = sanitizeInput(source || '');
 
     // Валидация обязательных полей
-    // Для заявок с источника (например с подстраниц) достаточно имени и телефона
     const isFromSubpage = sSource && sSource !== '';
     const requiredFieldsMissing = !sName || !sPhone || (!isFromSubpage && (!sFrom || !sTo || !sVol || !sKind || !sMode));
-    
+
     if (requiredFieldsMissing) {
       return NextResponse.json({ success: false, error: "Заполните все обязательные поля" }, { status: 400 });
     }
@@ -261,11 +306,16 @@ export async function POST(request: NextRequest) {
       price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
     }
 
-    // Отправляем в Битрикс24, WhatsApp и Telegram параллельно с проверкой результатов
     console.log('Sending to Bitrix24:', { name: sName, phone: sPhone, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, orderId });
-    
+
+    // ✅ ИСПРАВЛЕНИЕ 2: передаём utm-параметры в sendToBitrix24
     const [bitrixResult, whatsappResult, telegramResult] = await Promise.allSettled([
-      sendToBitrix24({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source: sSource }),
+      sendToBitrix24({
+        orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail,
+        from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode,
+        price, source: sSource,
+        utm_source, utm_medium, utm_campaign, utm_term, utm_content
+      }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
       sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source: sSource }),
     ]);
