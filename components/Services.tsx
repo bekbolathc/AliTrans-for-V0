@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Services() {
   return (
     <section className="services" id="services">
@@ -17,7 +19,9 @@ export function Services() {
               </div>
               <div className="mono svc__tag">AIR · 01</div>
             </div>
-            <h3 className="svc__title">Авиа доставка</h3>
+            <h3 className="svc__title">
+              <Link href="/avia-dostavka-iz-kitaya">Авиа доставка</Link>
+            </h3>
             <div className="svc__meta">
               <div><span className="mono">срок</span><b>от 2 дней</b></div>
               <div><span className="mono">от</span><b>$500/м³</b></div>
@@ -29,7 +33,10 @@ export function Services() {
               <li>Малогабаритные партии 100–500 кг</li>
               <li>Образцы и прототипы</li>
             </ul>
-            <a className="btn btn--ghost btn--full" href="#quiz">Рассчитать авиа →</a>
+            <div className="svc__actions">
+              <a className="btn btn--ghost btn--full" href="#quiz">Рассчитать авиа →</a>
+              <Link className="svc__more mono" href="/avia-dostavka-iz-kitaya">Подробнее →</Link>
+            </div>
           </article>
 
           <article className="svc svc--accent">
@@ -45,7 +52,9 @@ export function Services() {
               </div>
               <div className="mono svc__tag">RAIL · 02</div>
             </div>
-            <h3 className="svc__title">ЖД доставка</h3>
+            <h3 className="svc__title">
+              <Link href="/zhd-dostavka-iz-kitaya">ЖД доставка</Link>
+            </h3>
             <div className="svc__meta">
               <div><span className="mono">срок</span><b>12–18 дней</b></div>
               <div><span className="mono">от</span><b>$120/м³</b></div>
@@ -57,7 +66,10 @@ export function Services() {
               <li>Контейнерные перевозки через Хоргос</li>
               <li>Сезонные закупки заранее</li>
             </ul>
-            <a className="btn btn--gold btn--full" href="#quiz">Рассчитать ЖД →</a>
+            <div className="svc__actions">
+              <a className="btn btn--gold btn--full" href="#quiz">Рассчитать ЖД →</a>
+              <Link className="svc__more mono" href="/zhd-dostavka-iz-kitaya">Подробнее →</Link>
+            </div>
             <div className="svc__ribbon mono">САМЫЙ ПОПУЛЯРНЫЙ</div>
           </article>
 
@@ -72,7 +84,9 @@ export function Services() {
               </div>
               <div className="mono svc__tag">ROAD · 03</div>
             </div>
-            <h3 className="svc__title">Авто доставка</h3>
+            <h3 className="svc__title">
+              <Link href="/avto-dostavka-iz-kitaya">Авто доставка</Link>
+            </h3>
             <div className="svc__meta">
               <div><span className="mono">срок</span><b>7–14 дней</b></div>
               <div><span className="mono">от</span><b>$150/м³</b></div>
@@ -84,7 +98,10 @@ export function Services() {
               <li>Негабаритные грузы и тралы</li>
               <li>Температурный режим</li>
             </ul>
-            <a className="btn btn--ghost btn--full" href="#quiz">Рассчитать авто →</a>
+            <div className="svc__actions">
+              <a className="btn btn--ghost btn--full" href="#quiz">Рассчитать авто →</a>
+              <Link className="svc__more mono" href="/avto-dostavka-iz-kitaya">Подробнее →</Link>
+            </div>
           </article>
         </div>
       </div>

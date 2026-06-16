@@ -1,27 +1,17 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { SITE_PAGES, absoluteUrl } from "@/lib/site-map";
 
+/**
+ * Динамический sitemap: каждая публичная страница из SITE_PAGES.
+ * При добавлении новой страницы — править только lib/site-map.ts.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://alitrans.kz";
   const lastModified = new Date();
 
-  return [
-    {
-      url: baseUrl,
-      lastModified,
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/privacy-policy`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/terms`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
-  ];
+  return SITE_PAGES.filter((p) => !p.noIndex).map((page) => ({
+    url: absoluteUrl(page.slug),
+    lastModified,
+    changeFrequency: page.changefreq,
+    priority: page.priority,
+  }));
 }

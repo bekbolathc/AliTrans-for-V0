@@ -74,7 +74,7 @@ const organizationSchema = {
     telephone: "+77718000209",
     contactType: "Customer Service",
     areaServed: "KZ",
-    availableLanguage: ["ru", "kk"],
+    availableLanguage: ["ru"],
   },
   sameAs: ["https://instagram.com/alitrans.kz"],
 };
@@ -102,13 +102,9 @@ const localBusinessSchema = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${manrope.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ru-KZ" className={`${manrope.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Critical CSS inline to prevent FOUC and blocking */}
         <style dangerouslySetInnerHTML={{__html: `
@@ -145,7 +141,7 @@ img { display: block; max-width: 100%; height: auto; }
 .container { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad-x); }
 .header__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         `}} />
-        
+
         {/* Google Tag Manager - moved to lazyOnload to prevent blocking critical rendering */}
         <Script
           id="google-tag-manager"
@@ -158,33 +154,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KZ36W5SJ');`,
           }}
         />
-        
+
         {/* Preconnect for Google services - establishes connection early */}
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
-        
+
         {/* DNS Prefetch fallback for older browsers */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        
+
         {/* DNS Prefetch for external domains */}
         <link rel="dns-prefetch" href="https://wa.me" />
-        
+
         {/* Logo preload for LCP optimization */}
         <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" />
-        
+
         {/* Favicon */}
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
         <link rel="apple-touch-icon" href="/favicon-192x192.png" />
-        
+
         {/* Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
-        
+
         {/* LocalBusiness Schema */}
         <script
           type="application/ld+json"
@@ -201,12 +197,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        
+
         {children}
         <FAQSchema />
         <GoogleAnalytics />
         <Analytics />
-        
+
         {/* Google Ads Event Tracking */}
         <Script id="google-ads-events" strategy="afterInteractive">
           {`

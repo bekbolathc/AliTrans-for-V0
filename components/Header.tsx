@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { NavDropdown } from "@/components/NavDropdown";
 
 export function Header() {
   const pathname = usePathname();
@@ -17,28 +19,34 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const closeMenu = () => setOpen(false);
+
   return (
     <header className={`header${stuck ? " is-stuck" : ""}`} id="header">
       <div className="container header__row">
-        <a className="logo" href="/" aria-label="Ali Trans Group - доставка грузов из Китая">
-          <Image 
-            src="/logo.png" 
-            alt="Ali Trans Group логотип" 
+        <Link className="logo" href="/" aria-label="Ali Trans Group">
+          <Image
+            src="/logo.png"
+            alt="Ali Trans Group логотип"
             className="logo__image"
             width={180}
             height={100}
             priority
             sizes="(max-width: 768px) 60px, 80px"
           />
-        </a>
+        </Link>
 
         <nav className="nav" aria-label="Основная навигация" style={open ? mobileNavStyle : undefined}>
-          <a href={isHomepage ? "#services" : "/#services"} onClick={() => setOpen(false)}>Услуги</a>
-          <a href={isHomepage ? "#pricing" : "/#pricing"} onClick={() => setOpen(false)}>Цены</a>
-          <a href={isHomepage ? "#about" : "/#about"} onClick={() => setOpen(false)}>О компании</a>
-          <a href={isHomepage ? "#cases" : "/#cases"} onClick={() => setOpen(false)}>Кейсы</a>
-          <a href={isHomepage ? "#faq" : "/#faq"} onClick={() => setOpen(false)}>FAQ</a>
-          <a href={isHomepage ? "#contacts" : "/#contacts"} onClick={() => setOpen(false)}>Контакты</a>
+          <NavDropdown onItemClick={closeMenu} />
+          <Link href="/keysy" onClick={closeMenu}>
+            Кейсы
+          </Link>
+          <Link href="/o-kompanii" onClick={closeMenu}>
+            О компании
+          </Link>
+          <Link href="/kontakty" onClick={closeMenu}>
+            Контакты
+          </Link>
         </nav>
 
         <div className="header__cta">
@@ -51,9 +59,9 @@ export function Header() {
           </a>
         </div>
 
-        <button 
-          className="burger" 
-          aria-label="Меню" 
+        <button
+          className="burger"
+          aria-label="Меню"
           aria-expanded={open}
           onClick={() => setOpen(!open)}
         >
