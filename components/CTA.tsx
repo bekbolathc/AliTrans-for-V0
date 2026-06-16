@@ -55,20 +55,21 @@ export function CTA({
       setMessage("");
 
       try {
-        const response = await fetch("/api/quiz", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            from: "",
-            to: "",
-            vol: "",
-            kind: "",
-            mode: defaultMode,
-            name: name.trim(),
-            phone: phone.trim(),
-            source,
-          }),
-        });
+  console.log('CTA debug:', { source, defaultMode });
+  const response = await fetch("/api/quiz", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: "",
+      to: "",
+      vol: "",
+      kind: "",
+      mode: defaultMode,
+      name: name.trim(),
+      phone: phone.trim(),
+      source,
+    }),
+  });
 
         const data = await response.json();
 
