@@ -21,15 +21,23 @@ export function CTA({
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [utmParams, setUtmParams] = useState<Record<string, string>>({});
 
-  // Get URL parameters on mount
+  // Get URL parameters on mount (pre-fill + UTM capture)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const urlName = params.get("name");
     const urlPhone = params.get("phone");
-    
     if (urlName) setName(urlName);
     if (urlPhone) setPhone(urlPhone);
+
+    // Capture UTM params for CRM attribution
+    const utms: Record<string, string> = {};
+    for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]) {
+      const val = params.get(key);
+      if (val) utms[key] = val;
+    }
+    if (Object.keys(utms).length) setUtmParams(utms);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,6 +75,7 @@ export function CTA({
             name: name.trim(),
             phone: phone.trim(),
             source,
+            ...utmParams,
           }),
         });
 
@@ -104,7 +113,7 @@ export function CTA({
 
           <div className="cta__actions">
             <a className="btn btn--gold btn--lg" href={withQuizOnPage ? "#quiz" : "#quiz-cta"}>Рассчитать стоимость →</a>
-            <a className="btn btn--ghost-light btn--lg" href="https://wa.me/77718000209" target="_blank" rel="noopener">WhatsApp</a>
+            <a className="btn btn--ghost-light btn--lg" href="https://wa.me/77718000209" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           </div>
         </div>
 
@@ -112,7 +121,7 @@ export function CTA({
           <div className="manager">
             <div className="manager__photo" aria-hidden="true">
               <div className="manager__photo-init">АМ</div>
-              <div className="mono manager__photo-lbl">PORTRAIT · TODO 600×600</div>
+              <div className="mono manager__photo-lbl">АМ</div>
             </div>
             <div className="manager__body">
               <div className="mono manager__role">РУКОВОДИТЕЛЬ ЛОГИСТИЧЕСКОГО ОТДЕЛА</div>

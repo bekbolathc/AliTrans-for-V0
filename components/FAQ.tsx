@@ -18,7 +18,7 @@ export function FAQ() {
           <div className="mono section-head__num">/12 · ВОПРОСЫ</div>
           <h2 className="section-head__title">Частые вопросы</h2>
           <p className="section-head__lead">9 вопросов, которые задают клиенты перед первой отгрузкой.</p>
-          <a href="https://wa.me/77718000209" className="btn btn--gold" target="_blank" rel="noopener">
+          <a href="https://wa.me/77718000209" className="btn btn--gold" target="_blank" rel="noopener noreferrer">
             Не нашли ответ — WhatsApp →
           </a>
           <div className="faq__hint mono">↳ Отвечаем в течение 5 минут в рабочее время</div>

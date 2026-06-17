@@ -20,10 +20,10 @@ export function Footer() {
               Иу, Гуанчжоу, Урумчи, Хоргосе.
             </p>
             <div className="footer__social">
-              <a href="https://instagram.com/alitrans.kz" target="_blank" rel="noopener">
+              <a href="https://instagram.com/alitrans.kz" target="_blank" rel="noopener noreferrer">
                 <span className="mono">IG</span> @alitrans.kz
               </a>
-              <a href="https://wa.me/77718000209" target="_blank" rel="noopener">
+              <a href="https://wa.me/77718000209" target="_blank" rel="noopener noreferrer">
                 <span className="mono">WA</span> +7 771 800 02 09
               </a>
             </div>

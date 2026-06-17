@@ -56,8 +56,8 @@ async function sendToBitrix24(params: {
   utm_term?: string;
   utm_content?: string;
 }) {
-  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL
-    || 'https://alitrans.bitrix24.kz/rest/19/brd9b1vhzy7u8bpr';
+  const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL;
+  if (!BITRIX_WEBHOOK) throw new Error('BITRIX_WEBHOOK_URL env var is not set');
 
   // Маршрут в читаемом виде → попадёт в поле «Маршрут» в карточке
   const marshrut = [
@@ -99,7 +99,7 @@ async function sendToBitrix24(params: {
     params: { REGISTER_SONET_EVENT: 'Y' },
   };
 
-  console.log('Bitrix24 payload:', JSON.stringify(payload));
+  if (process.env.NODE_ENV !== 'production') console.log('Bitrix24 payload:', JSON.stringify(payload));
 
   // Создаём контакт
   const contactRes = await fetch(`${BITRIX_WEBHOOK}/crm.contact.add.json`, {
@@ -131,7 +131,7 @@ async function sendToBitrix24(params: {
   });
 
   const dealData = await dealRes.json();
-  console.log('Bitrix24 response:', JSON.stringify(dealData));
+  if (process.env.NODE_ENV !== 'production') console.log('Bitrix24 response:', JSON.stringify(dealData));
 
   if (!dealData.result) {
     throw new Error(`Bitrix24 error: ${JSON.stringify(dealData)}`);
@@ -189,8 +189,12 @@ async function sendToTelegram(params: {
   price: string;
   source?: string;
 }) {
-  const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8612057155:AAH6HJtzs5onFYFypiE3lOptfxdbojl2zeE';
-  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '218753191';
+  const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+  if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
+    logError('sendToTelegram', 'TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID env vars not set', {});
+    return;
+  }
 
   let text =
     `📋 *Новая заявка #${params.orderId}*\n\n` +
@@ -227,8 +231,13 @@ export async function POST(request: NextRequest) {
   try {
     // CSRF protection: проверяем origin
     const origin = request.headers.get('origin');
-    const allowedOrigins = ['https://alitrans.kz', 'https://www.alitrans.kz', 'http://localhost:3000'];
-    if (origin && !allowedOrigins.includes(origin)) {
+    const isAllowedOrigin =
+      !origin ||
+      origin === 'https://alitrans.kz' ||
+      origin === 'https://www.alitrans.kz' ||
+      origin === 'http://localhost:3000' ||
+      /^https:\/\/alitrans[a-z0-9-]*\.vercel\.app$/.test(origin);
+    if (!isAllowedOrigin) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
@@ -300,13 +309,13 @@ export async function POST(request: NextRequest) {
     let price = '';
     if (sVol && sMode) {
       const base = ({ "lt100": 150, "100-500": 350, "500-2000": 900, "2-10t": 3200, container: 9500 } as any)[sVol] ?? 800;
-      const mult = ({ air: 2.4, road: 1.0, rail: 0.9, advice: 1.1 } as any)[sMode] ?? 1;
+      const mult = ({ air: 2.4, road: 1.0, rail: 0.9, advice: 1.1, consolidated: 0.85, customs: 0.5 } as any)[sMode] ?? 1;
       const low  = Math.round(base * mult);
       const high = Math.round(base * mult * 1.35);
       price = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
     }
 
-    console.log('Sending to Bitrix24:', { name: sName, phone: sPhone, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, orderId });
+    if (process.env.NODE_ENV !== 'production') console.log('Sending to Bitrix24:', { orderId, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode });
 
     // ✅ ИСПРАВЛЕНИЕ 2: передаём utm-параметры в sendToBitrix24
     const [bitrixResult, whatsappResult, telegramResult] = await Promise.allSettled([

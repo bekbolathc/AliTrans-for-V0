@@ -10,9 +10,17 @@ export type BreadcrumbItem = {
 };
 
 const LABELS: Record<string, string> = {
+  "avia-dostavka-iz-kitaya": "Авиа доставка",
+  "zhd-dostavka-iz-kitaya": "ЖД доставка",
+  "avto-dostavka-iz-kitaya": "Авто доставка",
+  "sbornye-gruzy-iz-kitaya": "Сборные грузы",
+  "rastamozhka-gruzov": "Растаможка грузов",
+  "ved-pod-klyuch": "ВЭД под ключ",
   "o-kompanii": "О компании",
   keysy: "Кейсы",
   kontakty: "Контакты",
+  "privacy-policy": "Политика конфиденциальности",
+  terms: "Договор-оферта",
 };
 
 type Props = {

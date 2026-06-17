@@ -169,7 +169,7 @@ export function ServicePage({ data }: { data: ServicePageData }) {
                   className="btn btn--ghost btn--lg"
                   href="https://wa.me/77718000209"
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   <span className="wa-ico" aria-hidden="true">✆</span> WhatsApp
                 </a>
@@ -395,7 +395,7 @@ export function ServicePage({ data }: { data: ServicePageData }) {
                 href="https://wa.me/77718000209"
                 className="btn btn--gold"
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Не нашли ответ — WhatsApp →
               </a>
