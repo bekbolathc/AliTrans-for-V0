@@ -32,7 +32,7 @@ export default function Page() {
         { n: "01", html: <>Срок <b>2–5 дней</b> до Алматы или Астаны</> },
         { n: "02", html: <>Цена <b>от $500</b> за м³</> },
         { n: "03", html: <>Подходит для <b>срочных и хрупких грузов</b></> },
-        { n: "04", html: <>Минимум <b>100 кг</b></> },
+        { n: "04", html: <>Минимум <b>от45 кг</b></> },
       ],
       primaryCtaText: "Рассчитать авиа",
       proof: (
@@ -55,7 +55,7 @@ export default function Page() {
       amountUnit: "/м³",
       rows: [
         { label: "Срок доставки", value: "2–5 дней" },
-        { label: "Минимальная партия", value: "100 кг" },
+        { label: "Минимальная партия", value: "от45 кг" },
         { label: "Аэропортов в Китае", value: "8+" },
       ],
       includedLabel: "В СТОИМОСТЬ ВКЛЮЧЕНО",
@@ -111,7 +111,7 @@ export default function Page() {
           icon: "air",
           term: "2–5 дней",
           price: <><b>$500</b><span className="mono">/м³</span></>,
-          min: "100 кг",
+          min: "от45 кг",
           accent: true,
         },
         {
