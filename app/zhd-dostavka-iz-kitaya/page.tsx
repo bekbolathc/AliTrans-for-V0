@@ -303,11 +303,12 @@ export default function ZhdDostavkaIzKitaya() {
                 <div className="price-card__divider" />
                 <div className="price-card__incl-label">В СТОИМОСТЬ ВКЛЮЧЕНО</div>
                 <ul className="price-card__incl">
-                  <li>Страхование 0,2%</li>
-                  <li>Растаможка на Хоргосе</li>
-                  <li>Документы для бухгалтерии</li>
-                  <li>SMS-оповещения</li>
-                  <li>Доставка по адресу</li>
+                  <li>Предоставление контейнера%</li>
+                  <li>Забор груза от адреса отправителя</li>
+                  <li>Оформление экспортной декларации</li>
+                  <li>Оформление ЖД накладной</li>
+                  <li>Оформление транзитной декларации</li>
+                  <li>ЖД тариф и слежение по территории КНР</li>
                 </ul>
               </div>
             </aside>
