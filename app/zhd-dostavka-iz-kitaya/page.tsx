@@ -3,37 +3,17 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CTA } from "@/components/CTA";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+const SLUG = "zhd-dostavka-iz-kitaya";
+
+export const metadata: Metadata = buildMetadata({
+  slug: SLUG,
   title:
     "ЖД доставка из Китая в Казахстан — контейнерные и сборные перевозки | Ali Trans Group",
   description:
     "Узнайте условия ЖД доставки из Китая в Казахстан: сроки 12–18 дней, цена от $120/м³, маршрут через Хоргос. Контейнерные и сборные грузы.",
-  alternates: {
-    canonical: "https://alitrans.kz/zhd-dostavka-iz-kitaya",
-  },
-  openGraph: {
-    title:
-      "ЖД доставка из Китая в Казахстан — контейнерные и сборные перевозки | Ali Trans Group",
-    description:
-      "Условия ЖД доставки из Китая в Казахстан: сроки 12–18 дней, цена от $120/м³, маршрут через Хоргос. Контейнерные и сборные грузы.",
-    url: "https://alitrans.kz/zhd-dostavka-iz-kitaya",
-    type: "website",
-    locale: "ru_RU",
-    siteName: "Ali Trans Group",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title:
-      "ЖД доставка из Китая в Казахстан — контейнерные и сборные перевозки | Ali Trans Group",
-    description:
-      "Условия ЖД доставки из Китая в Казахстан: сроки 12–18 дней, цена от $120/м³, маршрут через Хоргос. Контейнерные и сборные грузы.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+});
 
 const whenItems = [
   {
@@ -481,7 +461,7 @@ export default function ZhdDostavkaIzKitaya() {
                     <li>Полный пакет документов</li>
                   </ul>
                   <blockquote>«ATG — это про предсказуемость. Знаю дату, цену, документы за неделю до отгрузки.»
-                    <cite>— TODO · цитата клиента</cite>
+                    <cite>— клиент ATG</cite>
                   </blockquote>
                 </div>
               </article>
@@ -570,7 +550,7 @@ export default function ZhdDostavkaIzKitaya() {
 
         {/* CTA — conversion block (existing component) */}
         <div id="quiz-cta">
-          <CTA withQuizOnPage={false} source="rail" defaultMode="rail" />
+          <CTA withQuizOnPage={false} source="zhd-dostavka" defaultMode="rail" />
         </div>
       </main>
 

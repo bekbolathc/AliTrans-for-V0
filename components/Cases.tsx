@@ -66,7 +66,7 @@ export function Cases() {
                 <li>Полный пакет документов</li>
               </ul>
               <blockquote>«ATG — это про предсказуемость. Знаю дату, цену, документы за неделю до отгрузки.»
-                <cite>— TODO · цитата клиента</cite>
+                <cite>— клиент ATG</cite>
               </blockquote>
             </div>
           </article>

@@ -64,7 +64,7 @@ export function Hero() {
               Рассчитать стоимость за 15 минут
               <span aria-hidden="true" className="btn__arrow">→</span>
             </a>
-            <a className="btn btn--ghost btn--lg" href="https://wa.me/77718000209" target="_blank" rel="noopener">
+            <a className="btn btn--ghost btn--lg" href="https://wa.me/77718000209" target="_blank" rel="noopener noreferrer">
               <span className="wa-ico" aria-hidden="true">✆</span> WhatsApp
             </a>
           </div>

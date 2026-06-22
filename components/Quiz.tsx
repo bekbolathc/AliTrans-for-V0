@@ -48,20 +48,25 @@ export function Quiz() {
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
 
-  // Load pre-filled data from sessionStorage and URL params
+  // Load pre-filled data from sessionStorage and URL params; capture UTM
   useEffect(() => {
     const savedName = sessionStorage.getItem("quiz_name");
     const savedPhone = sessionStorage.getItem("quiz_phone");
-    
     if (savedName || savedPhone) {
       setAnswers((prev) => ({
         ...prev,
         name: savedName || prev.name,
         phone: savedPhone || prev.phone,
       }));
-      // Clear sessionStorage after loading
       sessionStorage.removeItem("quiz_name");
       sessionStorage.removeItem("quiz_phone");
+    }
+
+    // Store UTM params in sessionStorage so they survive quiz multi-step flow
+    const params = new URLSearchParams(window.location.search);
+    for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]) {
+      const val = params.get(key);
+      if (val) sessionStorage.setItem(`quiz_${key}`, val);
     }
   }, []);
 
@@ -132,12 +137,20 @@ export function Quiz() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
+      // Read UTM params stored at quiz entry
+      const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"] as const;
+      const utms: Record<string, string> = {};
+      for (const key of utmKeys) {
+        const val = sessionStorage.getItem(`quiz_${key}`);
+        if (val) utms[key] = val;
+      }
+
       const response = await fetch("/api/quiz", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(answers),
+        body: JSON.stringify({ ...answers, ...utms }),
         signal: controller.signal,
       });
 

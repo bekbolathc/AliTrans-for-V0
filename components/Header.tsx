@@ -77,12 +77,17 @@ export function Header() {
 const mobileNavStyle: React.CSSProperties = {
   display: "flex",
   position: "fixed",
-  inset: "64px 0 0 0",
+  top: "77px",
+  left: 0,
+  right: 0,
+  height: "calc(100dvh - 77px)",
   background: "rgba(11,27,58,0.96)",
   backdropFilter: "blur(10px)",
   flexDirection: "column",
+  justifyContent: "flex-start",
   padding: "32px",
   fontSize: "20px",
   gap: "20px",
   zIndex: 99,
+  overflowY: "auto",
 };

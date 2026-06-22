@@ -17,7 +17,7 @@ export default function Page() {
     slug: SLUG,
     breadcrumbLabel: "Растаможка грузов",
     ctaSource: "rastamozhka",
-    ctaMode: "advice",
+    ctaMode: "customs",
     hero: {
       kicker: "B2B · CUSTOMS · CHINA → KZ · СВОЙ БРОКЕР",
       title: (
@@ -166,7 +166,7 @@ export default function Page() {
           task: "ускорить выпуск товара под пик продаж — растаможка не должна тормозить отгрузку на FBO Kaspi.",
           solve: "предварительная подготовка ВЭД-пакета, подача ГТД в день прибытия на Хоргос.",
           results: ["ГТД оформлено за 4 часа", "Партия уехала на FBO в день получения", "Бесшовно под маркетплейс"],
-          quote: { text: "ATG — это про скорость на таможне. Знают всех инспекторов, знают наш продукт.", cite: "TODO · цитата клиента" },
+          quote: { text: "ATG — это про скорость на таможне. Знают всех инспекторов, знают наш продукт.", cite: "клиент ATG" },
         },
         {
           mediaVariant: "a",

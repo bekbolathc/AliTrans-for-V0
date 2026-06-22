@@ -4,6 +4,7 @@ import { Manrope, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { FAQSchema } from "@/components/FAQSchema";
+import { schemaOrganization, schemaLocalBusiness } from "@/lib/schema";
 import "./globals.css";
 
 // Self-hosted fonts via Next.js - eliminates render-blocking Google Fonts CDN request
@@ -52,55 +53,9 @@ export const metadata: Metadata = {
   },
 };
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Ali Trans Group",
-  alternateName: "ATG",
-  url: "https://alitrans.kz",
-  logo: "https://alitrans.kz/logo.svg",
-  description:
-    "B2B логистика из Китая в Казахстан. Авиа, ЖД, авто доставка. 18 лет опыта. Договор, полный пакет документов и страховка.",
-  foundingDate: "2007",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "ул. Тимирязева 42, К23, БЦ Asia Most, офис 210",
-    addressLocality: "Алматы",
-    postalCode: "050000",
-    addressCountry: "KZ",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+77718000209",
-    contactType: "Customer Service",
-    areaServed: "KZ",
-    availableLanguage: ["ru"],
-  },
-  sameAs: ["https://instagram.com/alitrans.kz"],
-};
-
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Ali Trans Group",
-  image: "https://alitrans.kz/logo.svg",
-  description:
-    "B2B логистика из Китая в Казахстан с 2007 года",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "ул. Тимирязева 42, К23, БЦ Asia Most, офис 210",
-    addressLocality: "Алматы",
-    addressCountry: "KZ",
-  },
-  telephone: "+77718000209",
-  email: "sales@alitrans.kz",
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    opens: "09:00",
-    closes: "18:00",
-  },
-};
+// Schema objects from canonical source in lib/schema.ts
+const organizationSchema = schemaOrganization();
+const localBusinessSchema = schemaLocalBusiness();
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -142,18 +97,20 @@ img { display: block; max-width: 100%; height: auto; }
 .header__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         `}} />
 
-        {/* Google Tag Manager - moved to lazyOnload to prevent blocking critical rendering */}
-        <Script
-          id="google-tag-manager"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        {/* Google Tag Manager */}
+        {process.env.NEXT_PUBLIC_GTM_ID && (
+          <Script
+            id="google-tag-manager"
+            strategy="lazyOnload"
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KZ36W5SJ');`,
-          }}
-        />
+})(window,document,'script','dataLayer','${process.env.NEXT_PUBLIC_GTM_ID}');`,
+            }}
+          />
+        )}
 
         {/* Preconnect for Google services - establishes connection early */}
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
@@ -189,14 +146,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </head>
       <body>
         {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-KZ36W5SJ"
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
+        {process.env.NEXT_PUBLIC_GTM_ID && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
 
         {children}
         <FAQSchema />
