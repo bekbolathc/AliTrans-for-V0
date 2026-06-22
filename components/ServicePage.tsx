@@ -44,6 +44,7 @@ export type ServicePageData = {
   slug: string;
   /** Видимая подпись в breadcrumb. */
   breadcrumbLabel: string;
+  ctaMode?: string;
 
   /** Hero. */
   hero: {
