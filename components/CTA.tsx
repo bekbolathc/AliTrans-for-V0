@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
@@ -17,6 +17,7 @@ export function CTA({
   defaultMode = "",
 }: CTAProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -82,9 +83,7 @@ export function CTA({
         const data = await response.json();
 
         if (data.success) {
-          setMessage("✓ Спасибо! Расчёт придёт в WhatsApp в течение 15 минут.");
-          setName("");
-          setPhone("");
+          router.push("/thank-you");
         } else {
           setMessage(data.error || "Ошибка при отправке заявки. Попробуйте позже.");
         }
