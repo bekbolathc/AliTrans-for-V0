@@ -23,6 +23,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  verification: {
+    google: "erLr1W_64AeUsso4hnYIP4R-nkSUMeU3xGywF01fS78",
+  },
   title: "Доставка грузов из Китая в Казахстан — Ali Trans Group · от 100 кг, договор, страховка",
   description:
     "Грузоперевозки из Китая в Казахстан под ключ. Авиа, ЖД, авто. Минимум 100 кг. Свои склады в Иу, Гуанчжоу, Урумчи, Хоргос. Договор + страховка 0,2%. 18 лет на рынке.",
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "Ali Trans Group",
     images: [
       {
-        url: "https://alitrans.kz/og-image.png",
+        url: "https://alitrans.kz/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Ali Trans Group — доставка грузов из Китая в Казахстан",

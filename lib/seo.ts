@@ -6,7 +6,7 @@ type BuildMetadataInput = {
   slug: string;
   title: string;
   description: string;
-  /** Опциональный путь к OG-картинке (по умолчанию /og-image.png). */
+  /** Опциональный путь к OG-картинке (по умолчанию /og-image.jpg). */
   ogImage?: string;
   /** Если true — добавляется meta robots noindex. */
   noIndex?: boolean;
@@ -20,7 +20,7 @@ export function buildMetadata({
   slug,
   title,
   description,
-  ogImage = "/og-image.png",
+  ogImage = "/og-image.jpg",
   noIndex,
 }: BuildMetadataInput): Metadata {
   const canonical = absoluteUrl(slug);
