@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "Ali Trans Group",
     images: [
       {
-        url: "https://alitrans.kz/og-image.png",
+        url: "https://alitrans.kz/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Ali Trans Group — доставка грузов из Китая в Казахстан",
