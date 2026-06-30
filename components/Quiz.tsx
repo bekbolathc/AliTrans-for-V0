@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-// Extend Window interface for gtag and custom tracking
+// Extend Window interface for gtag
 declare global {
   interface Window {
     gtag?: (command: string, action: string, params?: Record<string, unknown>) => void;
-    trackQuizConversion?: () => void;
   }
 }
 
@@ -36,7 +34,6 @@ const captions: Record<number, string> = {
 };
 
 export function Quiz() {
-  const router = useRouter();
   const [step, setStep] = useState<number | "block" | "done">(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [price, setPrice] = useState("");
@@ -133,9 +130,11 @@ export function Quiz() {
       const high = Math.round(base * mult * 1.35);
       const calculatedPrice = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
 
-      // Fetch с timeout (10 секунд)
+      // Fetch с timeout (25 секунд — Bitrix24-вебхук иногда отвечает дольше 10с,
+      // а ранний abort означал, что лид уже создан в CRM, но клиент не успевал
+      // дождаться success и не делал редирект на /thank-you).
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       // Read UTM params stored at quiz entry
       const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"] as const;
@@ -165,21 +164,20 @@ export function Quiz() {
       setOrderId(data.orderId);
       setStep("done");
       
-      // Redirect to thank-you page after 1.5 seconds
+      // Redirect to thank-you page after 1.5 seconds.
+      // Полная перезагрузка (не router.push) — GTM должен переинициализироваться
+      // и заново сработать триггер «Просмотр страницы» для конверсии в Google Ads.
       setTimeout(() => {
-        router.push(`/thank-you?id=${data.orderId}`);
+        window.location.href = `/thank-you?id=${data.orderId}`;
       }, 1500);
       
-      // Track conversion in Google Analytics and Google Ads
+      // Track conversion in Google Analytics
       if (typeof window !== "undefined" && window.gtag) {
         window.gtag("event", "purchase", {
           value: base * mult,
           currency: "KZT",
           transaction_id: data.orderId,
         });
-        if (typeof window.trackQuizConversion === "function") {
-          window.trackQuizConversion();
-        }
       }
       
       // Сохраняем данные в sessionStorage для CTA компонента

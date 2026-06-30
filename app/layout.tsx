@@ -160,24 +160,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <FAQSchema />
         <GoogleAnalytics />
         <Analytics />
-
-        {/* Google Ads Event Tracking */}
-        <Script id="google-ads-events" strategy="afterInteractive">
-          {`
-            // Track form submissions and CTA clicks
-            document.addEventListener('DOMContentLoaded', function() {
-              // Track Quiz submission
-              const quizButtons = document.querySelectorAll('[data-track-conversion]');
-              quizButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                  if (typeof window.trackQuizConversion === 'function') {
-                    window.trackQuizConversion();
-                  }
-                });
-              });
-            });
-          `}
-        </Script>
       </body>
     </html>
   );

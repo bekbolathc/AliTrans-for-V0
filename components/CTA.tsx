@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
@@ -17,7 +17,6 @@ export function CTA({
   defaultMode = "",
 }: CTAProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -83,7 +82,9 @@ export function CTA({
         const data = await response.json();
 
         if (data.success) {
-          router.push("/thank-you");
+          // Полная перезагрузка (не router.push) — GTM должен переинициализироваться
+          // и заново сработать триггер «Просмотр страницы» для конверсии в Google Ads.
+          window.location.href = "/thank-you";
         } else {
           setMessage(data.error || "Ошибка при отправке заявки. Попробуйте позже.");
         }
