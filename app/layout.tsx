@@ -9,7 +9,7 @@ import "./globals.css";
 // Self-hosted fonts via Next.js - eliminates render-blocking Google Fonts CDN request
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
   variable: "--ff-manrope",
 });
