@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Manrope, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { FAQSchema } from "@/components/FAQSchema";
 import { schemaOrganization, schemaLocalBusiness } from "@/lib/schema";
 import "./globals.css";
@@ -94,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 html { background-color: var(--paper); -webkit-font-smoothing: antialiased; }
 body { font-family: var(--ff-sans); font-size: 16px; line-height: 1.5; color: var(--ink); background: var(--paper); }
 img { display: block; max-width: 100%; height: auto; }
-.logo__image { width: auto; height: 52px; }
+.logo__image { width: 94px; height: 52px; }
 .header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); padding: 12px 0; }
 .container { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad-x); }
 .header__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -103,7 +102,7 @@ img { display: block; max-width: 100%; height: auto; }
         {/* Google Tag Manager */}
         <Script
           id="google-tag-manager"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -125,7 +124,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <link rel="dns-prefetch" href="https://wa.me" />
 
         {/* Logo preload for LCP optimization */}
-        <link rel="preload" as="image" href="/logo.svg" type="image/svg+xml" />
+        <link rel="preload" as="image" href="/logo.png" />
 
         {/* Favicon */}
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -158,7 +157,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         {children}
         <FAQSchema />
-        <GoogleAnalytics />
         <Analytics />
       </body>
     </html>
