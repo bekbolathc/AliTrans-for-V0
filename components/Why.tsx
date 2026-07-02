@@ -12,7 +12,7 @@ export function Why() {
     <section className="why" id="why">
       <div className="container">
         <header className="section-head">
-          <div className="mono section-head__num">/04 · ПОЧЕМУ ATG</div>
+          <div className="mono section-head__num">/05 · ПОЧЕМУ ATG</div>
           <h2 className="section-head__title">Почему компании выбирают Ali Trans Group</h2>
         </header>
         <div className="why__grid">

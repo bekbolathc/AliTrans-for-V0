@@ -6,6 +6,7 @@ import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { ForWhom } from "@/components/ForWhom";
 import { Quiz } from "@/components/Quiz";
+import { Directions } from "@/components/Directions";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { SkipToContent } from "@/components/SkipToContent";
@@ -36,6 +37,7 @@ export function HomeContent() {
         <ForWhom />
         <Quiz />
         <Services />
+        <Directions />
         <Why />
         <Cases />
         <Testimonials />
