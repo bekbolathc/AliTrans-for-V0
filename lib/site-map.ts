@@ -59,6 +59,8 @@ export const SITE_PAGES: SitePage[] = [
   // ── Phase 3: блог ─────────────────────────────────────
   { slug: "blog", type: "blog", priority: 0.7, changefreq: "weekly" },
   { slug: "blog/zhd-vs-avia-iz-kitaya", type: "blog", priority: 0.7, changefreq: "monthly" },
+  { slug: "blog/kak-rastamojit-gruz-iz-kitaya", type: "blog", priority: 0.7, changefreq: "monthly" },
+  { slug: "blog/kak-vybrat-postavshchika-v-kitaye", type: "blog", priority: 0.7, changefreq: "monthly" },
 
   // ── Phase 3: компания ─────────────────────────────────
   { slug: "otzyvy", type: "about", priority: 0.65, changefreq: "monthly" },

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomeContent } from "./_home-content";
+import { FAQSchema } from "@/components/FAQSchema";
 
 export const metadata: Metadata = {
   alternates: {
@@ -8,5 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <HomeContent />;
+  return (
+    <>
+      <HomeContent />
+      <FAQSchema />
+    </>
+  );
 }

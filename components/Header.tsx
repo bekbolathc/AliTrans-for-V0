@@ -70,6 +70,17 @@ export function Header() {
 
   const closeMenu = () => setOpen(false);
 
+  // Страницы без блока #quiz-cta (блог, отзывы, кейсы и т.п.) — ведём на /kontakty,
+  // иначе клик по якорю ничего не делает.
+  const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    closeMenu();
+    if (isHomepage) return;
+    if (!document.getElementById("quiz-cta")) {
+      e.preventDefault();
+      window.location.href = "/kontakty";
+    }
+  };
+
   return (
     <>
       <header className={`header${stuck ? " is-stuck" : ""}`} id="header">
@@ -101,7 +112,7 @@ export function Header() {
               <span className="phone__label">Алматы</span>
               <span className="phone__num">+7 771 800 02 09</span>
             </a>
-            <a className="btn btn--gold" href={isHomepage ? "#quiz" : "#quiz-cta"}>
+            <a className="btn btn--gold" href={isHomepage ? "#quiz" : "#quiz-cta"} onClick={handleCtaClick}>
               Заявка <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -162,7 +173,7 @@ export function Header() {
             <a
               className="btn btn--gold btn--full"
               href={isHomepage ? "#quiz" : "#quiz-cta"}
-              onClick={closeMenu}
+              onClick={handleCtaClick}
             >
               Рассчитать стоимость →
             </a>

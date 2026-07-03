@@ -1614,6 +1614,17 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   cursor: pointer;
 }
 
+/* Соц-кнопки скрыты до скролла — не перекрывают hero и главную CTA */
+.fab-phone, .fab-wa, .fab-ig {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.18s, box-shadow 0.18s;
+}
+.fab-phone.is-visible, .fab-wa.is-visible, .fab-ig.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .fab-ig {
   bottom: 24px;
   background: #E73258;
@@ -1675,6 +1686,15 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 }
 .fab-top:hover {
   transform: translateY(-2px);
+}
+
+/* Мобила: Instagram убираем (не конверсионная), остальные сжимаем вниз */
+@media (max-width: 760px) {
+  .fab-ig { display: none; }
+  .fab { width: 52px; height: 52px; right: 16px; }
+  .fab-wa { bottom: 16px; }
+  .fab-phone { bottom: 80px; }
+  .fab-top { bottom: 144px; }
 }
 
 /* ============================================================== */

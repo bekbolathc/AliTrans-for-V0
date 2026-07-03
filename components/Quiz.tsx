@@ -175,7 +175,7 @@ export function Quiz() {
       if (typeof window !== "undefined" && window.gtag) {
         window.gtag("event", "purchase", {
           value: base * mult,
-          currency: "KZT",
+          currency: "USD",
           transaction_id: data.orderId,
         });
       }
@@ -385,10 +385,10 @@ export function Quiz() {
                 <legend className="qstep__title">Куда отправить расчёт?</legend>
                 <div className="qstep__form">
                   {error && <div role="alert" style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
-                  <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
-                  <label className="field" htmlFor="quiz-phone"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input id="quiz-phone" type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
-                  <label className="field" htmlFor="quiz-wa"><span>WhatsApp (если другой)</span><input id="quiz-wa" type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
-                  <label className="field" htmlFor="quiz-email"><span>Email · опционально</span><input id="quiz-email" type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" autoComplete="name" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-phone"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input id="quiz-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-wa"><span>WhatsApp (если другой)</span><input id="quiz-wa" type="tel" inputMode="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-email"><span>Email · опционально</span><input id="quiz-email" type="email" inputMode="email" autoComplete="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
                   <label className="check" htmlFor="quiz-consent"><input id="quiz-consent" type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
               </fieldset>

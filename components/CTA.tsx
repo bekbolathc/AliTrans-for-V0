@@ -131,8 +131,8 @@ export function CTA({
               <div className="manager__name">Аманжол</div>
               <p className="manager__quote">«Здравствуйте! Помогу с логистикой вашего груза — рассчитаю стоимость и подберу способ доставки.»</p>
               <form className="manager__form" onSubmit={handleSubmit}>
-                <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
-                <label className="field"><span>Телефон</span><input type="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
+                <label className="field"><span>Имя</span><input type="text" autoComplete="name" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
+                <label className="field"><span>Телефон</span><input type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
                 {message && <p style={{ fontSize: "14px", color: message.startsWith("✓") ? "var(--emerald)" : "var(--rose)", marginTop: "8px" }}>{message}</p>}
                 <button className="btn btn--gold btn--full" type="submit" disabled={isLoading}>{isLoading ? "Отправляем..." : "Жду расчёт →"}</button>
               </form>

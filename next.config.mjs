@@ -24,13 +24,10 @@ const nextConfig = {
   images: {
     // Enable AVIF format for better compression (Chrome, Edge, Firefox)
     formats: ['image/avif', 'image/webp'],
-    // Optimize images for LCP - focus on critical path
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    // Components use quality 75 (default) and 80 — both must be allowed
+    qualities: [75, 80],
+    // No remotePatterns: all images are local; an open pattern ('**')
+    // would let anyone proxy arbitrary hosts through /_next/image.
   },
 
   // Remove console.log statements in production to reduce overhead

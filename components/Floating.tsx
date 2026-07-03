@@ -16,7 +16,7 @@ export function Floating() {
     <>
       {/* Phone Call Button - First */}
       <a
-        className="fab fab-phone"
+        className={`fab fab-phone${show ? " is-visible" : ""}`}
         href="tel:+77718000209"
         aria-label="Позвонить"
         title="Позвонить"
@@ -28,7 +28,7 @@ export function Floating() {
 
       {/* WhatsApp Button - Second */}
       <a
-        className="fab fab-wa"
+        className={`fab fab-wa${show ? " is-visible" : ""}`}
         href="https://wa.me/77718000209?text=Здравствуйте,%20хочу%20уточнить%20по%20доставке%20из%20Китая"
         target="_blank"
         rel="noopener noreferrer"
@@ -45,7 +45,7 @@ export function Floating() {
 
       {/* Instagram Button - Third */}
       <a
-        className="fab fab-ig"
+        className={`fab fab-ig${show ? " is-visible" : ""}`}
         href="https://instagram.com/alitrans.kz"
         target="_blank"
         rel="noopener noreferrer"
