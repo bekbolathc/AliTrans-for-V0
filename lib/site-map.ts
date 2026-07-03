@@ -5,7 +5,7 @@ export type SitePage = {
   /** Slug без leading slash. Пустая строка = главная. */
   slug: string;
   /** Type страницы (для группировки в навигации). */
-  type: "home" | "service" | "about" | "cases" | "contacts" | "legal" | "system";
+  type: "home" | "service" | "cargo" | "about" | "cases" | "contacts" | "blog" | "legal" | "system";
   /** Priority для sitemap. */
   priority: number;
   /** ChangeFrequency для sitemap. */
@@ -45,6 +45,23 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "morskoy-ekspress-iz-korei", type: "service", priority: 0.75, changefreq: "monthly" },
   { slug: "avia-dostavka-iz-evropy", type: "service", priority: 0.75, changefreq: "monthly" },
   { slug: "avto-dostavka-iz-evropy", type: "service", priority: 0.75, changefreq: "monthly" },
+
+  // ── Phase 3: типы грузов ───────────────────────────────
+  { slug: "elektronika-iz-kitaya", type: "cargo", priority: 0.8, changefreq: "monthly" },
+  { slug: "avtozapchasti-iz-kitaya", type: "cargo", priority: 0.8, changefreq: "monthly" },
+  { slug: "tekstil-i-odezhda", type: "cargo", priority: 0.75, changefreq: "monthly" },
+  { slug: "oborudovanie-i-mashiny", type: "cargo", priority: 0.75, changefreq: "monthly" },
+  { slug: "negabaritnye-gruzy", type: "cargo", priority: 0.75, changefreq: "monthly" },
+  { slug: "opasnye-gruzy", type: "cargo", priority: 0.7, changefreq: "monthly" },
+  { slug: "kosmetika-i-krasota", type: "cargo", priority: 0.75, changefreq: "monthly" },
+  { slug: "tovary-dlya-marketpleysov", type: "cargo", priority: 0.8, changefreq: "monthly" },
+
+  // ── Phase 3: блог ─────────────────────────────────────
+  { slug: "blog", type: "blog", priority: 0.7, changefreq: "weekly" },
+  { slug: "blog/zhd-vs-avia-iz-kitaya", type: "blog", priority: 0.7, changefreq: "monthly" },
+
+  // ── Phase 3: компания ─────────────────────────────────
+  { slug: "otzyvy", type: "about", priority: 0.65, changefreq: "monthly" },
 
   // ── Корпоративные ─────────────────────────────────────
   { slug: "o-kompanii", type: "about", priority: 0.7, changefreq: "monthly" },

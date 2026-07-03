@@ -22,15 +22,29 @@ const DIRECTIONS = [
   { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа" },
 ];
 
+const CARGO_TYPES = [
+  { href: "/elektronika-iz-kitaya", label: "Электроника" },
+  { href: "/avtozapchasti-iz-kitaya", label: "Автозапчасти" },
+  { href: "/tekstil-i-odezhda", label: "Текстиль и одежда" },
+  { href: "/oborudovanie-i-mashiny", label: "Оборудование" },
+  { href: "/negabaritnye-gruzy", label: "Негабаритные грузы" },
+  { href: "/kosmetika-i-krasota", label: "Косметика" },
+  { href: "/tovary-dlya-marketpleysov", label: "Для маркетплейсов" },
+  { href: "/opasnye-gruzy", label: "Опасные грузы ADR" },
+];
+
 const MOBILE_SECTIONS = [
   { id: "uslugi", title: "Услуги", items: SERVICES },
   { id: "napravleniya", title: "Направления", items: DIRECTIONS },
+  { id: "gruzy", title: "Типы грузов", items: CARGO_TYPES },
   {
     id: "kompaniya",
     title: "Компания",
     items: [
       { href: "/o-kompanii", label: "О компании" },
       { href: "/keysy", label: "Кейсы" },
+      { href: "/otzyvy", label: "Отзывы" },
+      { href: "/blog", label: "Блог" },
     ],
   },
 ];
@@ -76,8 +90,9 @@ export function Header() {
           <nav className="nav" aria-label="Основная навигация">
             <NavDropdown label="Услуги" items={SERVICES} onItemClick={closeMenu} />
             <NavDropdown label="Направления" items={DIRECTIONS} onItemClick={closeMenu} />
+            <NavDropdown label="Типы грузов" items={CARGO_TYPES} onItemClick={closeMenu} />
             <Link href="/o-kompanii" onClick={closeMenu}>О компании</Link>
-            <Link href="/keysy" onClick={closeMenu}>Кейсы</Link>
+            <Link href="/blog" onClick={closeMenu}>Блог</Link>
             <Link href="/kontakty" onClick={closeMenu}>Контакты</Link>
           </nav>
 
