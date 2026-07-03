@@ -2083,7 +2083,7 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 /* ============================================================== */
 
 .skip-to-content {
-  position: absolute;
+  position: fixed;
   top: -100px;
   left: 50%;
   transform: translateX(-50%);
