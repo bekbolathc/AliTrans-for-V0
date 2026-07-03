@@ -297,8 +297,19 @@ export async function POST(request: NextRequest) {
     // ✅ ИСПРАВЛЕНИЕ 1: добавлены utm-параметры
     const {
       from, to, vol, kind, mode, name, phone, wa, email, source,
-      utm_source, utm_medium, utm_campaign, utm_term, utm_content
+      utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+      company,
     } = body;
+
+    // Honeypot: поле «company» скрыто от людей — если заполнено, это бот.
+    // Отвечаем success, чтобы бот не понял, что отфильтрован.
+    if (typeof company === 'string' && company.trim() !== '') {
+      return NextResponse.json({
+        success: true,
+        message: "Заявка принята.",
+        orderId: "ATG-" + (100000 + Math.floor(Math.random() * 899999)),
+      }, { status: 200 });
+    }
 
     // Санитизация
     const sFrom   = sanitizeInput(from);
@@ -335,8 +346,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Неправильный формат email" }, { status: 400 });
     }
 
-    // Генерируем ID заявки
-    const orderId = "ATG-" + (100000 + Math.floor(Math.random() * 899999));
+    // Генерируем ID заявки: временная метка + случайный суффикс — без коллизий
+    const orderId = "ATG-" + Date.now().toString(36).toUpperCase().slice(-5) + Math.floor(Math.random() * 90 + 10);
 
     // Считаем цену только если объём и способ указаны
     let price = '';

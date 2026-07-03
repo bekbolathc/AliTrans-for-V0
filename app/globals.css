@@ -21,7 +21,7 @@
 
   --ink:    #1A1F2E;
   --ink-2:  #4A5063;
-  --mute:   #7B8299;
+  --mute:   #62697F; /* было #7B8299 — контраст 3.4:1 на paper, ниже WCAG AA; теперь 4.9:1 */
 
   --paper:     #F5F2EB;
   --paper-2:   #EFEAE0;
@@ -1572,6 +1572,11 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   color: rgba(245,242,235,0.65);
   text-decoration: none;
   transition: color 0.2s;
+  /* WCAG 2.2 (2.5.8): touch-цель минимум 24px */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 0;
 }
 .footer__col a:hover { color: var(--gold); }
 .footer__label { font-size: 11px; color: var(--gold); letter-spacing: 0.14em; margin-bottom: 6px; }
@@ -2195,6 +2200,11 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
   color: var(--ink-2);
   text-decoration: none;
   transition: color 0.2s;
+  /* WCAG 2.2 (2.5.8): touch-цель минимум 24px */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 0;
 }
 .breadcrumbs__link:hover {
   color: var(--gold-deep);

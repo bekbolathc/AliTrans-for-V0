@@ -40,6 +40,9 @@ export function Quiz() {
   const [orderId, setOrderId] = useState("ATG-000000");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
+  const [consent, setConsent] = useState(false);
+  // Honeypot: скрытое поле, которое заполняют только боты
+  const [company, setCompany] = useState("");
   const [showCustomFrom, setShowCustomFrom] = useState(false);
   const [showCustomTo, setShowCustomTo] = useState(false);
   const [customFrom, setCustomFrom] = useState("");
@@ -118,6 +121,10 @@ export function Quiz() {
       setError("Пожалуйста, заполните имя и номер телефона");
       return;
     }
+    if (!consent) {
+      setError("Подтвердите согласие на обработку персональных данных");
+      return;
+    }
 
     setIsSubmitting(true);
     setError("");
@@ -149,7 +156,7 @@ export function Quiz() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...answers, ...utms }),
+        body: JSON.stringify({ ...answers, ...utms, company }),
         signal: controller.signal,
       });
 
@@ -389,7 +396,18 @@ export function Quiz() {
                   <label className="field" htmlFor="quiz-phone"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input id="quiz-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
                   <label className="field" htmlFor="quiz-wa"><span>WhatsApp (если другой)</span><input id="quiz-wa" type="tel" inputMode="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
                   <label className="field" htmlFor="quiz-email"><span>Email · опционально</span><input id="quiz-email" type="email" inputMode="email" autoComplete="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
-                  <label className="check" htmlFor="quiz-consent"><input id="quiz-consent" type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
+                  {/* Honeypot: скрыто от людей, боты заполняют */}
+                  <input
+                    type="text"
+                    name="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+                  />
+                  <label className="check" htmlFor="quiz-consent"><input id="quiz-consent" type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
               </fieldset>
             )}

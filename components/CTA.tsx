@@ -25,6 +25,9 @@ export function CTA({
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [utmParams, setUtmParams] = useState<Record<string, string>>({});
+  const [consent, setConsent] = useState(false);
+  // Honeypot: скрытое поле, которое заполняют только боты
+  const [company, setCompany] = useState("");
 
   // Get URL parameters on mount (pre-fill + UTM capture)
   useEffect(() => {
@@ -61,6 +64,10 @@ export function CTA({
         setMessage("Пожалуйста, укажите телефон");
         return;
       }
+      if (!consent) {
+        setMessage("Подтвердите согласие на обработку персональных данных");
+        return;
+      }
 
       setIsLoading(true);
       setMessage("");
@@ -78,6 +85,7 @@ export function CTA({
             name: name.trim(),
             phone: phone.trim(),
             source,
+            company,
             ...utmParams,
           }),
         });
@@ -133,7 +141,21 @@ export function CTA({
               <form className="manager__form" onSubmit={handleSubmit}>
                 <label className="field"><span>Имя</span><input type="text" autoComplete="name" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
                 <label className="field"><span>Телефон</span><input type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
-                {message && <p style={{ fontSize: "14px", color: message.startsWith("✓") ? "var(--emerald)" : "var(--rose)", marginTop: "8px" }}>{message}</p>}
+                <input
+                  type="text"
+                  name="company"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+                />
+                <label className="check" style={{ marginTop: "8px" }}>
+                  <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} disabled={isLoading} />
+                  <span>Согласен с обработкой персональных данных</span>
+                </label>
+                {message && <p role="alert" style={{ fontSize: "14px", color: "var(--rose)", marginTop: "8px" }}>{message}</p>}
                 <button className="btn btn--gold btn--full" type="submit" disabled={isLoading}>{isLoading ? "Отправляем..." : "Жду расчёт →"}</button>
               </form>
             </div>

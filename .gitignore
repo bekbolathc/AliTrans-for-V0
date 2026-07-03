@@ -44,3 +44,9 @@ pnpm-workspace.yaml
 .claude/
 .vscode/
 AliTransNew/
+
+# local junk — не для репозитория
+AliTransNew*/
+node-v*.pkg
+zhd-*.png
+tsconfig.tsbuildinfo
