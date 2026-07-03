@@ -9,12 +9,15 @@ interface CTAProps {
   source?: string;
   /** Базовый mode для API (рус. название способа доставки). */
   defaultMode?: string;
+  /** Страна/направление в заголовке: «Готовы доставить груз из {origin}?» */
+  origin?: string;
 }
 
 export function CTA({
   withQuizOnPage = true,
   source = "zhd-dostavka",
   defaultMode = "",
+  origin = "Китая",
 }: CTAProps) {
   const pathname = usePathname();
   const [name, setName] = useState("");
@@ -102,7 +105,7 @@ export function CTA({
       <div className="container cta__inner">
         <div className="cta__left">
           <div className="mono section-head__num section-head__num--light">/13 · ГОТОВЫ НАЧАТЬ</div>
-          <h2 className="cta__title">Готовы доставить груз<br />из Китая?</h2>
+          <h2 className="cta__title">Готовы доставить груз<br />из {origin}?</h2>
           <p className="cta__lead">Расчёт за 15 минут. Без обязательств. Без навязчивых звонков.</p>
 
           <ul className="cta__guarantees">

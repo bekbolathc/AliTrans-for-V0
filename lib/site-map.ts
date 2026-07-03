@@ -33,10 +33,18 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "rastamozhka-gruzov", type: "service", priority: 0.85, changefreq: "monthly" },
   { slug: "ved-pod-klyuch", type: "service", priority: 0.85, changefreq: "monthly" },
 
-  // ── Новые направления (не Китай) ──────────────────────
+  // ── Другие направления (не Китай) ─────────────────────
   { slug: "dostavka-iz-korei", type: "service", priority: 0.8, changefreq: "monthly" },
   { slug: "dostavka-iz-turcii", type: "service", priority: 0.8, changefreq: "monthly" },
   { slug: "dostavka-iz-evropy", type: "service", priority: 0.8, changefreq: "monthly" },
+
+  // ── Phase 2: матрица направление × способ ─────────────
+  { slug: "avia-dostavka-iz-turcii", type: "service", priority: 0.75, changefreq: "monthly" },
+  { slug: "avto-dostavka-iz-turcii", type: "service", priority: 0.75, changefreq: "monthly" },
+  { slug: "avia-dostavka-iz-korei", type: "service", priority: 0.75, changefreq: "monthly" },
+  { slug: "morskoy-ekspress-iz-korei", type: "service", priority: 0.75, changefreq: "monthly" },
+  { slug: "avia-dostavka-iz-evropy", type: "service", priority: 0.75, changefreq: "monthly" },
+  { slug: "avto-dostavka-iz-evropy", type: "service", priority: 0.75, changefreq: "monthly" },
 
   // ── Корпоративные ─────────────────────────────────────
   { slug: "o-kompanii", type: "about", priority: 0.7, changefreq: "monthly" },

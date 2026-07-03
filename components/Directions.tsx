@@ -1,6 +1,19 @@
 import Link from "next/link";
 
-const directions = [
+type Method = { label: string; href: string };
+
+type Direction = {
+  flag: string;
+  from: string;
+  tag: string;
+  desc: string;
+  href: string;
+  accent: boolean;
+  label: string;
+  methods: Method[];
+};
+
+const directions: Direction[] = [
   {
     flag: "🇨🇳",
     from: "Китай",
@@ -9,6 +22,11 @@ const directions = [
     href: "#services",
     accent: true,
     label: "Подробнее об услугах →",
+    methods: [
+      { label: "ЖД · 12–18 дн", href: "/zhd-dostavka-iz-kitaya" },
+      { label: "Авиа · 2–5 дн", href: "/avia-dostavka-iz-kitaya" },
+      { label: "Авто · 7–14 дн", href: "/avto-dostavka-iz-kitaya" },
+    ],
   },
   {
     flag: "🇰🇷",
@@ -17,7 +35,11 @@ const directions = [
     desc: "Электроника, авто-запчасти, косметика. Авиа и морской экспресс.",
     href: "/dostavka-iz-korei",
     accent: false,
-    label: "Подробнее →",
+    label: "Все способы →",
+    methods: [
+      { label: "Авиа · 3–7 дн", href: "/avia-dostavka-iz-korei" },
+      { label: "Море · 18–25 дн", href: "/morskoy-ekspress-iz-korei" },
+    ],
   },
   {
     flag: "🇹🇷",
@@ -26,7 +48,11 @@ const directions = [
     desc: "Текстиль, стройматериалы, оборудование. Авто и авиа маршруты.",
     href: "/dostavka-iz-turcii",
     accent: false,
-    label: "Подробнее →",
+    label: "Все способы →",
+    methods: [
+      { label: "Авто · 12–18 дн", href: "/avto-dostavka-iz-turcii" },
+      { label: "Авиа · 4–7 дн", href: "/avia-dostavka-iz-turcii" },
+    ],
   },
   {
     flag: "🇪🇺",
@@ -35,7 +61,11 @@ const directions = [
     desc: "Германия, Италия, Польша и другие. Авто и мультимодальные маршруты.",
     href: "/dostavka-iz-evropy",
     accent: false,
-    label: "Подробнее →",
+    label: "Все способы →",
+    methods: [
+      { label: "Авто · 15–25 дн", href: "/avto-dostavka-iz-evropy" },
+      { label: "Авиа · 5–8 дн", href: "/avia-dostavka-iz-evropy" },
+    ],
   },
 ];
 
@@ -53,17 +83,27 @@ export function Directions() {
 
         <div className="dir__grid">
           {directions.map((d) => (
-            <a
+            <div
               key={d.from}
               className={`dir__card${d.accent ? " dir__card--accent" : ""}`}
-              href={d.href}
             >
               <div className="dir__flag" aria-hidden="true">{d.flag}</div>
               <div className="mono dir__tag">{d.tag}</div>
               <h3 className="dir__from">{d.from} → Казахстан</h3>
               <p className="dir__desc">{d.desc}</p>
-              <span className="mono dir__cta">{d.label}</span>
-            </a>
+              <Link href={d.href} className="mono dir__cta">
+                {d.label}
+              </Link>
+              {d.methods.length > 0 && (
+                <div className="dir__methods">
+                  {d.methods.map((m) => (
+                    <Link key={m.href} href={m.href} className="mono dir__method">
+                      {m.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
