@@ -15,16 +15,17 @@
     "react-dom": "^18.3.1"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["mozjpeg", "pngquant-bin", "sharp"]
+    "onlyBuiltDependencies": [
+      "mozjpeg",
+      "pngquant-bin",
+      "sharp"
+    ]
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
-    "imagemin": "^9.0.1",
-    "imagemin-mozjpeg": "^10.0.0",
-    "imagemin-pngquant": "^10.0.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.5.4"

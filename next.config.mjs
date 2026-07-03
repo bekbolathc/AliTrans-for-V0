@@ -16,6 +16,22 @@ const nextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
+          {
+            // Report-only: собираем нарушения, не ломая GTM/GA/Vercel.
+            // После проверки в проде перевести в Content-Security-Policy.
+            key: "Content-Security-Policy-Report-Only",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com",
+              "font-src 'self'",
+              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://vitals.vercel-insights.com",
+              "frame-src https://www.googletagmanager.com",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join("; "),
+          },
         ],
       },
     ];
@@ -24,13 +40,10 @@ const nextConfig = {
   images: {
     // Enable AVIF format for better compression (Chrome, Edge, Firefox)
     formats: ['image/avif', 'image/webp'],
-    // Optimize images for LCP - focus on critical path
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    // Components use quality 75 (default) and 80 — both must be allowed
+    qualities: [75, 80],
+    // No remotePatterns: all images are local; an open pattern ('**')
+    // would let anyone proxy arbitrary hosts through /_next/image.
   },
 
   // Remove console.log statements in production to reduce overhead

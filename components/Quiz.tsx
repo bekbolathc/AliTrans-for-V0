@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-// Extend Window interface for gtag and custom tracking
+// Extend Window interface for gtag
 declare global {
   interface Window {
     gtag?: (command: string, action: string, params?: Record<string, unknown>) => void;
-    trackQuizConversion?: () => void;
   }
 }
 
@@ -36,13 +34,15 @@ const captions: Record<number, string> = {
 };
 
 export function Quiz() {
-  const router = useRouter();
   const [step, setStep] = useState<number | "block" | "done">(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [price, setPrice] = useState("");
   const [orderId, setOrderId] = useState("ATG-000000");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
+  const [consent, setConsent] = useState(false);
+  // Honeypot: скрытое поле, которое заполняют только боты
+  const [company, setCompany] = useState("");
   const [showCustomFrom, setShowCustomFrom] = useState(false);
   const [showCustomTo, setShowCustomTo] = useState(false);
   const [customFrom, setCustomFrom] = useState("");
@@ -121,6 +121,10 @@ export function Quiz() {
       setError("Пожалуйста, заполните имя и номер телефона");
       return;
     }
+    if (!consent) {
+      setError("Подтвердите согласие на обработку персональных данных");
+      return;
+    }
 
     setIsSubmitting(true);
     setError("");
@@ -133,9 +137,11 @@ export function Quiz() {
       const high = Math.round(base * mult * 1.35);
       const calculatedPrice = `$${low.toLocaleString("en-US")} – $${high.toLocaleString("en-US")}`;
 
-      // Fetch с timeout (10 секунд)
+      // Fetch с timeout (25 секунд — Bitrix24-вебхук иногда отвечает дольше 10с,
+      // а ранний abort означал, что лид уже создан в CRM, но клиент не успевал
+      // дождаться success и не делал редирект на /thank-you).
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       // Read UTM params stored at quiz entry
       const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"] as const;
@@ -150,7 +156,7 @@ export function Quiz() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...answers, ...utms }),
+        body: JSON.stringify({ ...answers, ...utms, company }),
         signal: controller.signal,
       });
 
@@ -165,21 +171,20 @@ export function Quiz() {
       setOrderId(data.orderId);
       setStep("done");
       
-      // Redirect to thank-you page after 1.5 seconds
+      // Redirect to thank-you page after 1.5 seconds.
+      // Полная перезагрузка (не router.push) — GTM должен переинициализироваться
+      // и заново сработать триггер «Просмотр страницы» для конверсии в Google Ads.
       setTimeout(() => {
-        router.push(`/thank-you?id=${data.orderId}`);
+        window.location.href = `/thank-you?id=${data.orderId}`;
       }, 1500);
       
-      // Track conversion in Google Analytics and Google Ads
+      // Track conversion in Google Analytics
       if (typeof window !== "undefined" && window.gtag) {
         window.gtag("event", "purchase", {
           value: base * mult,
-          currency: "KZT",
+          currency: "USD",
           transaction_id: data.orderId,
         });
-        if (typeof window.trackQuizConversion === "function") {
-          window.trackQuizConversion();
-        }
       }
       
       // Сохраняем данные в sessionStorage для CTA компонента
@@ -387,11 +392,22 @@ export function Quiz() {
                 <legend className="qstep__title">Куда отправить расчёт?</legend>
                 <div className="qstep__form">
                   {error && <div role="alert" style={{ color: "#D93D3D", marginBottom: "16px", fontSize: "14px" }}>{error}</div>}
-                  <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
-                  <label className="field" htmlFor="quiz-phone"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input id="quiz-phone" type="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
-                  <label className="field" htmlFor="quiz-wa"><span>WhatsApp (если другой)</span><input id="quiz-wa" type="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
-                  <label className="field" htmlFor="quiz-email"><span>Email · опционально</span><input id="quiz-email" type="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
-                  <label className="check" htmlFor="quiz-consent"><input id="quiz-consent" type="checkbox" defaultChecked /><span>Согласен с обработкой персональных данных</span></label>
+                  <label className="field" htmlFor="quiz-name"><span>Имя</span><input id="quiz-name" type="text" autoComplete="name" placeholder="Айгерим" value={answers.name ?? ""} onChange={(e) => set("name", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-phone"><span>Телефон <em className="mono">+7 7XX XXX XX XX</em></span><input id="quiz-phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={answers.phone ?? ""} onChange={(e) => set("phone", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-wa"><span>WhatsApp (если другой)</span><input id="quiz-wa" type="tel" inputMode="tel" placeholder="тот же номер" value={answers.wa ?? ""} onChange={(e) => set("wa", e.target.value)} /></label>
+                  <label className="field" htmlFor="quiz-email"><span>Email · опционально</span><input id="quiz-email" type="email" inputMode="email" autoComplete="email" placeholder="company@mail.kz" value={answers.email ?? ""} onChange={(e) => set("email", e.target.value)} /></label>
+                  {/* Honeypot: скрыто от людей, боты заполняют */}
+                  <input
+                    type="text"
+                    name="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+                  />
+                  <label className="check" htmlFor="quiz-consent"><input id="quiz-consent" type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} /><span>Согласен с обработкой персональных данных</span></label>
                 </div>
               </fieldset>
             )}

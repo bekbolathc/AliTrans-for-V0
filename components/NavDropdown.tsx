@@ -3,21 +3,20 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
-const SERVICE_ITEMS = [
-  { href: "/avia-dostavka-iz-kitaya", label: "Авиа доставка" },
-  { href: "/zhd-dostavka-iz-kitaya", label: "ЖД доставка" },
-  { href: "/avto-dostavka-iz-kitaya", label: "Авто доставка" },
-  { href: "/sbornye-gruzy-iz-kitaya", label: "Сборные грузы" },
-  { href: "/rastamozhka-gruzov", label: "Растаможка" },
-  { href: "/ved-pod-klyuch", label: "ВЭД под ключ" },
-];
+export type NavItem = { href: string; label: string };
 
-export function NavDropdown({ onItemClick }: { onItemClick?: () => void }) {
+export function NavDropdown({
+  label,
+  items,
+  onItemClick,
+}: {
+  label: string;
+  items: NavItem[];
+  onItemClick?: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Закрытие по клику снаружи и Escape — используем click, не mousedown,
-  // чтобы trigger.onClick успел переключить open до закрытия.
   useEffect(() => {
     if (!open) return;
     function handleClickOutside(e: MouseEvent) {
@@ -48,21 +47,17 @@ export function NavDropdown({ onItemClick }: { onItemClick?: () => void }) {
         className="nav-dropdown__trigger"
         aria-expanded={open}
         aria-haspopup="menu"
-        aria-label="Раскрыть список услуг"
         onClick={(e) => {
           e.stopPropagation();
           setOpen((v) => !v);
         }}
       >
-        Услуги
-        <span aria-hidden="true" className="nav-dropdown__caret">
-          ▾
-        </span>
+        {label}
+        <span aria-hidden="true" className="nav-dropdown__caret">▾</span>
       </button>
 
-      {/* Меню всегда в DOM — управляем через CSS-класс is-open. */}
       <div className="nav-dropdown__menu" role="menu">
-        {SERVICE_ITEMS.map((item) => (
+        {items.map((item) => (
           <Link
             key={item.href}
             href={item.href}

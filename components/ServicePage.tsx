@@ -441,7 +441,16 @@ export function ServicePage({ data }: { data: ServicePageData }) {
 
         {/* CTA */}
         <div id="quiz-cta">
-          <CTA withQuizOnPage={false} source={data.ctaSource} defaultMode={data.ctaMode} />
+          <CTA
+            withQuizOnPage={false}
+            source={data.ctaSource}
+            defaultMode={data.ctaMode}
+            origin={({
+              korea: "Кореи", "korea-air": "Кореи", "korea-sea": "Кореи",
+              turkey: "Турции", "turkey-air": "Турции", "turkey-road": "Турции",
+              europe: "Европы", "europe-air": "Европы", "europe-road": "Европы",
+            } as Record<string, string>)[data.ctaSource] ?? "Китая"}
+          />
         </div>
       </main>
 

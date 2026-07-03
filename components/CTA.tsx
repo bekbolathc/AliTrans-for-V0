@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
@@ -9,20 +9,25 @@ interface CTAProps {
   source?: string;
   /** Базовый mode для API (рус. название способа доставки). */
   defaultMode?: string;
+  /** Страна/направление в заголовке: «Готовы доставить груз из {origin}?» */
+  origin?: string;
 }
 
 export function CTA({
   withQuizOnPage = true,
   source = "zhd-dostavka",
   defaultMode = "",
+  origin = "Китая",
 }: CTAProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [utmParams, setUtmParams] = useState<Record<string, string>>({});
+  const [consent, setConsent] = useState(false);
+  // Honeypot: скрытое поле, которое заполняют только боты
+  const [company, setCompany] = useState("");
 
   // Get URL parameters on mount (pre-fill + UTM capture)
   useEffect(() => {
@@ -59,6 +64,10 @@ export function CTA({
         setMessage("Пожалуйста, укажите телефон");
         return;
       }
+      if (!consent) {
+        setMessage("Подтвердите согласие на обработку персональных данных");
+        return;
+      }
 
       setIsLoading(true);
       setMessage("");
@@ -76,6 +85,7 @@ export function CTA({
             name: name.trim(),
             phone: phone.trim(),
             source,
+            company,
             ...utmParams,
           }),
         });
@@ -83,7 +93,9 @@ export function CTA({
         const data = await response.json();
 
         if (data.success) {
-          router.push("/thank-you");
+          // Полная перезагрузка (не router.push) — GTM должен переинициализироваться
+          // и заново сработать триггер «Просмотр страницы» для конверсии в Google Ads.
+          window.location.href = "/thank-you";
         } else {
           setMessage(data.error || "Ошибка при отправке заявки. Попробуйте позже.");
         }
@@ -101,7 +113,7 @@ export function CTA({
       <div className="container cta__inner">
         <div className="cta__left">
           <div className="mono section-head__num section-head__num--light">/13 · ГОТОВЫ НАЧАТЬ</div>
-          <h2 className="cta__title">Готовы доставить груз<br />из Китая?</h2>
+          <h2 className="cta__title">Готовы доставить груз<br />из {origin}?</h2>
           <p className="cta__lead">Расчёт за 15 минут. Без обязательств. Без навязчивых звонков.</p>
 
           <ul className="cta__guarantees">
@@ -127,9 +139,23 @@ export function CTA({
               <div className="manager__name">Аманжол</div>
               <p className="manager__quote">«Здравствуйте! Помогу с логистикой вашего груза — рассчитаю стоимость и подберу способ доставки.»</p>
               <form className="manager__form" onSubmit={handleSubmit}>
-                <label className="field"><span>Имя</span><input type="text" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
-                <label className="field"><span>Телефон</span><input type="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
-                {message && <p style={{ fontSize: "14px", color: message.startsWith("✓") ? "var(--emerald)" : "var(--rose)", marginTop: "8px" }}>{message}</p>}
+                <label className="field"><span>Имя</span><input type="text" autoComplete="name" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
+                <label className="field"><span>Телефон</span><input type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
+                <input
+                  type="text"
+                  name="company"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", height: 0, width: 0, opacity: 0 }}
+                />
+                <label className="check" style={{ marginTop: "8px" }}>
+                  <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} disabled={isLoading} />
+                  <span>Согласен с обработкой персональных данных</span>
+                </label>
+                {message && <p role="alert" style={{ fontSize: "14px", color: "var(--rose)", marginTop: "8px" }}>{message}</p>}
                 <button className="btn btn--gold btn--full" type="submit" disabled={isLoading}>{isLoading ? "Отправляем..." : "Жду расчёт →"}</button>
               </form>
             </div>

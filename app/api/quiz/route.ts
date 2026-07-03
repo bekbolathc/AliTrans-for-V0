@@ -2,14 +2,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Улучшенная санитизация user input от XSS и инъекций
-function sanitizeInput(input: string): string {
-  if (!input) return '';
+function sanitizeInput(input: unknown): string {
+  if (typeof input !== 'string' || !input) return '';
   return input
     .trim()
     .replace(/[<>'"&\\]/g, '') // Убираем опасные символы
     .replace(/javascript:/gi, '') // Предотвращаем JS URI
     .replace(/on\w+=/gi, '') // Убираем event handlers
     .slice(0, 500);
+}
+
+// Нормализация телефона: убираем скобки, дефисы, пробелы — оставляем цифры и +
+function normalizePhone(phone: string): string {
+  return phone.replace(/[^\d+]/g, '');
+}
+
+// Экранирование для Telegram HTML parse mode
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 // Логирование ошибок (для продакшена можно заменить на Sentry/LogRocket)
@@ -30,10 +40,17 @@ function isValidEmail(email: string): boolean {
   return emailRegex.test(email);
 }
 
-// Валидация телефона Казахстана
+// Валидация телефона Казахстана (вход — уже нормализованный номер: цифры и +)
 function isValidPhone(phone: string): boolean {
-  const phoneRegex = /^(\+7|8)?[- ]?7[0-9]{9}$|^7[0-9]{9}$/;
-  return phoneRegex.test(phone.replace(/\s+/g, ''));
+  const digits = phone.replace(/^\+/, '');
+  // 11 цифр с 7/8 в начале (полный формат) или 10 цифр с 7 (без кода страны)
+  if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
+    return /^[78]7\d{9}$/.test(digits);
+  }
+  if (digits.length === 10 && digits.startsWith('7')) {
+    return /^7\d{9}$/.test(digits);
+  }
+  return false;
 }
 
 // Отправка сделки в Битрикс24
@@ -197,32 +214,38 @@ async function sendToTelegram(params: {
     return;
   }
 
+  // HTML parse mode + экранирование: пользовательские символы (*, _, [) в имени
+  // не ломают разметку — с Markdown такое сообщение молча терялось.
   let text =
-    `📋 *Новая заявка #${params.orderId}*\n\n` +
-    `👤 Имя: ${params.name}\n` +
-    `📞 Телефон: ${params.phone}\n` +
-    (params.wa ? `📱 WhatsApp: ${params.wa}\n` : '') +
-    (params.email ? `📧 Email: ${params.email}\n` : '');
+    `📋 <b>Новая заявка #${escapeHtml(params.orderId)}</b>\n\n` +
+    `👤 Имя: ${escapeHtml(params.name)}\n` +
+    `📞 Телефон: ${escapeHtml(params.phone)}\n` +
+    (params.wa ? `📱 WhatsApp: ${escapeHtml(params.wa)}\n` : '') +
+    (params.email ? `📧 Email: ${escapeHtml(params.email)}\n` : '');
 
-  if (params.from) text += `📍 Откуда: ${params.from}\n`;
-  if (params.to)   text += `📍 Куда: ${params.to}\n`;
-  if (params.vol)  text += `📦 Объём: ${params.vol}\n`;
-  if (params.kind) text += `🏷️ Тип груза: ${params.kind}\n`;
-  if (params.mode) text += `🚚 Способ: ${params.mode}\n`;
-  if (params.price && params.price !== '$0 – $0') text += `💰 Цена: ${params.price}\n`;
+  if (params.from) text += `📍 Откуда: ${escapeHtml(params.from)}\n`;
+  if (params.to)   text += `📍 Куда: ${escapeHtml(params.to)}\n`;
+  if (params.vol)  text += `📦 Объём: ${escapeHtml(params.vol)}\n`;
+  if (params.kind) text += `🏷️ Тип груза: ${escapeHtml(params.kind)}\n`;
+  if (params.mode) text += `🚚 Способ: ${escapeHtml(params.mode)}\n`;
+  if (params.price && params.price !== '$0 – $0') text += `💰 Цена: ${escapeHtml(params.price)}\n`;
 
-  text += `\n🌐 Источник: alitrans.kz${params.source ? ` (${params.source})` : ''}`;
+  text += `\n🌐 Источник: alitrans.kz${params.source ? ` (${escapeHtml(params.source)})` : ''}`;
 
   try {
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: TELEGRAM_CHAT_ID,
         text,
-        parse_mode: 'Markdown',
+        parse_mode: 'HTML',
       }),
     });
+    if (!res.ok) {
+      const errBody = await res.text();
+      logError('sendToTelegram', `Telegram API ${res.status}: ${errBody}`, { orderId: params.orderId });
+    }
   } catch (error) {
     logError('sendToTelegram', error, { orderId: params.orderId });
   }
@@ -274,8 +297,19 @@ export async function POST(request: NextRequest) {
     // ✅ ИСПРАВЛЕНИЕ 1: добавлены utm-параметры
     const {
       from, to, vol, kind, mode, name, phone, wa, email, source,
-      utm_source, utm_medium, utm_campaign, utm_term, utm_content
+      utm_source, utm_medium, utm_campaign, utm_term, utm_content,
+      company,
     } = body;
+
+    // Honeypot: поле «company» скрыто от людей — если заполнено, это бот.
+    // Отвечаем success, чтобы бот не понял, что отфильтрован.
+    if (typeof company === 'string' && company.trim() !== '') {
+      return NextResponse.json({
+        success: true,
+        message: "Заявка принята.",
+        orderId: "ATG-" + (100000 + Math.floor(Math.random() * 899999)),
+      }, { status: 200 });
+    }
 
     // Санитизация
     const sFrom   = sanitizeInput(from);
@@ -284,10 +318,19 @@ export async function POST(request: NextRequest) {
     const sKind   = sanitizeInput(kind);
     const sMode   = sanitizeInput(mode);
     const sName   = sanitizeInput(name);
-    const sPhone  = sanitizeInput(phone);
-    const sWa     = sanitizeInput(wa || '');
+    const sPhone  = normalizePhone(sanitizeInput(phone));
+    const sWa     = normalizePhone(sanitizeInput(wa || ''));
     const sEmail  = sanitizeInput(email || '');
     const sSource = sanitizeInput(source || '');
+
+    // UTM тоже санитизируем — идут в Bitrix24 как есть
+    const sUtm = {
+      utm_source:   sanitizeInput(utm_source),
+      utm_medium:   sanitizeInput(utm_medium),
+      utm_campaign: sanitizeInput(utm_campaign),
+      utm_term:     sanitizeInput(utm_term),
+      utm_content:  sanitizeInput(utm_content),
+    };
 
     // Валидация обязательных полей
     const isFromSubpage = sSource && sSource !== '';
@@ -303,8 +346,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Неправильный формат email" }, { status: 400 });
     }
 
-    // Генерируем ID заявки
-    const orderId = "ATG-" + (100000 + Math.floor(Math.random() * 899999));
+    // Генерируем ID заявки: временная метка + случайный суффикс — без коллизий
+    const orderId = "ATG-" + Date.now().toString(36).toUpperCase().slice(-5) + Math.floor(Math.random() * 90 + 10);
 
     // Считаем цену только если объём и способ указаны
     let price = '';
@@ -324,7 +367,7 @@ export async function POST(request: NextRequest) {
         orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail,
         from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode,
         price, source: sSource,
-        utm_source, utm_medium, utm_campaign, utm_term, utm_content
+        ...sUtm
       }),
       sendToBusinessWhatsApp(orderId, sFrom, sTo, sVol, sKind, sMode, sName, sPhone, sWa, sEmail),
       sendToTelegram({ orderId, name: sName, phone: sPhone, wa: sWa, email: sEmail, from: sFrom, to: sTo, vol: sVol, kind: sKind, mode: sMode, price, source: sSource }),

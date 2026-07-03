@@ -2,7 +2,6 @@ import Script from "next/script";
 
 export function GoogleAnalytics() {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
-  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
 
   if (!gaId) {
     return null;
@@ -27,40 +26,6 @@ export function GoogleAnalytics() {
           });
         `}
       </Script>
-
-      {/* Google Ads Conversion Tracking */}
-      {adsId && (
-        <Script id="google-ads-tracking" strategy="afterInteractive">
-          {`
-            window.gtag_report_conversion = function(url) {
-              var callback = function () {
-                if (typeof(url) != 'undefined') {
-                  window.location = url;
-                }
-              };
-              gtag('event', 'conversion', {
-                'send_to': '${adsId}/AW-123456789_ConversionLabel_abcdefgh',
-                'value': 1.0,
-                'currency': 'KZT',
-                'callback': callback
-              });
-              return false;
-            }
-            
-            // Track quiz submissions as conversions
-            function trackQuizConversion() {
-              gtag('event', 'conversion', {
-                'send_to': '${adsId}/AW-123456789_ConversionLabel_abcdefgh',
-                'value': 1.0,
-                'currency': 'KZT',
-                'transaction_id': ''
-              });
-            }
-            
-            window.trackQuizConversion = trackQuizConversion;
-          `}
-        </Script>
-      )}
     </>
   );
 }
