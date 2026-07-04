@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { ServicePage, type ServicePageData } from "@/components/ServicePage";
+import { CustomsCalculator } from "@/components/CustomsCalculator";
 
 const SLUG = "rastamozhka-gruzov";
 
@@ -16,6 +17,7 @@ export default function Page() {
   const data: ServicePageData = {
     slug: SLUG,
     breadcrumbLabel: "Растаможка грузов",
+    afterPricing: <CustomsCalculator />,
     ctaSource: "rastamozhka",
     ctaMode: "customs",
     hero: {

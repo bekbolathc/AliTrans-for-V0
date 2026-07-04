@@ -1557,6 +1557,64 @@ section { padding: clamp(72px, 8vw, 120px) 0; }
 .manager__form .field input { font-size: 14px; padding: 11px 14px; }
 
 /* ============================================================== */
+/* CUSTOMS CALCULATOR                                               */
+/* ============================================================== */
+.calc { background: var(--paper-2); }
+.calc__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: clamp(24px, 4vw, 40px);
+}
+.calc__form { display: flex; flex-direction: column; gap: 20px; }
+.calc__field { display: flex; flex-direction: column; gap: 8px; }
+.calc__label { font-size: 11px; letter-spacing: 0.12em; color: var(--mute); }
+.calc__field input,
+.calc__field select {
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: inherit; font-size: 16px;
+  outline: none;
+  transition: border 0.18s;
+}
+.calc__field input:focus,
+.calc__field select:focus { border-color: var(--gold); }
+.calc__field select { cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237B8299' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px;
+}
+.calc__result {
+  display: flex; flex-direction: column; gap: 12px; justify-content: center;
+}
+.calc__result--empty {
+  align-items: center; justify-content: center;
+  color: var(--mute); font-size: 15px;
+}
+.calc__row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px; color: var(--ink);
+}
+.calc__row--total {
+  border-bottom: none; border-top: 2px solid var(--gold);
+  padding-top: 14px; margin-top: 4px;
+  font-size: 18px; font-weight: 700; color: var(--navy-900);
+}
+.calc__note { font-size: 11px; color: var(--mute); line-height: 1.5; margin-top: 4px; }
+.calc__result .btn { margin-top: 8px; text-align: center; }
+@media (max-width: 760px) {
+  .calc__body { grid-template-columns: 1fr; }
+}
+
+/* ============================================================== */
 /* FOOTER                                                           */
 /* ============================================================== */
 .footer { background: var(--navy-900); color: rgba(245,242,235,0.7); padding: 80px 0 32px; }

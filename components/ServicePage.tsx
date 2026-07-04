@@ -111,6 +111,9 @@ export type ServicePageData = {
     items: OtherService[];
   };
 
+  /** Дополнительная секция после тарифов (напр. калькулятор). */
+  afterPricing?: React.ReactNode;
+
   /** source-параметр для /api/quiz (передаётся в CTA). */
   ctaSource: string;
   /** Способ доставки для поля "mode" в заявке (по умолчанию совпадает с ctaSource). */
@@ -321,6 +324,8 @@ export function ServicePage({ data }: { data: ServicePageData }) {
             </div>
           </div>
         </section>
+
+        {data.afterPricing}
 
         {/* 04 · Почему выбирают */}
         <section className="why" id="why">
