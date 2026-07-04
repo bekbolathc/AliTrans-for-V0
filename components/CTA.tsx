@@ -95,7 +95,9 @@ export function CTA({
         if (data.success) {
           // Полная перезагрузка (не router.push) — GTM должен переинициализироваться
           // и заново сработать триггер «Просмотр страницы» для конверсии в Google Ads.
-          window.location.href = "/thank-you";
+          window.location.href = data.orderId
+            ? `/thank-you?id=${encodeURIComponent(data.orderId)}`
+            : "/thank-you";
         } else {
           setMessage(data.error || "Ошибка при отправке заявки. Попробуйте позже.");
         }
