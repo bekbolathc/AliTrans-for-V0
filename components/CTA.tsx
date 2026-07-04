@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
@@ -132,9 +133,15 @@ export function CTA({
 
         <div className="cta__right">
           <div className="manager">
-            <div className="manager__photo" aria-hidden="true">
-              <div className="manager__photo-init">АМ</div>
-              <div className="mono manager__photo-lbl">АМ</div>
+            <div className="manager__photo">
+              <Image
+                src="/images/amanzhol.png"
+                alt="Аманжол — руководитель логистического отдела Ali Trans Group"
+                width={240}
+                height={240}
+                className="manager__photo-img"
+                sizes="120px"
+              />
             </div>
             <div className="manager__body">
               <div className="mono manager__role">РУКОВОДИТЕЛЬ ЛОГИСТИЧЕСКОГО ОТДЕЛА</div>
