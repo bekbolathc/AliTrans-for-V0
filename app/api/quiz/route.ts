@@ -76,8 +76,10 @@ async function sendToBitrix24(params: {
   const BITRIX_WEBHOOK = process.env.BITRIX_WEBHOOK_URL;
   if (!BITRIX_WEBHOOK) throw new Error('BITRIX_WEBHOOK_URL env var is not set');
 
-  // Маршрут в читаемом виде → попадёт в поле «Маршрут» в карточке
+  // Маршрут в читаемом виде → попадёт в поле «Маршрут» в карточке.
+  // Номер заявки — первым, т.к. заголовок сделки перекрывает Wazzup (WhatsApp-коннектор).
   const marshrut = [
+    `Заявка: #${params.orderId}`,
     params.source ? `Страница: ${params.source}` : '',
     params.from && params.to ? `${params.from} → ${params.to}` : '',
     params.mode ? `Способ: ${params.mode}` : '',
