@@ -1,11 +1,7 @@
 import Script from "next/script";
 
-// GA4 measurement ID — публичный идентификатор (виден в исходнике страницы),
-// не секрет. Можно переопределить через NEXT_PUBLIC_GA_ID в окружении.
-const DEFAULT_GA_ID = "G-VH1YKKNX3J";
-
 export function GoogleAnalytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID || DEFAULT_GA_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
   if (!gaId) {
     return null;

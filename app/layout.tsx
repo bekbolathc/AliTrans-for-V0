@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Manrope, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { schemaOrganization } from "@/lib/schema";
 import "./globals.css";
 
@@ -150,7 +149,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
 
         {children}
-        <GoogleAnalytics />
         <Analytics />
       </body>
     </html>
