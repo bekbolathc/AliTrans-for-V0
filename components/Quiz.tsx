@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 
-// Extend Window interface for gtag
+// dataLayer — общий буфер GTM. Конверсии пушим сюда; в GTM их подхватывает
+// триггер Custom Event "purchase" → GA4 Event-тег. (window.gtag через GTM
+// не создаётся, поэтому пушим в dataLayer напрямую.)
 declare global {
   interface Window {
-    gtag?: (command: string, action: string, params?: Record<string, unknown>) => void;
+    dataLayer?: Record<string, unknown>[];
   }
 }
 
@@ -178,9 +180,12 @@ export function Quiz() {
         window.location.href = `/thank-you?id=${data.orderId}`;
       }, 1500);
       
-      // Track conversion in Google Analytics
-      if (typeof window !== "undefined" && window.gtag) {
-        window.gtag("event", "purchase", {
+      // Конверсия → dataLayer. GTM ловит триггером Custom Event "purchase"
+      // и отправляет в GA4 Event-тегом (value / currency / transaction_id).
+      if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "purchase",
           value: base * mult,
           currency: "USD",
           transaction_id: data.orderId,
