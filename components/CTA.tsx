@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { pushFormStart } from "@/lib/analytics";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
@@ -147,7 +148,12 @@ export function CTA({
               <div className="mono manager__role">РУКОВОДИТЕЛЬ ЛОГИСТИЧЕСКОГО ОТДЕЛА</div>
               <div className="manager__name">Аманжол</div>
               <p className="manager__quote">«Здравствуйте! Помогу с логистикой вашего груза — рассчитаю стоимость и подберу способ доставки.»</p>
-              <form className="manager__form" onSubmit={handleSubmit}>
+              <form
+                className="manager__form"
+                onSubmit={handleSubmit}
+                onFocusCapture={() => pushFormStart("cta")}
+                onChangeCapture={() => pushFormStart("cta")}
+              >
                 <label className="field"><span>Имя</span><input type="text" autoComplete="name" placeholder="Айгерим" value={name} onChange={(e) => setName(e.target.value)} disabled={isLoading} /></label>
                 <label className="field"><span>Телефон</span><input type="tel" inputMode="tel" autoComplete="tel" placeholder="+7 771 800 02 09" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={isLoading} /></label>
                 <input
