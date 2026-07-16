@@ -1,15 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-// dataLayer — общий буфер GTM. Конверсии пушим сюда; в GTM их подхватывает
-// триггер Custom Event "purchase" → GA4 Event-тег. (window.gtag через GTM
-// не создаётся, поэтому пушим в dataLayer напрямую.)
-declare global {
-  interface Window {
-    dataLayer?: Record<string, unknown>[];
-  }
-}
+import { pushFormStart, pushPurchase } from "@/lib/analytics";
 
 type Mode = "air" | "rail" | "road" | "advice";
 type Volume = "lt100" | "100-500" | "500-2000" | "2-10t" | "container";
@@ -182,15 +174,11 @@ export function Quiz() {
       
       // Конверсия → dataLayer. GTM ловит триггером Custom Event "purchase"
       // и отправляет в GA4 Event-тегом (value / currency / transaction_id).
-      if (typeof window !== "undefined") {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "purchase",
-          value: base * mult,
-          currency: "USD",
-          transaction_id: data.orderId,
-        });
-      }
+      pushPurchase({
+        value: base * mult,
+        currency: "USD",
+        transactionId: data.orderId,
+      });
       
       // Сохраняем данные в sessionStorage для CTA компонента
       sessionStorage.setItem("quiz_name", answers.name);
@@ -232,7 +220,18 @@ export function Quiz() {
           </p>
         </header>
 
-        <div className="quiz__wrap" data-step={step} role="region" aria-live="polite" aria-label="Quiz форма">
+        {/* Capture-фазой ловим первое касание любого поля на любом шаге:
+            радио, текстовые поля, чекбокс. Quiz — не <form>, поэтому
+            автоматический form_start от GA4 здесь не работает. */}
+        <div
+          className="quiz__wrap"
+          data-step={step}
+          role="region"
+          aria-live="polite"
+          aria-label="Quiz форма"
+          onFocusCapture={() => pushFormStart("quiz")}
+          onChangeCapture={() => pushFormStart("quiz")}
+        >
           <div className="quiz__progress">
             <div className="quiz__progress-bar">
               <div style={{ width: progressW, height: "100%", background: step === "done" ? "#0E8B6C" : "#D9A441", borderRadius: 99, transition: "width 0.4s cubic-bezier(.4,0,.2,1)" }}></div>
