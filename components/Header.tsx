@@ -10,6 +10,8 @@ const SERVICES = [
   { href: "/zhd-dostavka-iz-kitaya", label: "ЖД из Китая" },
   { href: "/avia-dostavka-iz-kitaya", label: "Авиа из Китая" },
   { href: "/avto-dostavka-iz-kitaya", label: "Авто из Китая" },
+  { href: "/konteynernye-perevozki-iz-kitaya", label: "Контейнерные" },
+  { href: "/morskaya-dostavka-iz-kitaya", label: "Морская доставка" },
   { href: "/sbornye-gruzy-iz-kitaya", label: "Сборные грузы" },
   { href: "/rastamozhka-gruzov", label: "Растаможка" },
   { href: "/ved-pod-klyuch", label: "ВЭД под ключ" },

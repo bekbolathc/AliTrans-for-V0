@@ -32,6 +32,8 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "avia-dostavka-iz-kitaya", type: "service", priority: 0.9, changefreq: "monthly" },
   { slug: "zhd-dostavka-iz-kitaya", type: "service", priority: 0.9, changefreq: "monthly" },
   { slug: "avto-dostavka-iz-kitaya", type: "service", priority: 0.9, changefreq: "monthly" },
+  { slug: "konteynernye-perevozki-iz-kitaya", type: "service", priority: 0.9, changefreq: "monthly" },
+  { slug: "morskaya-dostavka-iz-kitaya", type: "service", priority: 0.85, changefreq: "monthly" },
   { slug: "sbornye-gruzy-iz-kitaya", type: "service", priority: 0.85, changefreq: "monthly" },
   { slug: "rastamozhka-gruzov", type: "service", priority: 0.85, changefreq: "monthly" },
   { slug: "ved-pod-klyuch", type: "service", priority: 0.85, changefreq: "monthly" },
