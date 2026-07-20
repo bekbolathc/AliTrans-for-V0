@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { pushFormStart } from "@/lib/analytics";
+import { pushFormStart, pushGenerateLead } from "@/lib/analytics";
 
 interface CTAProps {
   withQuizOnPage?: boolean;
@@ -95,18 +95,31 @@ export function CTA({
         const data = await response.json();
 
         if (data.success) {
-          // Полная перезагрузка (не router.push) — GTM должен переинициализироваться
-          // и заново сработать триггер «Просмотр страницы» для конверсии в Google Ads.
-          window.location.href = data.orderId
+          // Лид → dataLayer (по факту ответа сервера, не по просмотру страницы).
+          // У формы на страницах услуг нет расчётной суммы — value не передаём.
+          if (data.orderId) {
+            pushGenerateLead({ transactionId: data.orderId, currency: "USD" });
+          }
+
+          // Пауза перед полной перезагрузкой, чтобы GTM успел отправить событие
+          // до выгрузки страницы. Полная перезагрузка (не router.push) —
+          // GTM должен переинициализироваться на /thank-you.
+          const target = data.orderId
             ? `/thank-you?id=${encodeURIComponent(data.orderId)}`
             : "/thank-you";
+          // isLoading НЕ сбрасываем: кнопка остаётся заблокированной до
+          // редиректа (через 400 мс), иначе можно кликнуть повторно и отправить
+          // второй generate_lead.
+          setTimeout(() => {
+            window.location.href = target;
+          }, 400);
         } else {
           setMessage(data.error || "Ошибка при отправке заявки. Попробуйте позже.");
+          setIsLoading(false);
         }
       } catch (err) {
         setMessage("Ошибка при отправке заявки. Попробуйте позже.");
         console.error("[v0] CTA API error:", err);
-      } finally {
         setIsLoading(false);
       }
     }

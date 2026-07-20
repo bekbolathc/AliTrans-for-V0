@@ -39,18 +39,23 @@ export function pushFormStart(formId: FormId) {
 }
 
 /**
- * Успешная заявка. Схема полей совпадает с тегом GA4 «purchase» в GTM:
- * value / currency / transaction_id.
+ * Успешная заявка (лид). Шлётся ТОЛЬКО по факту успешного ответа сервера —
+ * поэтому перезагрузками страницы /thank-you её не накрутить (в отличие от
+ * события на просмотр страницы). Схема полей = тег GA4 «generate_lead» в GTM.
+ *
+ * `value` опционален: у калькулятора (Quiz) есть расчётная сумма, у формы на
+ * страницах услуг (CTA) её нет — тогда поле просто не отправляем.
  */
-export function pushPurchase(params: {
-  value: number;
-  currency: string;
+export function pushGenerateLead(params: {
   transactionId: string;
+  currency?: string;
+  value?: number;
 }) {
-  push({
-    event: "purchase",
-    value: params.value,
-    currency: params.currency,
+  const payload: Record<string, unknown> = {
+    event: "generate_lead",
     transaction_id: params.transactionId,
-  });
+  };
+  if (typeof params.value === "number") payload.value = params.value;
+  if (params.currency) payload.currency = params.currency;
+  push(payload);
 }
