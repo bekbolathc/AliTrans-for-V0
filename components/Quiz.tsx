@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { pushFormStart, pushPurchase } from "@/lib/analytics";
+import { pushFormStart, pushGenerateLead } from "@/lib/analytics";
 
 type Mode = "air" | "rail" | "road" | "advice";
 type Volume = "lt100" | "100-500" | "500-2000" | "2-10t" | "container";
@@ -172,9 +172,10 @@ export function Quiz() {
         window.location.href = `/thank-you?id=${data.orderId}`;
       }, 1500);
       
-      // Конверсия → dataLayer. GTM ловит триггером Custom Event "purchase"
+      // Лид → dataLayer. GTM ловит триггером Custom Event "generate_lead"
       // и отправляет в GA4 Event-тегом (value / currency / transaction_id).
-      pushPurchase({
+      // У квиза есть расчётная сумма — передаём её.
+      pushGenerateLead({
         value: base * mult,
         currency: "USD",
         transactionId: data.orderId,
