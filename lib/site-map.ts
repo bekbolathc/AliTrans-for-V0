@@ -38,6 +38,13 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "rastamozhka-gruzov", type: "service", priority: 0.85, changefreq: "monthly" },
   { slug: "ved-pod-klyuch", type: "service", priority: 0.85, changefreq: "monthly" },
 
+  // ── Китай: города назначения (гео) ────────────────────
+  { slug: "dostavka-iz-kitaya-v-almaty", type: "service", priority: 0.85, changefreq: "monthly" },
+  { slug: "dostavka-iz-kitaya-v-astanu", type: "service", priority: 0.85, changefreq: "monthly" },
+
+  // ── Коридоры из Китая (назначение не KZ) ──────────────
+  { slug: "gruzoperevozki-iz-kitaya-v-rossiyu", type: "service", priority: 0.8, changefreq: "monthly" },
+
   // ── Другие направления (не Китай) ─────────────────────
   { slug: "dostavka-iz-korei", type: "service", priority: 0.8, changefreq: "monthly" },
   { slug: "dostavka-iz-turcii", type: "service", priority: 0.8, changefreq: "monthly" },

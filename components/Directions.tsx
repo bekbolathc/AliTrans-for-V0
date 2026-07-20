@@ -11,6 +11,7 @@ type Direction = {
   accent: boolean;
   label: string;
   methods: Method[];
+  cities?: Method[];
 };
 
 const directions: Direction[] = [
@@ -26,6 +27,10 @@ const directions: Direction[] = [
       { label: "ЖД · 12–18 дн", href: "/zhd-dostavka-iz-kitaya" },
       { label: "Авиа · 2–5 дн", href: "/avia-dostavka-iz-kitaya" },
       { label: "Авто · 7–14 дн", href: "/avto-dostavka-iz-kitaya" },
+    ],
+    cities: [
+      { label: "→ в Алматы", href: "/dostavka-iz-kitaya-v-almaty" },
+      { label: "→ в Астану", href: "/dostavka-iz-kitaya-v-astanu" },
     ],
   },
   {
@@ -99,6 +104,15 @@ export function Directions() {
                   {d.methods.map((m) => (
                     <Link key={m.href} href={m.href} className="mono dir__method">
                       {m.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+              {d.cities && d.cities.length > 0 && (
+                <div className="dir__methods">
+                  {d.cities.map((c) => (
+                    <Link key={c.href} href={c.href} className="mono dir__method">
+                      {c.label}
                     </Link>
                   ))}
                 </div>
