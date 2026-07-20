@@ -25,6 +25,9 @@ export const SITE_PAGES: SitePage[] = [
   // ── Главная ────────────────────────────────────────────
   { slug: "", type: "home", priority: 1.0, changefreq: "weekly" },
 
+  // ── Пиллар: международные грузоперевозки (хаб всех направлений) ─
+  { slug: "mezhdunarodnye-gruzoperevozki", type: "service", priority: 0.9, changefreq: "monthly" },
+
   // ── Service-страницы (B2B услуги, generalised) ─────────
   { slug: "avia-dostavka-iz-kitaya", type: "service", priority: 0.9, changefreq: "monthly" },
   { slug: "zhd-dostavka-iz-kitaya", type: "service", priority: 0.9, changefreq: "monthly" },

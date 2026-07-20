@@ -16,10 +16,11 @@ const SERVICES = [
 ];
 
 const DIRECTIONS = [
-  { href: "/#services", label: "🇨🇳 Китай" },
-  { href: "/dostavka-iz-korei", label: "🇰🇷 Корея" },
-  { href: "/dostavka-iz-turcii", label: "🇹🇷 Турция" },
-  { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа" },
+  { href: "/mezhdunarodnye-gruzoperevozki", label: "🌍 Все направления" },
+  { href: "/#services", label: "🇨🇳 Китай → Казахстан" },
+  { href: "/dostavka-iz-korei", label: "🇰🇷 Корея → Казахстан" },
+  { href: "/dostavka-iz-turcii", label: "🇹🇷 Турция → Казахстан" },
+  { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа → Казахстан" },
 ];
 
 const CARGO_TYPES = [
