@@ -4,14 +4,19 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 export type NavItem = { href: string; label: string };
+export type NavGroup = { title: string; items: NavItem[] };
 
 export function NavDropdown({
   label,
   items,
+  groups,
   onItemClick,
 }: {
   label: string;
-  items: NavItem[];
+  /** Плоский список пунктов (для меню без категорий). */
+  items?: NavItem[];
+  /** Сгруппированные пункты с заголовками категорий (напр. типы грузов). */
+  groups?: NavGroup[];
   onItemClick?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -35,6 +40,22 @@ export function NavDropdown({
     };
   }, [open]);
 
+  const renderItem = (item: NavItem) => (
+    <Link
+      key={item.href}
+      href={item.href}
+      className="nav-dropdown__item"
+      role="menuitem"
+      tabIndex={open ? 0 : -1}
+      onClick={() => {
+        setOpen(false);
+        onItemClick?.();
+      }}
+    >
+      {item.label}
+    </Link>
+  );
+
   return (
     <div
       className={`nav-dropdown${open ? " is-open" : ""}`}
@@ -57,21 +78,16 @@ export function NavDropdown({
       </button>
 
       <div className="nav-dropdown__menu" role="menu">
-        {items.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="nav-dropdown__item"
-            role="menuitem"
-            tabIndex={open ? 0 : -1}
-            onClick={() => {
-              setOpen(false);
-              onItemClick?.();
-            }}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {groups
+          ? groups.map((g) => (
+              <div key={g.title} className="nav-dropdown__group">
+                <div className="nav-dropdown__group-title mono" aria-hidden="true">
+                  {g.title}
+                </div>
+                {g.items.map(renderItem)}
+              </div>
+            ))
+          : (items ?? []).map(renderItem)}
       </div>
     </div>
   );
