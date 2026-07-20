@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavDropdown } from "@/components/NavDropdown";
+import { NavDropdown, type NavGroup } from "@/components/NavDropdown";
 
 const SERVICES = [
   { href: "/zhd-dostavka-iz-kitaya", label: "ЖД из Китая" },
@@ -23,16 +23,42 @@ const DIRECTIONS = [
   { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа → Казахстан" },
 ];
 
-const CARGO_TYPES = [
-  { href: "/elektronika-iz-kitaya", label: "Электроника" },
-  { href: "/avtozapchasti-iz-kitaya", label: "Автозапчасти" },
-  { href: "/tekstil-i-odezhda", label: "Текстиль и одежда" },
-  { href: "/oborudovanie-i-mashiny", label: "Оборудование" },
-  { href: "/negabaritnye-gruzy", label: "Негабаритные грузы" },
-  { href: "/kosmetika-i-krasota", label: "Косметика" },
-  { href: "/tovary-dlya-marketpleysov", label: "Для маркетплейсов" },
-  { href: "/opasnye-gruzy", label: "Опасные грузы ADR" },
+// Типы грузов сгруппированы по категориям — таксономия под расширение.
+// Новые страницы грузов (шины, спецтехника, стройматериалы и т.д.)
+// добавляются в свою категорию. Плоский список для мобильного меню
+// выводится из категорий автоматически (CARGO_TYPES ниже).
+const CARGO_CATEGORIES: NavGroup[] = [
+  {
+    title: "Потребительские товары",
+    items: [
+      { href: "/tekstil-i-odezhda", label: "Текстиль и одежда" },
+      { href: "/kosmetika-i-krasota", label: "Косметика" },
+      { href: "/tovary-dlya-marketpleysov", label: "Для маркетплейсов" },
+    ],
+  },
+  {
+    title: "Электроника и IT",
+    items: [{ href: "/elektronika-iz-kitaya", label: "Электроника" }],
+  },
+  {
+    title: "Автотовары",
+    items: [{ href: "/avtozapchasti-iz-kitaya", label: "Автозапчасти" }],
+  },
+  {
+    title: "Оборудование и техника",
+    items: [{ href: "/oborudovanie-i-mashiny", label: "Оборудование и машины" }],
+  },
+  {
+    title: "Особые грузы",
+    items: [
+      { href: "/negabaritnye-gruzy", label: "Негабаритные грузы" },
+      { href: "/opasnye-gruzy", label: "Опасные грузы ADR" },
+    ],
+  },
 ];
+
+// Плоский список — для мобильного меню (там секции и так сворачиваются).
+const CARGO_TYPES = CARGO_CATEGORIES.flatMap((c) => c.items);
 
 const MOBILE_SECTIONS = [
   { id: "uslugi", title: "Услуги", items: SERVICES },
@@ -108,7 +134,7 @@ export function Header() {
           <nav className="nav" aria-label="Основная навигация">
             <NavDropdown label="Услуги" items={SERVICES} onItemClick={closeMenu} />
             <NavDropdown label="Направления" items={DIRECTIONS} onItemClick={closeMenu} />
-            <NavDropdown label="Типы грузов" items={CARGO_TYPES} onItemClick={closeMenu} />
+            <NavDropdown label="Типы грузов" groups={CARGO_CATEGORIES} onItemClick={closeMenu} />
             <Link href="/o-kompanii" onClick={closeMenu}>О компании</Link>
             <Link href="/blog" onClick={closeMenu}>Блог</Link>
             <Link href="/kontakty" onClick={closeMenu}>Контакты</Link>
