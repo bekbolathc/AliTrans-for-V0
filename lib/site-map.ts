@@ -67,6 +67,8 @@ export const SITE_PAGES: SitePage[] = [
   { slug: "opasnye-gruzy", type: "cargo", priority: 0.7, changefreq: "monthly" },
   { slug: "kosmetika-i-krasota", type: "cargo", priority: 0.75, changefreq: "monthly" },
   { slug: "tovary-dlya-marketpleysov", type: "cargo", priority: 0.8, changefreq: "monthly" },
+  { slug: "shiny-iz-kitaya", type: "cargo", priority: 0.8, changefreq: "monthly" },
+  { slug: "spetstehnika-iz-kitaya", type: "cargo", priority: 0.8, changefreq: "monthly" },
 
   // ── Phase 3: блог ─────────────────────────────────────
   { slug: "blog", type: "blog", priority: 0.7, changefreq: "weekly" },
