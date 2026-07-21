@@ -20,6 +20,8 @@ const SERVICES = [
 const DIRECTIONS = [
   { href: "/mezhdunarodnye-gruzoperevozki", label: "🌍 Все направления" },
   { href: "/#services", label: "🇨🇳 Китай → Казахстан" },
+  { href: "/dostavka-iz-kitaya-v-almaty", label: "🏙️ Из Китая в Алматы" },
+  { href: "/dostavka-iz-kitaya-v-astanu", label: "🏙️ Из Китая в Астану" },
   { href: "/dostavka-iz-korei", label: "🇰🇷 Корея → Казахстан" },
   { href: "/dostavka-iz-turcii", label: "🇹🇷 Турция → Казахстан" },
   { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа → Казахстан" },
