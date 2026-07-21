@@ -47,11 +47,17 @@ const CARGO_CATEGORIES: NavGroup[] = [
   },
   {
     title: "Автотовары",
-    items: [{ href: "/avtozapchasti-iz-kitaya", label: "Автозапчасти" }],
+    items: [
+      { href: "/avtozapchasti-iz-kitaya", label: "Автозапчасти" },
+      { href: "/shiny-iz-kitaya", label: "Шины" },
+    ],
   },
   {
     title: "Оборудование и техника",
-    items: [{ href: "/oborudovanie-i-mashiny", label: "Оборудование и машины" }],
+    items: [
+      { href: "/oborudovanie-i-mashiny", label: "Оборудование и машины" },
+      { href: "/spetstehnika-iz-kitaya", label: "Спецтехника" },
+    ],
   },
   {
     title: "Особые грузы",
