@@ -48,6 +48,11 @@ export const SITE_PAGES: SitePage[] = [
 
   // ── Новые страны-отправители ──────────────────────────
   { slug: "dostavka-iz-indii", type: "service", priority: 0.75, changefreq: "monthly" },
+  { slug: "dostavka-iz-vietnama", type: "service", priority: 0.7, changefreq: "monthly" },
+  { slug: "dostavka-iz-tailanda", type: "service", priority: 0.7, changefreq: "monthly" },
+  { slug: "dostavka-iz-malaysii", type: "service", priority: 0.7, changefreq: "monthly" },
+  { slug: "dostavka-iz-singapura", type: "service", priority: 0.7, changefreq: "monthly" },
+  { slug: "dostavka-iz-ssha", type: "service", priority: 0.7, changefreq: "monthly" },
 
   // ── Другие направления (не Китай) ─────────────────────
   { slug: "dostavka-iz-korei", type: "service", priority: 0.8, changefreq: "monthly" },

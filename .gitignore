@@ -50,3 +50,6 @@ AliTransNew*/
 node-v*.pkg
 zhd-*.png
 tsconfig.tsbuildinfo
+
+# graphify local output
+graphify-out/

@@ -17,18 +17,47 @@ const SERVICES = [
   { href: "/ved-pod-klyuch", label: "ВЭД под ключ" },
 ];
 
-const DIRECTIONS = [
-  { href: "/mezhdunarodnye-gruzoperevozki", label: "🌍 Все направления" },
-  { href: "/#services", label: "🇨🇳 Китай → Казахстан" },
-  { href: "/dostavka-iz-kitaya-v-almaty", label: "🏙️ Из Китая в Алматы" },
-  { href: "/dostavka-iz-kitaya-v-astanu", label: "🏙️ Из Китая в Астану" },
-  { href: "/dostavka-iz-korei", label: "🇰🇷 Корея → Казахстан" },
-  { href: "/dostavka-iz-turcii", label: "🇹🇷 Турция → Казахстан" },
-  { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа → Казахстан" },
-  { href: "/dostavka-iz-indii", label: "🇮🇳 Индия → Казахстан" },
-  { href: "/gruzoperevozki-iz-kitaya-v-rossiyu", label: "🇷🇺 Китай → Россия" },
-  { href: "/gruzoperevozki-iz-kitaya-v-uzbekistan", label: "🇺🇿 Китай → Узбекистан" },
+// Направления сгруппированы по категориям (стран стало много).
+// Плоский список DIRECTIONS для мобильного меню выводится автоматически.
+const DIRECTION_CATEGORIES: NavGroup[] = [
+  {
+    title: "Основные",
+    items: [
+      { href: "/mezhdunarodnye-gruzoperevozki", label: "🌍 Все направления" },
+      { href: "/#services", label: "🇨🇳 Китай → Казахстан" },
+      { href: "/dostavka-iz-korei", label: "🇰🇷 Корея → Казахстан" },
+      { href: "/dostavka-iz-turcii", label: "🇹🇷 Турция → Казахстан" },
+      { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа → Казахстан" },
+    ],
+  },
+  {
+    title: "Из Китая в города KZ",
+    items: [
+      { href: "/dostavka-iz-kitaya-v-almaty", label: "🏙️ в Алматы" },
+      { href: "/dostavka-iz-kitaya-v-astanu", label: "🏙️ в Астану" },
+    ],
+  },
+  {
+    title: "Азия и мир",
+    items: [
+      { href: "/dostavka-iz-indii", label: "🇮🇳 Индия" },
+      { href: "/dostavka-iz-vietnama", label: "🇻🇳 Вьетнам" },
+      { href: "/dostavka-iz-tailanda", label: "🇹🇭 Таиланд" },
+      { href: "/dostavka-iz-malaysii", label: "🇲🇾 Малайзия" },
+      { href: "/dostavka-iz-singapura", label: "🇸🇬 Сингапур" },
+      { href: "/dostavka-iz-ssha", label: "🇺🇸 США" },
+    ],
+  },
+  {
+    title: "Коридоры из Китая",
+    items: [
+      { href: "/gruzoperevozki-iz-kitaya-v-rossiyu", label: "🇷🇺 в Россию" },
+      { href: "/gruzoperevozki-iz-kitaya-v-uzbekistan", label: "🇺🇿 в Узбекистан" },
+    ],
+  },
 ];
+
+const DIRECTIONS = DIRECTION_CATEGORIES.flatMap((c) => c.items);
 
 // Типы грузов сгруппированы по категориям — таксономия под расширение.
 // Новые страницы грузов (шины, спецтехника, стройматериалы и т.д.)
@@ -151,7 +180,7 @@ export function Header() {
           {/* Desktop nav */}
           <nav className="nav" aria-label="Основная навигация">
             <NavDropdown label="Услуги" items={SERVICES} onItemClick={closeMenu} />
-            <NavDropdown label="Направления" items={DIRECTIONS} onItemClick={closeMenu} />
+            <NavDropdown label="Направления" groups={DIRECTION_CATEGORIES} onItemClick={closeMenu} />
             <NavDropdown label="Типы грузов" groups={CARGO_CATEGORIES} onItemClick={closeMenu} />
             <Link href="/o-kompanii" onClick={closeMenu}>О компании</Link>
             <Link href="/blog" onClick={closeMenu}>Блог</Link>
