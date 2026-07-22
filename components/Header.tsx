@@ -25,7 +25,9 @@ const DIRECTIONS = [
   { href: "/dostavka-iz-korei", label: "🇰🇷 Корея → Казахстан" },
   { href: "/dostavka-iz-turcii", label: "🇹🇷 Турция → Казахстан" },
   { href: "/dostavka-iz-evropy", label: "🇪🇺 Европа → Казахстан" },
+  { href: "/dostavka-iz-indii", label: "🇮🇳 Индия → Казахстан" },
   { href: "/gruzoperevozki-iz-kitaya-v-rossiyu", label: "🇷🇺 Китай → Россия" },
+  { href: "/gruzoperevozki-iz-kitaya-v-uzbekistan", label: "🇺🇿 Китай → Узбекистан" },
 ];
 
 // Типы грузов сгруппированы по категориям — таксономия под расширение.
