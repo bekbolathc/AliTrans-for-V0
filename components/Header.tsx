@@ -56,8 +56,13 @@ const CARGO_CATEGORIES: NavGroup[] = [
     title: "Оборудование и техника",
     items: [
       { href: "/oborudovanie-i-mashiny", label: "Оборудование и машины" },
+      { href: "/promyshlennoe-oborudovanie-iz-kitaya", label: "Промышленное оборудование" },
       { href: "/spetstehnika-iz-kitaya", label: "Спецтехника" },
     ],
+  },
+  {
+    title: "Стройка и ремонт",
+    items: [{ href: "/stroymaterialy-iz-kitaya", label: "Стройматериалы" }],
   },
   {
     title: "Особые грузы",
