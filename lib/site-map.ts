@@ -44,6 +44,10 @@ export const SITE_PAGES: SitePage[] = [
 
   // ── Коридоры из Китая (назначение не KZ) ──────────────
   { slug: "gruzoperevozki-iz-kitaya-v-rossiyu", type: "service", priority: 0.8, changefreq: "monthly" },
+  { slug: "gruzoperevozki-iz-kitaya-v-uzbekistan", type: "service", priority: 0.75, changefreq: "monthly" },
+
+  // ── Новые страны-отправители ──────────────────────────
+  { slug: "dostavka-iz-indii", type: "service", priority: 0.75, changefreq: "monthly" },
 
   // ── Другие направления (не Китай) ─────────────────────
   { slug: "dostavka-iz-korei", type: "service", priority: 0.8, changefreq: "monthly" },
