@@ -6,7 +6,7 @@ import { SITE_PAGES, absoluteUrl } from "@/lib/site-map";
  * При добавлении новой страницы — править только lib/site-map.ts.
  */
 // Static date — update this when significant content changes are deployed.
-const LAST_MODIFIED = new Date("2026-06-17");
+const LAST_MODIFIED = new Date("2026-07-21");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return SITE_PAGES.filter((p) => !p.noIndex).map((page) => ({
